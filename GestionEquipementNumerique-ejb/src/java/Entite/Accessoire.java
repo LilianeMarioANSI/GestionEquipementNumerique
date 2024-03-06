@@ -5,11 +5,14 @@
 package Entite;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -17,6 +20,8 @@ import javax.persistence.Id;
  */
 @Entity
 public class Accessoire implements Serializable {
+
+    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -115,4 +120,38 @@ public class Accessoire implements Serializable {
     public void setDisponibilite(boolean disponibilite) {
         this.disponibilite = disponibilite;
     }
+    
+    /*
+        Relations
+    
+        Catégorie d'accessoire
+    */
+    
+    @ManyToOne
+    private CategorieAccessoire categorieAccessoire;
+
+    public CategorieAccessoire getCategorieAccessoire() {
+        return categorieAccessoire;
+    }
+
+    public void setCategorieAccessoire(CategorieAccessoire categorieAccessoire) {
+        this.categorieAccessoire = categorieAccessoire;
+    }
+    
+    /*
+        Accessoire
+    */
+    
+    @OneToMany(mappedBy = "accessoire")
+    private List<Offre> offres;
+
+    public List<Offre> getOffres() {
+        return offres;
+    }
+
+    public void setOffres(List<Offre> offres) {
+        this.offres = offres;
+    }
+    
+    
 }

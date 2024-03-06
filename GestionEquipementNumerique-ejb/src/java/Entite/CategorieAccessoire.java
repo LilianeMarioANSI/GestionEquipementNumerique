@@ -5,11 +5,13 @@
 package Entite;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -17,6 +19,10 @@ import javax.persistence.Id;
  */
 @Entity
 public class CategorieAccessoire implements Serializable {
+
+    
+
+    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -86,6 +92,28 @@ public class CategorieAccessoire implements Serializable {
         this.description = description;
     }
     
+    /*
+        Relations
+
+        Souhaits
+    */
     
+    @OneToMany(mappedBy = "categorieAccessoire")
+    private List<Souhait> souhaits;
+
+    public List<Souhait> getSouhaits() {
+        return souhaits;
+    }
+
+    public void setSouhaits(List<Souhait> souhaits) {
+        this.souhaits = souhaits;
+    }
+    
+    /*
+        Accessoires
+    */
+    
+    @OneToMany(mappedBy = "categorieAccessoire")
+    private List<Accessoire> accessoires;
     
 }

@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -63,5 +64,36 @@ public class Souhait implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datePublication;
     
+    /*
+        Relations
     
+        Souhait
+    */
+    
+    @ManyToOne
+    private Utilisateur utilisateur;
+    
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+    
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+    
+    /*
+        Categorie d'accessoire
+    */
+    
+    @ManyToOne
+    private CategorieAccessoire categorieAccessoire;
+
+    public CategorieAccessoire getCategorieAccessoire() {
+        return categorieAccessoire;
+    }
+    
+    public void setCategorieAccessoire(CategorieAccessoire categorieAccessoire) {
+        this.categorieAccessoire = categorieAccessoire;
+    }
+
 }

@@ -5,19 +5,20 @@
 package Entite;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 
 /**
  *
  * @author loulo
  */
 @Entity
-public class Badge implements Serializable {
+public class Pret extends Offre implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -42,10 +43,10 @@ public class Badge implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Badge)) {
+        if (!(object instanceof Pret)) {
             return false;
         }
-        Badge other = (Badge) object;
+        Pret other = (Pret) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -54,33 +55,37 @@ public class Badge implements Serializable {
 
     @Override
     public String toString() {
-        return "Entite.Badge[ id=" + id + " ]";
+        return "Entite.Pret[ id=" + id + " ]";
     }
     
     /*
-        Niveau
+        Date de fin du prêt
     */
+    @Column(nullable = false)
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateDebutPret;
     
-    @Column (nullable = false)
-    private NiveauBadge niveau; 
-
-    public NiveauBadge getNiveau() {
-        return niveau;
+    public Date getDateDebutPret() {
+        return dateDebutPret;
     }
 
-    public void setNiveau(NiveauBadge niveau) {
-        this.niveau = niveau;
-    }
-    
-    @ManyToOne
-    private Utilisateur utilisateur;
-
-    public Utilisateur getUtilisateur() {
-        return utilisateur;
+    public void setDateDebutPret(Date dateDebutPret) {
+        this.dateDebutPret = dateDebutPret;
     }
     
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
+    
+    /*
+        Date de fin du prêt
+    */
+    @Column(nullable = false)
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateFinPret;
+
+    public Date getDateFinPret() {
+        return dateFinPret;
     }
 
+    public void setDateFinPret(Date dateFinPret) {
+        this.dateFinPret = dateFinPret;
+    }
 }

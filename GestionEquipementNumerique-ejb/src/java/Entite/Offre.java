@@ -6,11 +6,14 @@ package Entite;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 /**
@@ -19,6 +22,8 @@ import javax.persistence.Temporal;
  */
 @Entity
 public class Offre implements Serializable {
+
+    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,15 +63,87 @@ public class Offre implements Serializable {
         return "Entite.Offre[ id=" + id + " ]";
     }
     
+    /*
+        intitule
+    */
+    
     @Column(nullable = false)
     private String intitule;
     
+    public String getIntitule() {
+        return intitule;
+    }
+
+    public void setIntitule(String intitule) {
+        this.intitule = intitule;
+    }
+    
+    /*
+        Categorie accessoire
+    */
     @Column(nullable = false)
     private CategorieAccessoire categorie;
     
+    public CategorieAccessoire getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(CategorieAccessoire categorie) {
+        this.categorie = categorie;
+    }
+    
+    /*
+        Date publication
+    */
     @Column(unique = true, nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dateRepresentation;
+    private Date datePublication;
     
+    public Date getDatePublication() {
+        return datePublication;
+    }
+
+    public void setDatedatePublication(Date datePublication) {
+        this.datePublication = datePublication;
+    }
     
+    /*
+        Relations
+    
+        Utilisateur
+    */
+    
+    @ManyToOne
+    private Utilisateur utilisateur;
+
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+    
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+    
+    /*
+        Accessoires
+    */
+    
+    @ManyToOne
+    private Accessoire accessoire;
+
+    public Accessoire getAccessoire() {
+        return accessoire;
+    }
+
+    public void setAccessoire(Accessoire accessoire) {
+        this.accessoire = accessoire;
+    }
+    
+    /*
+        Demande
+    */
+    
+    @OneToMany(mappedBy = "offre")
+    private List<Demande> demandes;
+
 }

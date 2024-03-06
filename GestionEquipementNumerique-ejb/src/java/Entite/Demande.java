@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -86,5 +87,39 @@ public class Demande implements Serializable {
     public void setDateDemande(Date dateDemande) {
         this.dateDemande = dateDemande;
     }
+    
+    /*
+        Relation
+    
+        Offre
+    */
+    
+    @ManyToOne
+    private Offre offre;
+
+    public Offre getOffre() {
+        return offre;
+    }
+
+    public void setOffre(Offre offre) {
+        this.offre = offre;
+    }
+    
+    /*
+        Utilisateur
+    */
+    
+    @ManyToOne
+    private Utilisateur utilisateur;
+
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
+
     
 }

@@ -5,18 +5,22 @@
 package Entite;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author loulo
  */
 @Entity
-public class Personne implements Serializable {
+public class Utilisateur implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,10 +45,10 @@ public class Personne implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Personne)) {
+        if (!(object instanceof Utilisateur)) {
             return false;
         }
-        Personne other = (Personne) object;
+        Utilisateur other = (Utilisateur) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -160,4 +164,82 @@ public class Personne implements Serializable {
     public void setSiteGeographique(String siteGeographique) {
         this.siteGeographique = siteGeographique;
     }
+    
+    /*
+        Rôle utilisateur
+    */
+    @Column (nullable = false)
+    private RoleUtilisateur roleUtilisateur;
+
+    public RoleUtilisateur getRoleUtilisateur() {
+        return roleUtilisateur;
+    }
+
+    public void setRoleUtilisateur(RoleUtilisateur role) {
+        this.roleUtilisateur = role;
+    }
+    
+    /*
+        Relations
+    
+        Badges
+    */
+
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Badge> badges;
+
+    public List<Badge> getBadges() {
+        return badges;
+    }
+
+    public void setBadges(List<Badge> badges) {
+        this.badges = badges;
+    }
+    
+    
+    /*
+        Souhaits
+    */
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Souhait> souhaits;
+
+    public List<Souhait> getSouhaits() {
+        return souhaits;
+    }
+
+    public void setSouhaits(List<Souhait> souhaits) {
+        this.souhaits = souhaits;
+    }
+    
+    /*
+        Offres
+    */
+    
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Offre> offres;
+
+    public List<Offre> getOffres() {
+        return offres;
+    }
+
+    public void setOffres(List<Offre> offres) {
+        this.offres = offres;
+    }
+    
+    /*
+        Demandes
+    */
+    
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Demande> demandes;
+
+    public List<Demande> getDemandes() {
+        return demandes;
+    }
+
+    public void setDemandes(List<Demande> demandes) {
+        this.demandes = demandes;
+    }
+    
+    
 }

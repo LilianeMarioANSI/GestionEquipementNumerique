@@ -5,19 +5,17 @@
 package Entite;
 
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
  *
  * @author loulo
  */
 @Entity
-public class Badge implements Serializable {
+public class Don extends Offre implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -42,10 +40,10 @@ public class Badge implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Badge)) {
+        if (!(object instanceof Don)) {
             return false;
         }
-        Badge other = (Badge) object;
+        Don other = (Don) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -54,33 +52,7 @@ public class Badge implements Serializable {
 
     @Override
     public String toString() {
-        return "Entite.Badge[ id=" + id + " ]";
+        return "Entite.Don[ id=" + id + " ]";
     }
     
-    /*
-        Niveau
-    */
-    
-    @Column (nullable = false)
-    private NiveauBadge niveau; 
-
-    public NiveauBadge getNiveau() {
-        return niveau;
-    }
-
-    public void setNiveau(NiveauBadge niveau) {
-        this.niveau = niveau;
-    }
-    
-    @ManyToOne
-    private Utilisateur utilisateur;
-
-    public Utilisateur getUtilisateur() {
-        return utilisateur;
-    }
-    
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
-    }
-
 }
