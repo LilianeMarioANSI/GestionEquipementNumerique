@@ -59,7 +59,7 @@ public class Pret extends Offre implements Serializable {
     }
     
     /*
-        Date de fin du prêt
+        Date de debut du prêt
     */
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)

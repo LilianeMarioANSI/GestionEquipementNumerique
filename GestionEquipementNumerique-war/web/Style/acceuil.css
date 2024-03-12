@@ -1,0 +1,37 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 9 mars 2024, 22:18:46
+    Author     : loulo
+*/
+
+.auth-section{
+    padding : 40px;
+    margin-top: 50px;
+}
+
+.login{
+    background-color: var(--light-blue-color);
+    border-right: 1px solid var(--gray-color);
+    border-radius: 5px 0 0 5px
+}
+
+.register{
+    background-color: var(--light-gray-color);
+    border-radius: 0 5px 5px 0
+}
+
+.register select {
+    width: 100%;
+}
+
+.register input[type=password]:invalid{
+    outline: 1px solid var(--error-color);
+}
+
+.btn-wrapper.right{
+    display: flex;
+    justify-content: flex-end;
+}

@@ -79,20 +79,6 @@ public class Offre implements Serializable {
     }
     
     /*
-        Categorie accessoire
-    */
-    @Column(nullable = false)
-    private CategorieAccessoire categorie;
-    
-    public CategorieAccessoire getCategorie() {
-        return categorie;
-    }
-
-    public void setCategorie(CategorieAccessoire categorie) {
-        this.categorie = categorie;
-    }
-    
-    /*
         Date publication
     */
     @Column(unique = true, nullable = false)
@@ -110,17 +96,17 @@ public class Offre implements Serializable {
     /*
         Relations
     
-        Utilisateur
+        Personne
     */
     
     @ManyToOne
-    private Utilisateur utilisateur;
+    private Personne utilisateur;
 
-    public Utilisateur getUtilisateur() {
+    public Personne getUtilisateur() {
         return utilisateur;
     }
     
-    public void setUtilisateur(Utilisateur utilisateur) {
+    public void setUtilisateur(Personne utilisateur) {
         this.utilisateur = utilisateur;
     }
     

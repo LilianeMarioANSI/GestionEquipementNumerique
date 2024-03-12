@@ -106,17 +106,17 @@ public class Demande implements Serializable {
     }
     
     /*
-        Utilisateur
+        Personne
     */
     
     @ManyToOne
-    private Utilisateur utilisateur;
+    private Personne utilisateur;
 
-    public Utilisateur getUtilisateur() {
+    public Personne getUtilisateur() {
         return utilisateur;
     }
 
-    public void setUtilisateur(Utilisateur utilisateur) {
+    public void setUtilisateur(Personne utilisateur) {
         this.utilisateur = utilisateur;
     }
 

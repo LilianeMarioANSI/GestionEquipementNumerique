@@ -71,29 +71,14 @@ public class Souhait implements Serializable {
     */
     
     @ManyToOne
-    private Utilisateur utilisateur;
+    private Personne utilisateur;
     
-    public Utilisateur getUtilisateur() {
+    public Personne getUtilisateur() {
         return utilisateur;
     }
     
-    public void setUtilisateur(Utilisateur utilisateur) {
+    public void setUtilisateur(Personne utilisateur) {
         this.utilisateur = utilisateur;
-    }
-    
-    /*
-        Categorie d'accessoire
-    */
-    
-    @ManyToOne
-    private CategorieAccessoire categorieAccessoire;
-
-    public CategorieAccessoire getCategorieAccessoire() {
-        return categorieAccessoire;
-    }
-    
-    public void setCategorieAccessoire(CategorieAccessoire categorieAccessoire) {
-        this.categorieAccessoire = categorieAccessoire;
     }
 
 }

@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -124,34 +125,36 @@ public class Accessoire implements Serializable {
     /*
         Relations
     
-        Catégorie d'accessoire
+        Personne
+    */
+    
+    @ManyToMany
+    private List<Personne> Personnes;
+
+    public List<Personne> getPersonnes() {
+        return Personnes;
+    }
+
+    public void setPersonnes(List<Personne> Personnes) {
+        this.Personnes = Personnes;
+    }
+
+    
+    /*
+        Offre
     */
     
     @ManyToOne
-    private CategorieAccessoire categorieAccessoire;
+    private Offre offre;
 
-    public CategorieAccessoire getCategorieAccessoire() {
-        return categorieAccessoire;
+    public Offre getOffre() {
+        return offre;
     }
 
-    public void setCategorieAccessoire(CategorieAccessoire categorieAccessoire) {
-        this.categorieAccessoire = categorieAccessoire;
-    }
-    
-    /*
-        Accessoire
-    */
-    
-    @OneToMany(mappedBy = "accessoire")
-    private List<Offre> offres;
-
-    public List<Offre> getOffres() {
-        return offres;
+    public void setOffre(Offre offre) {
+        this.offre = offre;
     }
 
-    public void setOffres(List<Offre> offres) {
-        this.offres = offres;
-    }
     
     
 }
