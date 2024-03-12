@@ -5,8 +5,7 @@
 package Session;
 
 import Entite.Agence;
-import Entite.RoleUtilisateur;
-import Entite.Personne;
+import Entite.Membre;
 import javax.ejb.Local;
 
 /**
@@ -14,7 +13,7 @@ import javax.ejb.Local;
  * @author loulo
  */
 @Local
-public interface SessionStandardLocal {
+public interface SessionMembreLocal {
     
-    Personne InscriptionUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence, RoleUtilisateur roleUtilisateur);
+    Membre InscriptionUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence);
 }

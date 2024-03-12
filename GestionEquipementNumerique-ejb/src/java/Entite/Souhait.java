@@ -59,10 +59,44 @@ public class Souhait implements Serializable {
         return "Entite.Souhait[ id=" + id + " ]";
     }
     
-    
+    /*
+        DatePublication
+    */
     @Column (nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datePublication;
+    
+    /*
+        Type souhait
+    */
+    
+    @Column (nullable = false)
+    private TypeSouhait typeSouhait;
+
+    public TypeSouhait getTypeSouhait() {
+        return typeSouhait;
+    }
+
+    public void setTypeSouhait(TypeSouhait typeSouhait) {
+        this.typeSouhait = typeSouhait;
+    }
+    
+    /*
+        Type accessoire
+    */
+    
+    @Column (nullable = false)
+    private TypeAccessoire TypeAccessoire;
+
+    public TypeAccessoire getTypeAccessoire() {
+        return TypeAccessoire;
+    }
+
+    public void setTypeAccessoire(TypeAccessoire TypeAccessoire) {
+        this.TypeAccessoire = TypeAccessoire;
+    }
+
+
     
     /*
         Relations

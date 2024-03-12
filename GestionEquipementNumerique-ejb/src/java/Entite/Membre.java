@@ -15,7 +15,7 @@ import javax.persistence.Id;
  * @author loulo
  */
 @Entity
-public class Membre implements Serializable {
+public class Membre extends Personne implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id

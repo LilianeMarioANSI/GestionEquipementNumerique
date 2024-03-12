@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 <resources>
-  <jdbc-resource enabled="true" jndi-name="jdbc/myEquipementNumerique" object-type="user" pool-name="EquipementNumeriqueConnectionPool">
+  <jdbc-resource enabled="true" jndi-name="jdbc/myGestionEquipement" object-type="user" pool-name="connectionPoolGestionEquipement">
     <description/>
   </jdbc-resource>
-  <jdbc-connection-pool allow-non-component-callers="false" associate-with-thread="false" connection-creation-retry-attempts="0" connection-creation-retry-interval-in-seconds="10" connection-leak-reclaim="false" connection-leak-timeout-in-seconds="0" connection-validation-method="auto-commit" datasource-classname="org.apache.derby.jdbc.ClientDataSource" fail-all-connections="false" idle-timeout-in-seconds="300" is-connection-validation-required="false" is-isolation-level-guaranteed="true" lazy-connection-association="false" lazy-connection-enlistment="false" match-connections="false" max-connection-usage-count="0" max-pool-size="32" max-wait-time-in-millis="60000" name="EquipementNumeriqueConnectionPool" non-transactional-connections="false" pool-resize-quantity="2" res-type="javax.sql.DataSource" statement-timeout-in-seconds="-1" steady-pool-size="8" validate-atmost-once-period-in-seconds="0" wrap-jdbc-objects="false">
-    <property name="URL" value="jdbc:derby://localhost:1527/DB_GestionEquipementNumerique"/>
+  <jdbc-connection-pool allow-non-component-callers="false" associate-with-thread="false" connection-creation-retry-attempts="0" connection-creation-retry-interval-in-seconds="10" connection-leak-reclaim="false" connection-leak-timeout-in-seconds="0" connection-validation-method="auto-commit" datasource-classname="org.apache.derby.jdbc.ClientDataSource" fail-all-connections="false" idle-timeout-in-seconds="300" is-connection-validation-required="false" is-isolation-level-guaranteed="true" lazy-connection-association="false" lazy-connection-enlistment="false" match-connections="false" max-connection-usage-count="0" max-pool-size="32" max-wait-time-in-millis="60000" name="connectionPoolGestionEquipement" non-transactional-connections="false" pool-resize-quantity="2" res-type="javax.sql.DataSource" statement-timeout-in-seconds="-1" steady-pool-size="8" validate-atmost-once-period-in-seconds="0" wrap-jdbc-objects="false">
+    <property name="URL" value="jdbc:derby://localhost:1527/DB_GestionEquipement"/>
     <property name="serverName" value="localhost"/>
     <property name="PortNumber" value="1527"/>
-    <property name="DatabaseName" value="DB_GestionEquipementNumerique"/>
+    <property name="DatabaseName" value="DB_GestionEquipement"/>
     <property name="User" value="administrateur"/>
     <property name="Password" value="projet@cgi"/>
   </jdbc-connection-pool>

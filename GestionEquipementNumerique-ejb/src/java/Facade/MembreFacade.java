@@ -5,7 +5,7 @@
 package Facade;
 
 import Entite.Agence;
-import Entite.RoleUtilisateur;
+import Entite.Membre;
 import Entite.Personne;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author loulo
  */
 @Stateless
-public class UtilisateurFacade extends AbstractFacade<Personne> implements UtilisateurFacadeLocal {
+public class MembreFacade extends AbstractFacade<Membre> implements MembreFacadeLocal {
 
     @PersistenceContext(unitName = "GestionEquipementNumerique-ejbPU")
     private EntityManager em;
@@ -26,13 +26,13 @@ public class UtilisateurFacade extends AbstractFacade<Personne> implements Utili
         return em;
     }
 
-    public UtilisateurFacade() {
-        super(Personne.class);
+    public MembreFacade() {
+        super(Membre.class);
     }
     
     @Override
-    public Personne CreerUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence, RoleUtilisateur roleUtilisateur) {
-        Personne utilisateur = new Personne();
+    public Membre CreerMembre(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence) {
+        Membre utilisateur = new Membre();
         utilisateur.setLogin(login);
         utilisateur.setMdp(mdp);
         utilisateur.setNom(nom);
@@ -40,7 +40,6 @@ public class UtilisateurFacade extends AbstractFacade<Personne> implements Utili
         utilisateur.setBureau(bureau);
         utilisateur.setTelephone(telephone);
         utilisateur.setAgence(agence);
-        utilisateur.setRoleUtilisateur(roleUtilisateur);
         em.persist(utilisateur);
         return utilisateur;
     }

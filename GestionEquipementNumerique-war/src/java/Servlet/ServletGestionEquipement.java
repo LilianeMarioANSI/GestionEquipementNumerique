@@ -5,8 +5,6 @@
 package Servlet;
 
 import Entite.Agence;
-import Entite.RoleUtilisateur;
-import Session.SessionStandardLocal;
 import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -16,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
+import Session.SessionMembreLocal;
 /**
  *
  * @author loulo
@@ -34,20 +33,26 @@ public class ServletGestionEquipement extends HttpServlet {
      */
     
     @EJB
-    private SessionStandardLocal sessionStandard;
+    private SessionMembreLocal sessionMembre;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
         String action = request.getParameter("action");
-        String jsp = "/jsp/acceuil.jsp";
+        String jsp = "/jsp/Acceuil.jsp";
         if(action == null){
-            jsp = "/jsp/acceuil.jsp";
+            jsp = "/jsp/Acceuil.jsp";
         }
         else if(action.equals("inscription")){
-            jsp = "/jsp/acceuil.jsp";
+            jsp = "/jsp/Acceuil.jsp";
             doInscrireUtilisateur(request, response);
+        }
+        else if(action.equals("afficherFormulaireInscription")){
+            jsp = "/jsp/Inscription.jsp";
+        }
+        else if(action.equals("afficherFormulaireAuthentification")){
+            jsp = "/jsp/Acceuil.jsp";
         }
         
         RequestDispatcher Rd;
@@ -79,7 +84,7 @@ public class ServletGestionEquipement extends HttpServlet {
         else {
             //Chiffrement du mot de passe
             String encrytptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
-            sessionStandard.InscriptionUtilisateur(login, encrytptedMdp, nom, prenom, bureau, tel, agence, RoleUtilisateur.STANDARD);
+            sessionMembre.InscriptionUtilisateur(login, encrytptedMdp, nom, prenom, bureau, tel, agence);
             message = "Compte créé avec succès !";
             typeMessage = "success";
         }

@@ -3,7 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/ProjetDev/GestionEquipementNumerique/GestionEquipementNumerique-ejb/src/java/Facade/UtilisateurFacade.java</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-ejb/src/java/Entite/Offre.java</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-ejb/src/java/Session/SessionMembre.java</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-ejb/src/java/Facade/MembreFacade.java</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-ejb/src/java/Entite/Demande.java</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-ejb/src/java/Entite/Membre.java</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-ejb/src/java/Entite/Souhait.java</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-ejb/src/conf/persistence.xml</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-ejb/src/java/Entite/Accessoire.java</file>
         </group>
     </open-files>
 </project-private>

@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 /**
  *
@@ -62,7 +61,7 @@ public class Accessoire implements Serializable {
         return "Entite.Accessoi&re[ id=" + id + " ]";
     }
     
-     /* 
+    /* 
         Désignation
     */
     
@@ -123,20 +122,36 @@ public class Accessoire implements Serializable {
     }
     
     /*
+        Type Accessoire
+    */
+    
+    @Column (nullable = false)
+    private TypeAccessoire TypeAccessoire;
+
+    public TypeAccessoire getTypeAccessoire() {
+        return TypeAccessoire;
+    }
+
+    public void setTypeAccessoire(TypeAccessoire TypeAccessoire) {
+        this.TypeAccessoire = TypeAccessoire;
+    }
+
+    
+    /*
         Relations
     
         Personne
     */
     
     @ManyToMany
-    private List<Personne> Personnes;
+    private List<Personne> utilisateurs;
 
     public List<Personne> getPersonnes() {
-        return Personnes;
+        return utilisateurs;
     }
 
     public void setPersonnes(List<Personne> Personnes) {
-        this.Personnes = Personnes;
+        this.utilisateurs = Personnes;
     }
 
     

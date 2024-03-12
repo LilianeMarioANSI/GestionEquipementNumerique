@@ -1,0 +1,30 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+
+<%-- Menu de navigation --%>
+<nav class="navbar fixed-top">
+    <div class="logo-wrapper">
+        <a href="ServletGestionEquipement"><img class="logo" src="Assets/icons/logo.svg" alt="logo"/></a>
+    </div>
+    <div class="primary-navbar">
+        <ul>
+            <li><a href="#" class="nav-link">Catalogue</a></li>
+            <li class="dropdown">
+                <button class="nav-link nav-btn" id="dropbtn" type="button">Mon espace <img class="tiny-icon arrow" src="Assets/icons/chevron-down-outline.svg" alt="logo"/></button>
+                <div class="dropDownContent">
+                    <a href="#" class="nav-link">Mes souhaits</a>
+                    <a href="#" class="nav-link">Mes offres</a>
+                    <a href="#" class="nav-link">Mes demandes</a>
+                </div>
+            </li>
+            <li><a href="#" class="nav-link">Tableau de bord</a></li>
+        </ul>
+    </div>
+    <div class="user-navbar">
+        <div>
+            <a href="#" class="nav-link"><img class="small-icon" src="Assets/icons/person-circle.svg" alt="logo"/></a>
+        </div>
+    </div>
+    
+    
+</nav>

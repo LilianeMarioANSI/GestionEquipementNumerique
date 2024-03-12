@@ -4,7 +4,7 @@
  */
 package Facade;
 
-import Entite.Don;
+import Entite.Personne;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -13,19 +13,19 @@ import javax.ejb.Local;
  * @author loulo
  */
 @Local
-public interface DonFacadeLocal {
+public interface PersonneFacadeLocal {
 
-    void create(Don don);
+    void create(Personne personne);
 
-    void edit(Don don);
+    void edit(Personne personne);
 
-    void remove(Don don);
+    void remove(Personne personne);
 
-    Don find(Object id);
+    Personne find(Object id);
 
-    List<Don> findAll();
+    List<Personne> findAll();
 
-    List<Don> findRange(int[] range);
+    List<Personne> findRange(int[] range);
 
     int count();
     
