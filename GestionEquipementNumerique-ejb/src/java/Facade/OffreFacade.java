@@ -5,9 +5,12 @@
 package Facade;
 
 import Entite.Offre;
+import java.sql.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,5 +30,16 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     public OffreFacade() {
         super(Offre.class);
     }
+    
+    @Override
+    public List<Offre> getOffresParPeriode(Date dateDebut, Date dateFin) {
+    List<Offre> result;
+    String txt = "SELECT offre FROM Offre offre WHERE offre.datePublication BETWEEN :dateDebut AND :dateFin";
+    Query req = getEntityManager().createQuery(txt);
+    req.setParameter("dateDebut", dateDebut);
+    req.setParameter("dateFin", dateFin);
+    result = req.getResultList();
+    return result;
+}
     
 }

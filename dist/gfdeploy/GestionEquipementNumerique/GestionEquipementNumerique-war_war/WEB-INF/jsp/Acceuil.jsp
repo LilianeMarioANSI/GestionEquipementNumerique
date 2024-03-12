@@ -21,11 +21,12 @@
     </head>
     <body>
         
-        <%@include file="/jspf/header.jspf" %>
-        <%@include file="/jspf/navigation.jspf" %>
+        
+        <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+        <%@include file="/WEB-INF/jspf/header.jspf" %>
         
         <main>
-            <%@include file="/jspf/message.jspf" %>
+            <%@include file="/WEB-INF/jspf/message.jspf" %>
             
             <section class="auth-section login">
                 <h2>Authentification</h2>
@@ -42,7 +43,7 @@
                    
                 </form>
                 
-                <p>Vous n'avez pas encore de compte ? <a href="ServletGestionEquipement?action=afficherFormulaireInscription">Inscrivez vous ici.</a></p>
+                <p>Vous n'avez pas encore de compte ? <a href="ServletGestionEquipement?action=inscription">Inscrivez vous ici.</a></p>
             </section>
         </main>
         

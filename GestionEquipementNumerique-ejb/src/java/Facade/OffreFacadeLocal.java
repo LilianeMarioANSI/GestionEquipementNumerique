@@ -5,6 +5,7 @@
 package Facade;
 
 import Entite.Offre;
+import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -28,5 +29,7 @@ public interface OffreFacadeLocal {
     List<Offre> findRange(int[] range);
 
     int count();
+    
+    List<Offre> getOffresParPeriode(Date dateDebut, Date dateFin);
     
 }
