@@ -4,7 +4,7 @@
  */
 package Facade;
 
-import Entite.Don;
+import Entite.Personne;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author loulo
  */
 @Stateless
-public class DonFacade extends AbstractFacade<Don> implements DonFacadeLocal {
+public class PersonneFacade extends AbstractFacade<Personne> implements PersonneFacadeLocal {
 
     @PersistenceContext(unitName = "GestionEquipementNumerique-ejbPU")
     private EntityManager em;
@@ -24,8 +24,8 @@ public class DonFacade extends AbstractFacade<Don> implements DonFacadeLocal {
         return em;
     }
 
-    public DonFacade() {
-        super(Don.class);
+    public PersonneFacade() {
+        super(Personne.class);
     }
     
 }

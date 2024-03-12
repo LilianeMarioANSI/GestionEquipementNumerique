@@ -4,7 +4,7 @@
  */
 package Facade;
 
-import Entite.Pret;
+import Entite.Administrateur;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author loulo
  */
 @Stateless
-public class PretFacade extends AbstractFacade<Pret> implements PretFacadeLocal {
+public class AdministrateurFacade extends AbstractFacade<Administrateur> implements AdministrateurFacadeLocal {
 
     @PersistenceContext(unitName = "GestionEquipementNumerique-ejbPU")
     private EntityManager em;
@@ -24,8 +24,8 @@ public class PretFacade extends AbstractFacade<Pret> implements PretFacadeLocal 
         return em;
     }
 
-    public PretFacade() {
-        super(Pret.class);
+    public AdministrateurFacade() {
+        super(Administrateur.class);
     }
     
 }

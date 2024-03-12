@@ -227,12 +227,12 @@ public class Personne implements Serializable {
     public void setDemandes(List<Demande> demandes) {
         this.demandes = demandes;
     }
-    
+        
     /*
-        Personnes
+        Accessoires
     */
     
-    @ManyToMany(mappedBy = "Personnes")
+    @ManyToMany(mappedBy = "utilisateurs")
     private List<Accessoire> accessoires;
 
     public List<Accessoire> getAccessoires() {

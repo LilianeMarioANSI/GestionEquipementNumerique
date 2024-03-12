@@ -8,13 +8,13 @@ package Entite;
  *
  * @author loulo
  */
-public enum StatutDemande {
-    EN_COURS("En cours"),
-    TERMINEE("Terminée");
+public enum TypeOffre {
+    DON("Don"),
+    PRET("¨Prêt");
     
     public final String label;
 
-    private StatutDemande(String label) {
+    private TypeOffre(String label) {
         this.label = label;
     }
 }
