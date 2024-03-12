@@ -1,0 +1,127 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 9 mars 2024, 09:05:39
+    Author     : loulo
+*/
+
+html{
+    --red-color : #e11937;
+    --blue-color : #5236AB;
+    --light-blue-color : #ece9f6;
+    --very-light-gray-color : #F8F8F8;
+    --light-gray-color : #efefef;
+    --gray-color : #d1d1d1;
+    --dark-gray-color : #8a8a8a;
+    --error-bg : #FFBABA;
+    --error-color : #D8000C;
+    --success-bg : #DFF2BF;
+    --success-color : #270;
+    --info-bg: #BEF;
+    --info-color: #059;
+    font-family: sans-serif;
+}
+
+main{
+    display: flex;
+    margin-top : 161px;
+    justify-content: center;
+    position : relative;
+}
+
+/* message */
+
+.msg{
+    position: absolute;
+    top: 1.5em;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 3px;
+    color: var(--info-color);
+    background-color: var(--info-bg);
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+    animation: fadeIn 0.5s ease;
+}
+
+.msg.error{
+    color: var(--error-color);
+    background-color: var(--error-bg);
+}
+
+.msg.success{
+    color: var(--success-color);
+    background-color: var(--success-bg);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.show-message {
+    animation: none; /* Suppression de l'animation pour réinitialiser la transition */
+    opacity: 1 !important; /* Opacité forcée à 1 */
+}
+
+/* Form et input*/
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap : 1em;
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+    gap : 10px;
+    border-radius: 5px;
+    border : 1px solid var(--gray-color);
+}
+
+input{
+    border: 1px solid var(--gray-color);
+    border-radius: 5px;
+}
+
+input:focus{
+    outline: 1px solid var(--blue-color);
+}
+
+/* Button */
+
+button {
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+button:hover{
+    cursor: pointer;
+    
+}
+
+button.submit{
+    color: white;
+    background-color: var(--blue-color);
+}
+
+/*Icons*/
+.tiny-icon{
+    width: 1em;
+    height: 1em;
+}
+
+.small-icon{
+    width: 40px;
+    height: 40px;
+}

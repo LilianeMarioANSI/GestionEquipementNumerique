@@ -1,0 +1,27 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 9 mars 2024, 11:30:04
+    Author     : loulo
+*/
+
+header{
+    display: flex;
+    align-items: center;
+    height: 100px;
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid var(--gray-color);
+}
+
+.banner{
+    background-image: url("../Assets/Banner/banner.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 1032;
+}
