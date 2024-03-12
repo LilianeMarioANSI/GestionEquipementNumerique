@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-war/src/java/Servlet/ServletGestionEquipement.java</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-war/web/jsp/Inscription.jsp</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-war/web/jsp/Acceuil.jsp</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-war/web/jsp/TableauBordAdmin.jsp</file>
+            <file>file:/C:/Users/loulo/OneDrive/Documents/GitHub/GestionEquipementNumerique/GestionEquipementNumerique-war/web/jspf/header.jspf</file>
         </group>
     </open-files>
 </project-private>

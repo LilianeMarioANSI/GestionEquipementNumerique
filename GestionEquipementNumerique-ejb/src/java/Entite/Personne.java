@@ -65,7 +65,7 @@ public class Personne implements Serializable {
         login
     */
     
-    @Column(nullable = false)
+    @Column(nullable = false, unique=true)
     private String login;
 
     public String getLogin() {

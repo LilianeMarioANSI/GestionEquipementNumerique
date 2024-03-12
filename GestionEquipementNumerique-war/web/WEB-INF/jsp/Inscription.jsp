@@ -18,11 +18,12 @@
         <link rel="stylesheet" type="text/css" href="Style/inscription.css">
     </head>
     
-    <%@include file="/jspf/header.jspf" %>
-    <%@include file="/jspf/navigation.jspf" %>
+    <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+    <%@include file="/WEB-INF/jspf/header.jspf" %>
+    
     
     <main>
-        <%@include file="/jspf/message.jspf" %>
+        <%@include file="/WEB-INF/jspf/message.jspf" %>
         
         <section class="auth-section register">
                 <h2>Inscription</h2>
@@ -59,12 +60,12 @@
                     </fieldset>
                     
                     
-                    <input type="hidden" name="action" value="inscription">
+                    <input type="hidden" name="action" value="creerMembre">
                     
                     
                     
                     <div class="action-wrapper right">
-                        <a href="ServletGestionEquipement?action=afficherFormulaireAuthentification">Se connecter</a>
+                        <a href="ServletGestionEquipement">Se connecter</a>
                         <button type="submit" class="submit">S'enregistrer</button>
                     </div>
                 </form>

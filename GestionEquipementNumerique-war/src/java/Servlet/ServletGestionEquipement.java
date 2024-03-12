@@ -5,6 +5,8 @@
 package Servlet;
 
 import Entite.Agence;
+import Entite.Offre;
+import Session.SessionAdministrateurLocal;
 import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -15,6 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import Session.SessionMembreLocal;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 /**
  *
  * @author loulo
@@ -35,24 +42,52 @@ public class ServletGestionEquipement extends HttpServlet {
     @EJB
     private SessionMembreLocal sessionMembre;
     
+    @EJB
+    private SessionAdministrateurLocal sessionAdministrateur;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
         String action = request.getParameter("action");
-        String jsp = "/jsp/Acceuil.jsp";
+        String jsp = null;
         if(action == null){
-            jsp = "/jsp/Acceuil.jsp";
+            jsp = "/WEB-INF/jsp/Acceuil.jsp";
+            
+            //Titre de la page
+            request.setAttribute("titrePage", "Acceuil");
+        }
+        else if(action.equals("creerMembre")){
+            jsp = "/WEB-INF/jsp/Acceuil.jsp";
+            doInscrireUtilisateur(request, response);
+            
+            //Titre de la page
+            request.setAttribute("titrePage", "Acceuil");
         }
         else if(action.equals("inscription")){
-            jsp = "/jsp/Acceuil.jsp";
-            doInscrireUtilisateur(request, response);
-        }
-        else if(action.equals("afficherFormulaireInscription")){
-            jsp = "/jsp/Inscription.jsp";
-        }
-        else if(action.equals("afficherFormulaireAuthentification")){
-            jsp = "/jsp/Acceuil.jsp";
+            jsp = "/WEB-INF/jsp/Inscription.jsp";
+            
+            //Titre de la page
+            request.setAttribute("titrePage", "Inscription");
+        }else if(action.equals("tableauBord")){
+            
+            //Récupération de la période de temps
+            String dateDebut_String = request.getParameter("dateDebut");
+            String dateFin_String = request.getParameter("dateFin");
+            
+            //Conversion Date_String en sql Date pour être utilisé dans la méthode GetOffresParPeriode
+            
+            Date dateDeb_sql = Date.valueOf(dateDebut_String);
+            Date dateFin_sql = Date.valueOf(dateFin_String);
+            
+            //Récupération des données concernant les offres de la période
+            Collection <Offre> listesOffres = sessionAdministrateur.GetOffresParPeriode(dateDeb_sql, dateFin_sql);
+            request.setAttribute("dataOffres",listesOffres);
+            
+            jsp = "/WEB-INF/jsp/TableauBordAdmin.jsp";
+            
+            //Titre de la page
+            request.setAttribute("titrePage", "Tableau de bord");
         }
         
         RequestDispatcher Rd;
