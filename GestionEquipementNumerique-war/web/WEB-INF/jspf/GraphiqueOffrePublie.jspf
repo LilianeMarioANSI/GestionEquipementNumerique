@@ -1,5 +1,4 @@
 <%-- any content can be specified here e.g.: --%>
-<<<<<<< HEAD
 <%@page import="com.google.gson.GsonBuilder"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page import="java.util.List"%>
@@ -11,7 +10,6 @@
     <canvas id="offrePublie"></canvas>
 </div>
 
-<<<<<<< HEAD
 <%
     Gson gson = new Gson();
     String dataOffres_json = gson.toJson(dataOffres);
@@ -31,19 +29,6 @@ data.forEach(function(offer) {
 
     // Créer une clé unique pour le mois et l'année
     let key = year + '-' + month;
-=======
-<script>
-    // Supposons que vous ayez un tableau 'data' contenant les données récupérées de la base de données
-
-// Traitement des données pour compter le nombre d'offres publiées par mois
-var offersByMonth = {};
-data.forEach(function(offer) {
-    var month = offer.date.getMonth() + 1; // Récupérer le mois (1-12)
-    var year = offer.date.getFullYear(); // Récupérer l'année
-
-    // Créer une clé unique pour le mois et l'année
-    var key = year + '-' + month;
->>>>>>> main
 
     // Incrémenter le compteur pour ce mois
     if (offersByMonth[key]) {
@@ -54,15 +39,11 @@ data.forEach(function(offer) {
 });
 
 // Création des labels (mois) et des données (nombre d'offres) pour Chart.js
-<<<<<<< HEAD
+
 let labels = [];
 let dataCounts = [];
 for (let key in offersByMonth) {
-=======
-var labels = [];
-var dataCounts = [];
-for (var key in offersByMonth) {
->>>>>>> main
+
     if (offersByMonth.hasOwnProperty(key)) {
         labels.push(key);
         dataCounts.push(offersByMonth[key]);
@@ -70,11 +51,8 @@ for (var key in offersByMonth) {
 }
 
 // Configuration du graphique avec Chart.js
-<<<<<<< HEAD
 var ctx = document.getElementById('offrePublie');
-=======
-var ctx = document.getElementById('myChart');
->>>>>>> main
+
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -89,19 +67,11 @@ var myChart = new Chart(ctx, {
     },
     options: {
         scales: {
-<<<<<<< HEAD
             y: {
                 
                 beginAtZero: true
                 
             }
-=======
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
->>>>>>> main
         }
     }
 });
