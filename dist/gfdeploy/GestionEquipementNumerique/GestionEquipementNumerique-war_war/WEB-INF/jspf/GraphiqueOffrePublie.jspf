@@ -1,21 +1,36 @@
 <%-- any content can be specified here e.g.: --%>
+<%@page import="com.google.gson.GsonBuilder"%>
+<%@page import="com.google.gson.Gson"%>
+<%@page import="java.util.List"%>
+<%@page import="Entite.Offre"%>
 <%@ page pageEncoding="UTF-8" %>
+<jsp:useBean id="dataOffres" scope="request" class="java.util.List"></jsp:useBean>
+
+
 
 <div class="chart">
     <canvas id="offrePublie"></canvas>
 </div>
 
+<%
+    Gson gson = new Gson();
+    String dataOffres_json = gson.toJson(dataOffres);
+%>
+
+
 <script>
-    // Supposons que vous ayez un tableau 'data' contenant les données récupérées de la base de données
+
+let data = <%=dataOffres_json%>;
+console.log(data);
 
 // Traitement des données pour compter le nombre d'offres publiées par mois
-var offersByMonth = {};
+let offersByMonth = {};
 data.forEach(function(offer) {
-    var month = offer.date.getMonth() + 1; // Récupérer le mois (1-12)
-    var year = offer.date.getFullYear(); // Récupérer l'année
+    let month = offer.date.getMonth() + 1; // Récupérer le mois (1-12)
+    let year = offer.date.getFullYear(); // Récupérer l'année
 
     // Créer une clé unique pour le mois et l'année
-    var key = year + '-' + month;
+    let key = year + '-' + month;
 
     // Incrémenter le compteur pour ce mois
     if (offersByMonth[key]) {
@@ -26,9 +41,9 @@ data.forEach(function(offer) {
 });
 
 // Création des labels (mois) et des données (nombre d'offres) pour Chart.js
-var labels = [];
-var dataCounts = [];
-for (var key in offersByMonth) {
+let labels = [];
+let dataCounts = [];
+for (let key in offersByMonth) {
     if (offersByMonth.hasOwnProperty(key)) {
         labels.push(key);
         dataCounts.push(offersByMonth[key]);
@@ -36,7 +51,7 @@ for (var key in offersByMonth) {
 }
 
 // Configuration du graphique avec Chart.js
-var ctx = document.getElementById('myChart');
+var ctx = document.getElementById('offrePublie');
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -51,11 +66,11 @@ var myChart = new Chart(ctx, {
     },
     options: {
         scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
+            y: {
+                
+                beginAtZero: true
+                
+            }
         }
     }
 });
