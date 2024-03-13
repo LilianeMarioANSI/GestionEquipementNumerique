@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import Session.SessionMembreLocal;
+<<<<<<< HEAD
+import static java.lang.System.out;
+=======
+>>>>>>> main
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -72,6 +76,33 @@ public class ServletGestionEquipement extends HttpServlet {
         }else if(action.equals("tableauBord")){
             
             //Récupération de la période de temps
+<<<<<<< HEAD
+            String dateDebut_String = request.getParameter("dateDeb");
+            String dateFin_String = request.getParameter("dateFin");
+            
+            //On renvoie les date de début et de fin pour pré-remplir les champs date du formulaire 
+            request.setAttribute("dateDeb",dateDebut_String);
+            request.setAttribute("dateFin",dateFin_String);
+            
+            //Conversion Date_String en sql Date pour être utilisé dans la méthode GetOffresParPeriode
+            Date dateDeb_sql;
+            Date dateFin_sql;
+            
+            if (dateDebut_String == null || dateFin_String == null){
+                dateDeb_sql = Date.valueOf("2023-01-01");
+                dateFin_sql = Date.valueOf("2023-12-31");
+            }else{
+                dateDeb_sql = Date.valueOf(dateDebut_String);
+                dateFin_sql = Date.valueOf(dateFin_String);
+            }
+            
+            out.println(dateDeb_sql);
+            out.println(dateFin_sql);
+            
+            //Récupération des données concernant les offres de la période
+            Collection <Offre> listesOffres = sessionAdministrateur.GetOffresParPeriode(dateDeb_sql, dateFin_sql);
+            
+=======
             String dateDebut_String = request.getParameter("dateDebut");
             String dateFin_String = request.getParameter("dateFin");
             
@@ -82,10 +113,15 @@ public class ServletGestionEquipement extends HttpServlet {
             
             //Récupération des données concernant les offres de la période
             Collection <Offre> listesOffres = sessionAdministrateur.GetOffresParPeriode(dateDeb_sql, dateFin_sql);
+>>>>>>> main
             request.setAttribute("dataOffres",listesOffres);
             
             jsp = "/WEB-INF/jsp/TableauBordAdmin.jsp";
             
+<<<<<<< HEAD
+            
+=======
+>>>>>>> main
             //Titre de la page
             request.setAttribute("titrePage", "Tableau de bord");
         }

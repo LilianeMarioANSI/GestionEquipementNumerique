@@ -16,12 +16,29 @@
         <link rel="stylesheet" type="text/css" href="Style/header.css">
         <link rel="stylesheet" type="text/css" href="Style/chart.css">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="./Js/GraphiqueOffrePublie.js" defer></script>
+        
     </head>
     <body>
         <%@include file="/WEB-INF/jspf/navigation.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         <main>
+            
+            <%
+                String dateDeb = (String)request.getAttribute("dateDeb");
+                String dateFin = (String)request.getAttribute("dateFin");
+            %>
+            
+            <form action="ServletGestionEquipement" method="post">
+                <label for="dateDeb">Date de début</label>
+                <input type="date" name="dateDeb" id="dateDeb" value=<%=dateDeb%>>
+                
+                <label for="dateFin">Date de fin</label>
+                <input type="date" name="dateFin" id="dateFin" value=<%=dateFin%>>
+                
+                <input type="hidden" name="action" value="tableauBord">
+                <button type="submit" class="submit">Appliquer</button>
+            </form>
+                
             <%@include file="/WEB-INF/jspf/GraphiqueOffrePublie.jspf" %>
         </main>
         
