@@ -4,7 +4,6 @@
  */
 package Entite;
 
-import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,13 +15,11 @@ import javax.persistence.Id;
  * @author loulo
  */
 @Entity
-public class Administrateur extends Personne implements Serializable {
+public class SuperAdministrateur extends Membre implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @SerializedName("idAdministrateur")
     private Long id;
 
     public Long getId() {
@@ -43,10 +40,10 @@ public class Administrateur extends Personne implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Administrateur)) {
+        if (!(object instanceof SuperAdministrateur)) {
             return false;
         }
-        Administrateur other = (Administrateur) object;
+        SuperAdministrateur other = (SuperAdministrateur) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -55,7 +52,7 @@ public class Administrateur extends Personne implements Serializable {
 
     @Override
     public String toString() {
-        return "Entite.Administrateur[ id=" + id + " ]";
+        return "Entite.SuperAdministrateur[ id=" + id + " ]";
     }
     
 }
