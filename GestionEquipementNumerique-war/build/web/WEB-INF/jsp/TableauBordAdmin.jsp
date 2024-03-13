@@ -16,12 +16,17 @@
         <link rel="stylesheet" type="text/css" href="Style/header.css">
         <link rel="stylesheet" type="text/css" href="Style/chart.css">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<<<<<<< HEAD
         
+=======
+        <script src="./Js/GraphiqueOffrePublie.js" defer></script>
+>>>>>>> main
     </head>
     <body>
         <%@include file="/WEB-INF/jspf/navigation.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         <main>
+<<<<<<< HEAD
             
             <%
                 String dateDeb = (String)request.getAttribute("dateDeb");
@@ -39,6 +44,8 @@
                 <button type="submit" class="submit">Appliquer</button>
             </form>
                 
+=======
+>>>>>>> main
             <%@include file="/WEB-INF/jspf/GraphiqueOffrePublie.jspf" %>
         </main>
         

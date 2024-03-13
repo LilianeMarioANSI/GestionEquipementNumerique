@@ -4,7 +4,10 @@
  */
 package Entite;
 
+<<<<<<< HEAD
 import com.google.gson.annotations.SerializedName;
+=======
+>>>>>>> main
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,10 +22,15 @@ import javax.persistence.Id;
 public class Administrateur extends Personne implements Serializable {
 
     private static final long serialVersionUID = 1L;
+<<<<<<< HEAD
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @SerializedName("idAdministrateur")
+=======
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+>>>>>>> main
     private Long id;
 
     public Long getId() {
