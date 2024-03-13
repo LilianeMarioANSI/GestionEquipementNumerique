@@ -7,6 +7,7 @@ package Facade;
 import Entite.Offre;
 import static java.lang.System.out;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -33,16 +34,18 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     }
     
     @Override
-    public List<Offre> getOffresParPeriode(Date dateDebut, Date dateFin) {
-        List<Offre> result;
-        //String txt = "SELECT o FROM Offre o WHERE o.datePublication BETWEEN :dateDebut AND :dateFin";
-        String txt = "SELECT o FROM Offre as o";
+    public List<String> getOffresParPeriode_Json(Date dateDebut, Date dateFin) {
+        List<String> resultList = new ArrayList<>();
+        String txt = "SELECT o FROM Offre o WHERE o.datePublication BETWEEN :dateDebut AND :dateFin ORDER BY o.datePublication ASC";
         Query req = getEntityManager().createQuery(txt);
-        //req.setParameter("dateDebut", dateDebut);
-        //req.setParameter("dateFin", dateFin);
-        result = req.getResultList();
-        out.println(result);
-        return result;
+        req.setParameter("dateDebut", dateDebut);
+        req.setParameter("dateFin", dateFin);
+        List<Offre> result = req.getResultList();
+        for (Offre offre : result) {
+            resultList.add(offre.toJson());
+        }
+        
+        return resultList;
     }
     
 }

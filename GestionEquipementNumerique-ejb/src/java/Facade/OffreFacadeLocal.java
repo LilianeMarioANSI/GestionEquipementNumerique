@@ -30,6 +30,6 @@ public interface OffreFacadeLocal {
 
     int count();
     
-    List<Offre> getOffresParPeriode(Date dateDebut, Date dateFin);
+    List<String> getOffresParPeriode_Json(Date dateDebut, Date dateFin);
     
 }

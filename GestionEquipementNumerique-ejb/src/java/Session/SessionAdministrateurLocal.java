@@ -16,6 +16,6 @@ import javax.ejb.Local;
 @Local
 public interface SessionAdministrateurLocal {
     
-    List <Offre> GetOffresParPeriode(Date dateDebut, Date dateFin);
+    List <String> getOffresParPeriode_Json(Date dateDebut, Date dateFin);
     
 }

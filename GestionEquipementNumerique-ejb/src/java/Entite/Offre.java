@@ -4,6 +4,9 @@
  */
 package Entite;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +70,7 @@ public class Offre implements Serializable {
         Intitule
     */
     
+    @Expose
     @Column(nullable = false)
     private String intitule;
     
@@ -81,6 +85,7 @@ public class Offre implements Serializable {
     /*
         Date publication
     */
+    @Expose
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datePublication;
@@ -97,6 +102,7 @@ public class Offre implements Serializable {
         Type offre
     */
     
+    @Expose
     @Column(nullable = false)
     private TypeOffre TypeOffre;
 
@@ -112,6 +118,7 @@ public class Offre implements Serializable {
         Description
     */
     
+    @Expose
     @Column(nullable = false)
     private String Description;
 
@@ -127,6 +134,7 @@ public class Offre implements Serializable {
         Date début
     */
     
+    @Expose
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateDebut;
@@ -143,6 +151,7 @@ public class Offre implements Serializable {
         Date fin
     */
     
+    @Expose
     @Column(nullable = true)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateFin;
@@ -158,6 +167,8 @@ public class Offre implements Serializable {
     /*
         Etat de l'offre
     */
+    
+    @Expose
     private EtatOffre etat;
 
     public EtatOffre getEtat() {
@@ -176,6 +187,7 @@ public class Offre implements Serializable {
     */
     
     @ManyToOne
+    @Expose(serialize = false, deserialize = false)
     private Personne utilisateur;
 
     public Personne getUtilisateur() {
@@ -191,6 +203,7 @@ public class Offre implements Serializable {
     */
     
     @ManyToOne
+    @Expose(serialize = false, deserialize = false)
     private Accessoire accessoire;
 
     public Accessoire getAccessoire() {
@@ -206,6 +219,19 @@ public class Offre implements Serializable {
     */
     
     @OneToMany(mappedBy = "offre")
+    @Expose(serialize = false, deserialize = false)
     private List<Demande> demandes;
+    
+    /*
+        Methodes
+    */
+    
+    //Retourne une représentation de l'objet au format Json
+    public String toJson() {
+        GsonBuilder builder = new GsonBuilder();  
+        builder.excludeFieldsWithoutExposeAnnotation();  
+        Gson gson = builder.create(); 
+        return gson.toJson(this);
+    }
 
 }

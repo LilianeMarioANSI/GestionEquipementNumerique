@@ -25,7 +25,7 @@ public class SessionAdministrateur implements SessionAdministrateurLocal {
     // "Insert Code > Add Business Method")
     
     @Override
-    public List <Offre> GetOffresParPeriode(Date dateDebut, Date dateFin) {
-        return offreFacade.getOffresParPeriode(dateDebut, dateDebut);
+    public List <String> getOffresParPeriode_Json(Date dateDebut, Date dateFin) {
+        return offreFacade.getOffresParPeriode_Json(dateDebut, dateFin);
     }
 }
