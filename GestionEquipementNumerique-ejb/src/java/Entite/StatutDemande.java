@@ -9,6 +9,12 @@ package Entite;
  * @author loulo
  */
 public enum StatutDemande {
-    EN_COURS,
-    TERMINEE,
+    EN_COURS("En cours"),
+    TERMINEE("Terminée");
+    
+    public final String label;
+
+    private StatutDemande(String label) {
+        this.label = label;
+    }
 }

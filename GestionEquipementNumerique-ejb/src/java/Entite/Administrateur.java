@@ -15,7 +15,7 @@ import javax.persistence.Id;
  * @author loulo
  */
 @Entity
-public class Don extends Offre implements Serializable {
+public class Administrateur extends Personne implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,10 +40,10 @@ public class Don extends Offre implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Don)) {
+        if (!(object instanceof Administrateur)) {
             return false;
         }
-        Don other = (Don) object;
+        Administrateur other = (Administrateur) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -52,7 +52,7 @@ public class Don extends Offre implements Serializable {
 
     @Override
     public String toString() {
-        return "Entite.Don[ id=" + id + " ]";
+        return "Entite.Administrateur[ id=" + id + " ]";
     }
     
 }

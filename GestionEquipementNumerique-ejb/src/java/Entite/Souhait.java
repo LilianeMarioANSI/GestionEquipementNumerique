@@ -59,10 +59,44 @@ public class Souhait implements Serializable {
         return "Entite.Souhait[ id=" + id + " ]";
     }
     
-    
+    /*
+        DatePublication
+    */
     @Column (nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datePublication;
+    
+    /*
+        Type souhait
+    */
+    
+    @Column (nullable = false)
+    private TypeSouhait typeSouhait;
+
+    public TypeSouhait getTypeSouhait() {
+        return typeSouhait;
+    }
+
+    public void setTypeSouhait(TypeSouhait typeSouhait) {
+        this.typeSouhait = typeSouhait;
+    }
+    
+    /*
+        Type accessoire
+    */
+    
+    @Column (nullable = false)
+    private TypeAccessoire TypeAccessoire;
+
+    public TypeAccessoire getTypeAccessoire() {
+        return TypeAccessoire;
+    }
+
+    public void setTypeAccessoire(TypeAccessoire TypeAccessoire) {
+        this.TypeAccessoire = TypeAccessoire;
+    }
+
+
     
     /*
         Relations
@@ -71,29 +105,14 @@ public class Souhait implements Serializable {
     */
     
     @ManyToOne
-    private Utilisateur utilisateur;
+    private Personne utilisateur;
     
-    public Utilisateur getUtilisateur() {
+    public Personne getUtilisateur() {
         return utilisateur;
     }
     
-    public void setUtilisateur(Utilisateur utilisateur) {
+    public void setUtilisateur(Personne utilisateur) {
         this.utilisateur = utilisateur;
-    }
-    
-    /*
-        Categorie d'accessoire
-    */
-    
-    @ManyToOne
-    private CategorieAccessoire categorieAccessoire;
-
-    public CategorieAccessoire getCategorieAccessoire() {
-        return categorieAccessoire;
-    }
-    
-    public void setCategorieAccessoire(CategorieAccessoire categorieAccessoire) {
-        this.categorieAccessoire = categorieAccessoire;
     }
 
 }

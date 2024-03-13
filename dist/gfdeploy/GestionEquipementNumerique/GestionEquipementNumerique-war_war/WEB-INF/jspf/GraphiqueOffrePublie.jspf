@@ -1,0 +1,63 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+
+<div class="chart">
+    <canvas id="offrePublie"></canvas>
+</div>
+
+<script>
+    // Supposons que vous ayez un tableau 'data' contenant les données récupérées de la base de données
+
+// Traitement des données pour compter le nombre d'offres publiées par mois
+var offersByMonth = {};
+data.forEach(function(offer) {
+    var month = offer.date.getMonth() + 1; // Récupérer le mois (1-12)
+    var year = offer.date.getFullYear(); // Récupérer l'année
+
+    // Créer une clé unique pour le mois et l'année
+    var key = year + '-' + month;
+
+    // Incrémenter le compteur pour ce mois
+    if (offersByMonth[key]) {
+        offersByMonth[key]++;
+    } else {
+        offersByMonth[key] = 1;
+    }
+});
+
+// Création des labels (mois) et des données (nombre d'offres) pour Chart.js
+var labels = [];
+var dataCounts = [];
+for (var key in offersByMonth) {
+    if (offersByMonth.hasOwnProperty(key)) {
+        labels.push(key);
+        dataCounts.push(offersByMonth[key]);
+    }
+}
+
+// Configuration du graphique avec Chart.js
+var ctx = document.getElementById('myChart');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Nombre d\'offres publiées par mois',
+            data: dataCounts,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Couleur de fond des barres
+            borderColor: 'rgba(75, 192, 192, 1)', // Couleur de la bordure des barres
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+
+</script>

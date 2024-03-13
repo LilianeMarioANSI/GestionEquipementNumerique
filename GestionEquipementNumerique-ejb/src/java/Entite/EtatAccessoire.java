@@ -9,6 +9,15 @@ package Entite;
  * @author loulo
  */
 public enum EtatAccessoire {
-    NEUF,
-    USAGE
+    NEUF("Neuf"),
+    QUASI_NEUF("Quasi neuf"),
+    USAGE("Usagé"),
+    MAUVAIS("Mauvais");
+    
+    
+    public final String label;
+
+    private EtatAccessoire(String label) {
+        this.label = label;
+    }
 }

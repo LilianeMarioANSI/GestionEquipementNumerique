@@ -64,7 +64,7 @@ public class Offre implements Serializable {
     }
     
     /*
-        intitule
+        Intitule
     */
     
     @Column(nullable = false)
@@ -79,23 +79,9 @@ public class Offre implements Serializable {
     }
     
     /*
-        Categorie accessoire
-    */
-    @Column(nullable = false)
-    private CategorieAccessoire categorie;
-    
-    public CategorieAccessoire getCategorie() {
-        return categorie;
-    }
-
-    public void setCategorie(CategorieAccessoire categorie) {
-        this.categorie = categorie;
-    }
-    
-    /*
         Date publication
     */
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datePublication;
     
@@ -108,19 +94,95 @@ public class Offre implements Serializable {
     }
     
     /*
+        Type offre
+    */
+    
+    @Column(nullable = false)
+    private TypeOffre TypeOffre;
+
+    public TypeOffre getTypeOffre() {
+        return TypeOffre;
+    }
+
+    public void setTypeOffre(TypeOffre TypeOffre) {
+        this.TypeOffre = TypeOffre;
+    }
+    
+    /*
+        Description
+    */
+    
+    @Column(nullable = false)
+    private String Description;
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String Description) {
+        this.Description = Description;
+    }
+    
+    /*
+        Date début
+    */
+    
+    @Column(nullable = false)
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateDebut;
+
+    public Date getDateDebut() {
+        return dateDebut;
+    }
+
+    public void setDateDebut(Date dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+    
+    /*
+        Date fin
+    */
+    
+    @Column(nullable = true)
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateFin;
+
+    public Date getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
+    }
+    
+    /*
+        Etat de l'offre
+    */
+    private EtatOffre etat;
+
+    public EtatOffre getEtat() {
+        return etat;
+    }
+
+    public void setEtat(EtatOffre etat) {
+        this.etat = etat;
+    }
+
+
+    /*
         Relations
     
-        Utilisateur
+        Personne
     */
     
     @ManyToOne
-    private Utilisateur utilisateur;
+    private Personne utilisateur;
 
-    public Utilisateur getUtilisateur() {
+    public Personne getUtilisateur() {
         return utilisateur;
     }
     
-    public void setUtilisateur(Utilisateur utilisateur) {
+    public void setUtilisateur(Personne utilisateur) {
         this.utilisateur = utilisateur;
     }
     

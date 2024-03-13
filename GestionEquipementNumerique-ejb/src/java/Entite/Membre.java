@@ -5,20 +5,17 @@
 package Entite;
 
 import java.io.Serializable;
-import java.util.Date;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
 
 /**
  *
  * @author loulo
  */
 @Entity
-public class Pret extends Offre implements Serializable {
+public class Membre extends Personne implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,10 +40,10 @@ public class Pret extends Offre implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pret)) {
+        if (!(object instanceof Membre)) {
             return false;
         }
-        Pret other = (Pret) object;
+        Membre other = (Membre) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -55,37 +52,7 @@ public class Pret extends Offre implements Serializable {
 
     @Override
     public String toString() {
-        return "Entite.Pret[ id=" + id + " ]";
+        return "Entite.Membre[ id=" + id + " ]";
     }
     
-    /*
-        Date de fin du prêt
-    */
-    @Column(nullable = false)
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dateDebutPret;
-    
-    public Date getDateDebutPret() {
-        return dateDebutPret;
-    }
-
-    public void setDateDebutPret(Date dateDebutPret) {
-        this.dateDebutPret = dateDebutPret;
-    }
-    
-    
-    /*
-        Date de fin du prêt
-    */
-    @Column(nullable = false)
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dateFinPret;
-
-    public Date getDateFinPret() {
-        return dateFinPret;
-    }
-
-    public void setDateFinPret(Date dateFinPret) {
-        this.dateFinPret = dateFinPret;
-    }
 }
