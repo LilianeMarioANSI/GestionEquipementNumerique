@@ -4,10 +4,7 @@
  */
 package Entite;
 
-<<<<<<< HEAD
 import com.google.gson.annotations.SerializedName;
-=======
->>>>>>> main
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,17 +19,11 @@ import javax.persistence.Id;
 public class Membre extends Personne implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-<<<<<<< HEAD
     @SerializedName("idMembre")
     private Long id;
-    
-    
-=======
-    private Long id;
-
->>>>>>> main
     public Long getId() {
         return id;
     }

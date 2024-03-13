@@ -7,11 +7,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <jsp:useBean id="dataOffres" scope="request" class="java.util.List"></jsp:useBean>
 
-
-=======
-<%@ page pageEncoding="UTF-8" %>
->>>>>>> main
-
 <div class="chart">
     <canvas id="offrePublie"></canvas>
 </div>
