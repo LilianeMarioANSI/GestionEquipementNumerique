@@ -10,7 +10,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 header{
     display: flex;
     align-items: center;
-    height: 50px;
+    height: var(--header-size);
     width: 100%;
     background-color: white;
     overflow: hidden;
@@ -28,7 +28,7 @@ header{
 }
 
 .left{
-    transform: rotateY(180deg);
+    transform: rotate(180deg);
 }
 
 .banner{

@@ -21,14 +21,17 @@ html{
     --success-color : #270;
     --info-bg: #BEF;
     --info-color: #059;
+    --header-size : 80px;
+    --nav-size : 60px;
     font-family: sans-serif;
 }
 
 main{
     display: flex;
-    margin-top : 110px;
+    margin-top : calc(var(--header-size) + var(--nav-size));
     justify-content: center;
     position : relative;
+    padding : 50px;
 }
 
 /* message */
@@ -101,6 +104,10 @@ input:focus{
     outline: 1px solid var(--blue-color);
 }
 
+input:read-only{
+    background-color: var(--gray-color);
+}
+
 .action-wrapper.right{
     display: flex;
     justify-content: flex-end;
@@ -118,12 +125,22 @@ button {
 
 button:hover{
     cursor: pointer;
-    
 }
 
 button.submit{
     color: white;
     background-color: var(--blue-color);
+}
+
+button.edit{
+   transition : background-color 0.2s ease, color 0.2s ease;
+   border: 1px solid var(--gray-color);
+}
+
+button.edit:hover{
+   background-color: var(--blue-color);
+   border: 1px solid var(--blue-color);
+   color: white;
 }
 
 /*Icons*/
@@ -135,4 +152,9 @@ button.submit{
 .small-icon{
     width: 40px;
     height: 40px;
+}
+
+.large-icon{
+    width: 140px;
+    height: 140px;
 }

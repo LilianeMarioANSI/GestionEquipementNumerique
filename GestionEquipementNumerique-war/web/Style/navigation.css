@@ -13,7 +13,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     width: 100%;
     padding : 0 1rem;
     align-items: stretch;
-    height: 60px;
+    height: var(--nav-size);
     box-sizing: border-box;
     border-bottom: 1px solid var(--gray-color);
     z-index: 1001;
@@ -58,16 +58,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     align-items: center;
 }
 
-.nav-btn{
-    border: none;
-    display: flex;
-    align-items : center;
+.nav-drop{
+    display : flex;
     gap : 5px;
-    background-color: white;
 }
 
-.nav-btn:hover{
-    background-color: transparent;
+.nav-drop:hover{
     cursor : pointer;
     background-color: var(--light-gray-color);
 }

@@ -67,9 +67,11 @@ public class ServletGestionEquipement extends HttpServlet {
             
             //Titre de la page
             request.setAttribute("titrePage", "Inscription");
-        }else if(action.equals("tableauBord")){
+        }else if(action.equals("analytics")){
             
             jsp = "/WEB-INF/jsp/TableauBordAdmin.jsp";
+            //Titre de la page
+            request.setAttribute("titrePage", "Tableau de bord");
             
             //Récupération de la période de temps
             String dateDebut_String = request.getParameter("dateDeb");
@@ -101,8 +103,14 @@ public class ServletGestionEquipement extends HttpServlet {
             out.println(listesOffres);
             request.setAttribute("dataOffres", listesOffres);
             
+            
+        }else if(action.equals("tableauBord")){
+            
+            
+            jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
             //Titre de la page
-            request.setAttribute("titrePage", "Tableau de bord");
+            request.setAttribute("titrePage", "Mon espace");
+            
         }
         
         RequestDispatcher Rd;
