@@ -6,6 +6,7 @@ package Servlet;
 
 import Entite.Agence;
 import Entite.Offre;
+import Entite.Souhait;
 import Session.SessionAdministrateurLocal;
 import java.io.IOException;
 import javax.ejb.EJB;
@@ -110,6 +111,16 @@ public class ServletGestionEquipement extends HttpServlet {
             jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
             //Titre de la page
             request.setAttribute("titrePage", "Mon espace");
+            
+        }else if(action.equals("mesSouhaits")){
+            jsp = "/WEB-INF/jsp/MesSouhaits.jsp";
+            //Titre de la page
+            request.setAttribute("titrePage", "Mes Souhaits");
+            
+            //long idMembre = Récupérer l'Id du membre connecté
+            //Collection<Souhait> listeSouhaits = sessionMembre.GetSouhaitByMembre(idMembre);
+            
+            //request.setAttribute("listeSouhaits", listeSouhaits);
             
         }
         

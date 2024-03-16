@@ -5,9 +5,11 @@
 package Facade;
 
 import Entite.Souhait;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -26,6 +28,16 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
 
     public SouhaitFacade() {
         super(Souhait.class);
+    }
+    
+    @Override
+    public List<Souhait> getSouhaitByMembre(long idMembre) {
+        String txt = "SELECT s FROM Souhait s WHERE s.utilisateur.id = :id";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("id", idMembre);
+        List<Souhait> result = req.getResultList();
+        
+        return result;
     }
     
 }

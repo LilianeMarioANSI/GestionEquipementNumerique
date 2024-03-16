@@ -21,7 +21,7 @@
         <%@include file="/WEB-INF/jspf/navigation.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         
-        <main >
+        <main>
             <section class="user-data">
                 <div class="container">
                     <div class="container-header">
@@ -35,9 +35,11 @@
                             <li>Casque Jabra filaire</li>
                             <li>Adaptateur HDMI/VGA</li>
                         </ul>
-                        <div class="action-wrapper right">
+                        <form class="action-wrapper right">
+                            <input type="hidden" name="action" value="mesEquipements">
                             <button type="submit" class="submit">Voir plus</button>
-                        </div>
+                        </form>
+                        
                     </div>
                 </div>
                 
@@ -53,9 +55,10 @@
                             <li>Casque Jabra filaire</li>
                             <li>Adaptateur HDMI/VGA</li>
                         </ul>
-                        <div class="action-wrapper right">
+                        <form class="action-wrapper right">
+                            <input type="hidden" name="action" value="mesPrets">
                             <button type="submit" class="submit">Voir plus</button>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 
@@ -71,9 +74,10 @@
                             <li>Casque Jabra filaire</li>
                             <li>Adaptateur HDMI/VGA</li>
                         </ul>
-                        <div class="action-wrapper right">
+                        <form class="action-wrapper right">
+                            <input type="hidden" name="action" value="mesSouhaits">
                             <button type="submit" class="submit">Voir plus</button>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 
@@ -90,9 +94,10 @@
                             <li>Adaptateur HDMI/VGA</li>
                         </ul>
                         
-                        <div class="action-wrapper right">
+                        <form class="action-wrapper right">
+                            <input type="hidden" name="action" value="mesDons">
                             <button type="submit" class="submit">Voir plus</button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </section>

@@ -21,8 +21,12 @@ toggleEditBtn.addEventListener("click", () => {
         toggleEditBtn.dataset.state = "reset";
         formWithEditableInput.reset();
         toggleEditBtn.innerText = "Modifier";
+        toggleEditBtn.classList.remove("delete");
+        toggleEditBtn.classList.add("edit");
     } else {
         toggleEditBtn.dataset.state = "edit";
         toggleEditBtn.innerText = "Annuler";
+        toggleEditBtn.classList.remove("edit");
+        toggleEditBtn.classList.add("delete");
     }
 });

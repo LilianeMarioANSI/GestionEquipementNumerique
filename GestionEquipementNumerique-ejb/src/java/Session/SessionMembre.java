@@ -6,7 +6,10 @@ package Session;
 
 import Entite.Agence;
 import Entite.Membre;
+import Entite.Souhait;
 import Facade.MembreFacadeLocal;
+import Facade.SouhaitFacadeLocal;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -16,12 +19,22 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class SessionMembre implements SessionMembreLocal {
+
+    @EJB
+    private SouhaitFacadeLocal souhaitFacade;
     
     @EJB
     private MembreFacadeLocal membreFacade;
     
+    
+    
     @Override
     public Membre InscriptionUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence) {
         return membreFacade.CreerMembre(login, mdp, nom, prenom, bureau, telephone, agence);
+    }
+    
+    @Override
+    public List<Souhait> GetSouhaitByMembre(long idMembre){
+        return souhaitFacade.getSouhaitByMembre(idMembre);
     }
 }

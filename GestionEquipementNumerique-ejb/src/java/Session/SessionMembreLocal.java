@@ -6,6 +6,8 @@ package Session;
 
 import Entite.Agence;
 import Entite.Membre;
+import Entite.Souhait;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -16,4 +18,6 @@ import javax.ejb.Local;
 public interface SessionMembreLocal {
     
     Membre InscriptionUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence);
+    
+    List<Souhait> GetSouhaitByMembre(long idMembre);
 }

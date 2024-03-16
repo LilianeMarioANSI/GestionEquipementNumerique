@@ -29,4 +29,5 @@ public interface SouhaitFacadeLocal {
 
     int count();
     
+    List<Souhait> getSouhaitByMembre(long idMembre);
 }

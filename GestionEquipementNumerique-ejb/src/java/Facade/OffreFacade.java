@@ -5,7 +5,6 @@
 package Facade;
 
 import Entite.Offre;
-import static java.lang.System.out;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;

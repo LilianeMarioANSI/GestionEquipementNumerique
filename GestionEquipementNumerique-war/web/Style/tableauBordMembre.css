@@ -39,6 +39,10 @@ section{
     padding: 20px 30px;
 }
 
+.container-body form{
+    flex-direction: row;
+}
+
 .container-body ul {
     list-style: none;
     padding: 10px 32px;
