@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -47,4 +48,9 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         return resultList;
     }
     
+    public List<Offre> catalogueOffres() {
+        TypedQuery<Offre> query = getEntityManager().createQuery(
+                "SELECT o FROM Offre o", Offre.class);
+        return query.getResultList();
+    }
 }

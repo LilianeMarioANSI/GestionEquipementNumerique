@@ -32,4 +32,6 @@ public interface OffreFacadeLocal {
     
     List<String> getOffresParPeriode_Json(Date dateDebut, Date dateFin);
     
+    List<Offre> catalogueOffres();
+    
 }
