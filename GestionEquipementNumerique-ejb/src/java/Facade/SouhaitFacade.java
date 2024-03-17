@@ -4,7 +4,11 @@
  */
 package Facade;
 
+import Entite.Personne;
 import Entite.Souhait;
+import Entite.TypeAccessoire;
+import Entite.TypeSouhait;
+import java.sql.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -39,5 +43,26 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
         
         return result;
     }
+
+    @Override
+    public Souhait creerSouhait(Date datePublication, Date dateDebut, Date dateFin, TypeSouhait typeSouhait, TypeAccessoire typeAccessoire, String description, Personne utilisateur) {
+        Souhait s = new Souhait();
+        s.setDatePublication(datePublication);
+        s.setDateDebut(dateDebut);
+        s.setDateFin(dateFin);
+        s.setTypeSouhait(typeSouhait);
+        s.setTypeAccessoire(typeAccessoire);
+        s.setDescription(description);
+        s.setUtilisateur(utilisateur);
+        em.persist(s);
+        return s;
+    }
+
+    @Override
+    public void supprimerSouhait(Souhait souhait) {
+        em.remove(souhait);
+    }
+    
+    
     
 }

@@ -4,7 +4,11 @@
  */
 package Facade;
 
+import Entite.Personne;
 import Entite.Souhait;
+import Entite.TypeAccessoire;
+import Entite.TypeSouhait;
+import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -30,4 +34,8 @@ public interface SouhaitFacadeLocal {
     int count();
     
     List<Souhait> getSouhaitByMembre(long idMembre);
+
+    Souhait creerSouhait(Date datePublication, Date dateDebut, Date dateFin, TypeSouhait typeSouhait, TypeAccessoire typeAccessoire, String description, Personne utilisateur);
+
+    void supprimerSouhait(Souhait idSouhait);
 }

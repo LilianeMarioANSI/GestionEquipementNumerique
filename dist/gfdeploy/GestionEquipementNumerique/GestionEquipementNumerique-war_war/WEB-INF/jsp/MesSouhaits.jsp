@@ -4,6 +4,7 @@
     Author     : loulo
 --%>
 
+<%@page import="Entite.TypeAccessoire"%>
 <%@page import="Entite.Souhait"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -24,10 +25,14 @@
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         
         <main class="vertical">
+            
+            <%@include file="/WEB-INF/jspf/message.jspf" %>
+            
             <form action="ServletGestionEquipement" method="post" class="addForm">
                 <div >
                     <h3>De quoi avez vous besoin ?</h3>
                     <div class="action-wrapper right">
+                        <input type="hidden" name="action" value="creerSouhait">
                         <button type="submit" class="submit">Valider</button>
                     </div>
                 </div>
@@ -35,10 +40,10 @@
                 <div class="formBody">
                     <section class="formSection">
                         <h4>Categorie</h4>
-                        <select name="categorie" id="categorie">
-                            <option>Option1</option>
-                            <option>Option1</option>
-                            <option>Option1</option>
+                        <select name="categorie" id="categorie" required>
+                            <% for (TypeAccessoire t : TypeAccessoire.values()) {%>
+                                <option value ="<%=t.label%>"><%=t.label%></option>
+                            <% }%>
                         </select>
                     </section>
                     
@@ -48,11 +53,11 @@
                         <h4>Type</h4>
                         
                         <div>
-                            <input type="radio" name="type" id="pret">
+                            <input type="radio" name="type" id="pret" value="pret" checked>
                             <label for="pret">Prêt</label>
                         </div>
                         <div>
-                            <input type="radio" name="type" id="don">
+                            <input type="radio" name="type" id="don" value="don" >
                             <label for="pret">Don</label>
                         </div>
                     </section>
@@ -63,17 +68,17 @@
                         <h4>Date</h4>
                         <div>
                             <label for="dateDebut">Date début :</label>
-                            <input type="date" name="dateDebut" id="dateDebut">
+                            <input type="date" name="dateDebut" id="dateDebut" required>
                        
                             <label for="dateFin">Date fin :</label>
-                            <input type="date" name="dateFin" id="dateFin">
+                            <input type="date" name="dateFin" id="dateFin" required>
                         </div>
                     </section>
                     
                     <div class="separator"></div>
                     
                     <section class="formSection">
-                        <textarea name="description" id="description" placeholder="description" rows="4"></textarea>
+                        <textarea name="description" id="description" placeholder="description" rows="4" required></textarea>
                     </section>
                 </div>
                 

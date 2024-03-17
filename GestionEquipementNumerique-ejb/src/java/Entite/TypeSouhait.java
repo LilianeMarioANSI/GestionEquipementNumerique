@@ -17,4 +17,14 @@ public enum TypeSouhait {
     private TypeSouhait(String label) {
         this.label = label;
     }
+    
+    //Trouve la valeur à partir du label
+    public static TypeSouhait valueOfLabel(String label) {
+        for (TypeSouhait e : values()) {
+            if (e.label.equals(label)) {
+                return e;
+            }
+        }
+        return null;
+    }
 }

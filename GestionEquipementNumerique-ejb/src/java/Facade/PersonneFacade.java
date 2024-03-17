@@ -8,6 +8,7 @@ import Entite.Personne;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -26,6 +27,14 @@ public class PersonneFacade extends AbstractFacade<Personne> implements Personne
 
     public PersonneFacade() {
         super(Personne.class);
+    }
+    
+    @Override
+    public Personne rechercherPersonne(long id) {
+        Query req = getEntityManager().createQuery("Select p from Personne as p where p.id=:idPersonne");
+        req.setParameter("idPersonne", id);
+        Personne result = (Personne) req.getResultList().get(0);
+        return result;
     }
     
 }
