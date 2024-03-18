@@ -5,6 +5,7 @@
 package Facade;
 
 import Entite.Offre;
+import Entite.TypeOffre;
 import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
@@ -31,5 +32,9 @@ public interface OffreFacadeLocal {
     int count();
     
     List<String> getOffresParPeriode_Json(Date dateDebut, Date dateFin);
+    
+    int getNombreOffrePublic();
+    
+    int getNombreOffrePublicByType(TypeOffre type);
     
 }

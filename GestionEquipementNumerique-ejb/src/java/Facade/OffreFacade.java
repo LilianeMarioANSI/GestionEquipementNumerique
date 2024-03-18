@@ -4,7 +4,9 @@
  */
 package Facade;
 
+import Entite.EtatOffre;
 import Entite.Offre;
+import Entite.TypeOffre;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +48,30 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         
         return resultList;
     }
+    
+    @Override
+    public int getNombreOffrePublic() {
+        List<String> resultList = new ArrayList<>();
+        String txt = "SELECT o FROM Offre o WHERE o.etat = :disponible OR o.etat = :enCours";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("disponible", EtatOffre.DISPONIBLE);
+        req.setParameter("enCours", EtatOffre.EN_COURS);
+        List<Offre> result = req.getResultList();
+        return result.size();
+    }
+    
+    @Override
+    public int getNombreOffrePublicByType(TypeOffre type) {
+        List<String> resultList = new ArrayList<>();
+        String txt = "SELECT o FROM Offre o WHERE o.TypeOffre = :typeOffre AND (o.etat = :disponible OR o.etat = :enCours)";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("disponible", EtatOffre.DISPONIBLE);
+        req.setParameter("enCours", EtatOffre.EN_COURS);
+        req.setParameter("typeOffre", type);
+        List<Offre> result = req.getResultList();
+        return result.size();
+    }
+    
+    
     
 }

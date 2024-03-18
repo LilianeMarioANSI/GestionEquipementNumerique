@@ -7,9 +7,13 @@ package Facade;
 import Entite.Agence;
 import Entite.Membre;
 import Entite.Personne;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -43,5 +47,18 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         em.persist(utilisateur);
         return utilisateur;
     }
+
+    @Override
+    public int getNombreMembre() {
+        List<String> resultList = new ArrayList<>();
+        String txt = "SELECT m FROM Membre m";
+        Query req = getEntityManager().createQuery(txt);
+        List<Membre> result = req.getResultList();
+        return result.size();
+    }
+    
+    
+    
+    
     
 }

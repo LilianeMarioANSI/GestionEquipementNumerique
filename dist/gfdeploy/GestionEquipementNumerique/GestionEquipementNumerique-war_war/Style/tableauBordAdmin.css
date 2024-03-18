@@ -1,0 +1,44 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 18 mars 2024, 09:08:57
+    Author     : loulo
+*/
+
+.container{
+    background-color: var(--light-gray-color);
+    display: flex;
+    padding: 18px;
+    border-radius: 5px;
+    justify-content: center;
+}
+
+.container-section{
+    display : flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.container-section:not(:last-child){
+    border-right: 1px solid var(--gray-color);
+}
+
+.container-section p{
+    color: var(--gray-text-color);
+    margin : 8px 0;
+}
+
+form{
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 16px 0
+}
+
+form label{
+    color : var(--gray-text-color);
+    
+}
