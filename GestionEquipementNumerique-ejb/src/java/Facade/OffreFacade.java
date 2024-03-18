@@ -15,6 +15,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import Entite.Accessoire;
+import Entite.EtatOffre;
+import Entite.Personne;
+import Entite.TypeOffre;
+
 
 /**
  *
@@ -48,6 +53,23 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         }
         
         return resultList;
+    }
+
+    @Override
+    public Offre creerOffre (String libelle, String description, Date datePublication, TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre) {
+        Offre o = new Offre();
+        o.setIntitule(libelle);
+        o.setDescription(description);
+        o.setDatePublication(datePublication);
+        o.setTypeOffre(typeOffre);
+        o.setDateDebut(dateDebut);
+        o.setDateFin(dateFin);
+        o.setAccessoire(accesoires);
+        o.setUtilisateur(user);
+        o.setEtat(etatOffre.DISPONIBLE);
+        em.persist(o);
+        user.getOffres().add(o);
+        return o;
     }
     
     @Override

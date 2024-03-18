@@ -4,11 +4,16 @@
  */
 package Facade;
 
+import Entite.Accessoire;
+import Entite.EtatOffre;
 import Entite.Offre;
+import Entite.TypeOffre;
+import Entite.Personne;
 import Entite.TypeOffre;
 import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
+
 
 /**
  *
@@ -39,5 +44,7 @@ public interface OffreFacadeLocal {
     int getNombreOffrePublic();
     
     int getNombreOffrePublicByType(TypeOffre type);
+    
+    Offre creerOffre (String libelle, String description, Date datePublication, TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
     
 }
