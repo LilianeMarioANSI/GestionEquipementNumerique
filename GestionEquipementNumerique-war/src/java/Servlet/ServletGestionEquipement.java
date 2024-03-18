@@ -5,10 +5,12 @@
 package Servlet;
 
 import Entite.Agence;
+import Entite.Membre;
 import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
+import Entite.TypeOffre;
 import Entite.TypeSouhait;
 import Facade.SouhaitFacadeLocal;
 import Session.SessionAdministrateurLocal;
@@ -26,6 +28,8 @@ import static java.lang.System.out;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 /**
  *
@@ -79,7 +83,43 @@ public class ServletGestionEquipement extends HttpServlet {
             
             //Titre de la page
             request.setAttribute("titrePage", "Inscription");
-        }else if(action.equals("analytics")){
+        }
+        else if (action.equals("authentification")) {
+            String login = request.getParameter("login");
+            String mdp = request.getParameter("mdp");
+            Membre m = sessionMembre.IdentificationMembre(login, mdp);
+            if (m != null) {
+                HttpSession session = request.getSession(true);
+                session.setAttribute("membre", m);
+                // Afficher le profil de l'utilisateur après une authentification réussie
+                jsp = "/WEB-INF/jsp/Profil.jsp";
+            } else {
+                // Rediriger vers la page d'accueil avec un message d'erreur si l'authentification échoue
+                String message = "Identifiant ou mot de passe incorrect.";
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("/WEB-INF/jsp/Acceuil.jsp").forward(request, response);
+            }
+        }
+        else if(action.equals("afficherCatalogue")){
+            String type = request.getParameter("type");
+            String etat = request.getParameter("etat");
+            String categorie = request.getParameter("categorie");
+
+            List<Offre> offres;
+
+            // Vérifier s'il y a des paramètres de filtre spécifiés
+            if (type != null || etat != null || categorie != null) {
+                // Si des paramètres de filtre sont spécifiés, récupérer les offres filtrées
+                offres = sessionMembre.ConsulterCatalogueFiltre(type, etat, categorie);
+            } else {
+                offres = sessionMembre.ConsulterCatalogue();
+            }
+
+            request.setAttribute("offres", offres);
+            request.setAttribute("titrePage", "Offres en ligne"); // Titre de la page
+            jsp = "/WEB-INF/jsp/Catalogue.jsp";
+        }
+        else if(action.equals("analytics")){
             
             jsp = "/WEB-INF/jsp/TableauBordAdmin.jsp";
             //Titre de la page
@@ -110,11 +150,20 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("dateDeb",dateDebut_String);
                 request.setAttribute("dateFin",dateFin_String);
             }
-            //Récupération des données concernant les offres de la période
-            Collection <String> listesOffres = sessionAdministrateur.getOffresParPeriode_Json(dateDeb_sql, dateFin_sql);
-            out.println(listesOffres);
-            request.setAttribute("dataOffres", listesOffres);
             
+            //Récupération des données pour le tableau de bord
+            Collection <String> listesOffres = sessionAdministrateur.getOffresParPeriode_Json(dateDeb_sql, dateFin_sql);
+            int nombreMembre = sessionAdministrateur.getNombreMembre();
+            int nombreOffrePublic = sessionAdministrateur.getNombreOffrePublic();
+            int nombreDonPublic = sessionAdministrateur.getNombreOffrePublicByType(TypeOffre.DON);
+            int nombrePretPublic = sessionAdministrateur.getNombreOffrePublicByType(TypeOffre.PRET);
+            
+            //Réglage des attributs
+            request.setAttribute("dataOffres", listesOffres);
+            request.setAttribute("nbMembre", Integer.toString(nombreMembre));
+            request.setAttribute("nbOffrePublic", Integer.toString(nombreOffrePublic));
+            request.setAttribute("nbDonPublic", Integer.toString(nombreDonPublic));
+            request.setAttribute("nbPretPublic", Integer.toString(nombrePretPublic));
             
         }else if(action.equals("tableauBord")){
             
@@ -133,10 +182,12 @@ public class ServletGestionEquipement extends HttpServlet {
             
             //request.setAttribute("listeSouhaits", listeSouhaits);
             
-        }else if(action.equals("creerSouhait")){
+        }
+        else if(action.equals("creerSouhait")){
             jsp = "/WEB-INF/jsp/MesSouhaits.jsp";
             doCreerSouhait(request, response);
-        }else if(action.equals("supprimerSouhait")){
+        }
+        else if(action.equals("supprimerSouhait")){
             long idSouhait = Long.parseLong(request.getParameter("souhait"));
             Souhait souhaitToRemove = souhaitFacade.find(idSouhait);
             sessionMembre.SupprimerSouhait(souhaitToRemove);
@@ -255,7 +306,6 @@ public class ServletGestionEquipement extends HttpServlet {
         request.setAttribute( "message", message );
         request.setAttribute( "typeMessage", typeMessage );
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

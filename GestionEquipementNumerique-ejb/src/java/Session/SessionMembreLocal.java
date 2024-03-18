@@ -35,6 +35,12 @@ public interface SessionMembreLocal {
     
     void SupprimerSouhait(Souhait souhait);
     
+    Membre IdentificationMembre(String log, String mdp);
+    
+    List<Offre> ConsulterCatalogue();
+    
+    List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie);
+    
    Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
 
     List<Accessoire> getAllAccesoire();

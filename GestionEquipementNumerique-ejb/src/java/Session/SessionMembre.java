@@ -16,6 +16,7 @@ import Entite.TypeOffre;
 import Entite.TypeSouhait;
 import Facade.AccessoireFacade;
 import Facade.MembreFacadeLocal;
+import Facade.OffreFacadeLocal;
 import Facade.OffreFacade;
 import Facade.PersonneFacadeLocal;
 import Facade.SouhaitFacadeLocal;
@@ -32,6 +33,9 @@ import javax.print.attribute.standard.DateTimeAtCreation;
  */
 @Stateless
 public class SessionMembre implements SessionMembreLocal {
+
+    @EJB
+    private OffreFacadeLocal offreFacade;
 
     @EJB
     private PersonneFacadeLocal personneFacade;
@@ -67,6 +71,23 @@ public class SessionMembre implements SessionMembreLocal {
     @Override
     public Membre InscriptionUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence) {
         return membreFacade.CreerMembre(login, mdp, nom, prenom, bureau, telephone, agence);
+    }
+    
+    @Override
+    public Membre IdentificationMembre(String log, String mdp){
+        Membre m=membreFacade.IdentificationMembre(log, mdp);
+        return m;
+    }
+    /*
+        Catalogue Offres
+    */
+    @Override
+    public List<Offre> ConsulterCatalogue(){
+        return offreFacade.catalogueOffres();
+    } 
+    
+    public List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie){
+        return offreFacade.catalogueOffresFiltre(type, etat, categorie);
     }
     
     /*

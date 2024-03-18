@@ -6,6 +6,7 @@ package Facade;
 
 import Entite.Agence;
 import Entite.Membre;
+import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -31,4 +32,7 @@ public interface MembreFacadeLocal {
     int count();
     
     Membre CreerMembre(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence);
+
+    Membre IdentificationMembre(String login, String mdp);
+    int getNombreMembre();
 }
