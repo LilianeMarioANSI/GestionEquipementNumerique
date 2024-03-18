@@ -4,19 +4,27 @@
  */
 package Session;
 
+import Entite.Accessoire;
 import Entite.Agence;
+import Entite.EtatOffre;
 import Entite.Membre;
+import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
+import Entite.TypeOffre;
 import Entite.TypeSouhait;
+import Facade.AccessoireFacade;
 import Facade.MembreFacadeLocal;
+import Facade.OffreFacade;
 import Facade.PersonneFacadeLocal;
 import Facade.SouhaitFacadeLocal;
 import java.sql.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.print.attribute.standard.DateTimeAtCreation;
+
 
 /**
  *
@@ -33,6 +41,14 @@ public class SessionMembre implements SessionMembreLocal {
     
     @EJB
     private MembreFacadeLocal membreFacade;
+
+    @EJB
+    private OffreFacade OffreFacade;
+    
+    @EJB
+    private AccessoireFacade accessoireFacade;
+
+
     
     
     
@@ -72,5 +88,17 @@ public class SessionMembre implements SessionMembreLocal {
         souhaitFacade.supprimerSouhait(souhait);
     }
     
+    @Override
+    public Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre) {
+        Offre o= null;
+        Date datePublication = new Date(System.currentTimeMillis());
+        o = OffreFacade.creerOffre(libelle, description, datePublication, typeOffre, dateDebut, dateFin, accesoires, user, EtatOffre.DISPONIBLE);
+        return o;
+    }
+
+    @Override
+    public List<Accessoire> getAllAccesoire() {
+        return accessoireFacade.getListeAccessoires();
+    }
     
 }

@@ -26,6 +26,7 @@ import static java.lang.System.out;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 /**
  *
  * @author loulo
@@ -140,7 +141,51 @@ public class ServletGestionEquipement extends HttpServlet {
             Souhait souhaitToRemove = souhaitFacade.find(idSouhait);
             sessionMembre.SupprimerSouhait(souhaitToRemove);
         }
-        
+        // Mettre l'action sur le bouton pour qu'il puisse charger la liste Accesoire
+        else if (action.equals("creerOffre")){
+            List<Accesoires> listAs= sessionMembre.getAllAccesoire();
+            request.setAttribute("listeAccesoire",listAs);
+            jsp="/FormCreationOffre.jsp";
+        }
+
+        else if (action.equals("ajouterOffre")){
+            jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
+            //Récupération des données du formulaire
+            String dateDebut = request.getParameter("dateDebut");
+            String dateFin = request.getParameter("dateFin");
+            String intitule= request.getParameter("intitule");
+            String description = request.getParameter("description");
+            String typeOffre= request.getParameter("typeOffre");
+            String accessoire= request.getParameter("accessoire");
+            Date dd = null;
+                Date df = null;
+                try {
+                    dd = dateformat.parse(dateDebut);
+                    df = dateformat.parse(dateFin);
+                } 
+                catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if ( dd != null && df != null && 
+                dd.before(df) && //La date de début doit être avant la date de fin
+                dd.after(new Date(System.currentTimeMillis())) &&//La date de début doit être après la date actuelle
+                df.after(new Date(System.currentTimeMillis())) //La date de fin doit être après la date actuelle
+                ){
+                }
+        }
+
+
+
+
+
+
+
+
+        else{
+            jsp="/Acceuil.jsp";
+            request.setAttribute("message","PAGE N'EXISTE PAS");
+        }
+ 
         RequestDispatcher Rd;
         Rd = getServletContext().getRequestDispatcher(jsp);
         Rd.forward(request, response);

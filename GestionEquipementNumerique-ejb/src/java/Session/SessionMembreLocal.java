@@ -4,11 +4,15 @@
  */
 package Session;
 
+import Entite.Accessoire;
 import Entite.Agence;
+import Entite.EtatOffre;
 import Entite.Membre;
+import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
+import Entite.TypeOffre;
 import Entite.TypeSouhait;
 import java.sql.Date;
 import java.util.List;
@@ -30,4 +34,8 @@ public interface SessionMembreLocal {
     public Personne RechercherPersonne(long id);
     
     void SupprimerSouhait(Souhait souhait);
+    
+   Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
+
+    List<Accessoire> getAllAccesoire();
 }

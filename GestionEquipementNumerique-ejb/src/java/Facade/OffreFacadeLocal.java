@@ -4,10 +4,15 @@
  */
 package Facade;
 
+import Entite.Accessoire;
+import Entite.EtatOffre;
 import Entite.Offre;
+import Entite.Personne;
+import Entite.TypeOffre;
 import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
+
 
 /**
  *
@@ -31,5 +36,7 @@ public interface OffreFacadeLocal {
     int count();
     
     List<String> getOffresParPeriode_Json(Date dateDebut, Date dateFin);
+    
+    Offre creerOffre (String libelle, String description, Date datePublication, TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
     
 }

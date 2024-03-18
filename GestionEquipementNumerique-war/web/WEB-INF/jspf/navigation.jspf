@@ -18,6 +18,7 @@
                 </div>
             </li>
             <li><a href="ServletGestionEquipement?action=analytics" class="nav-link">Tableau de bord</a></li>
+            <li><a href="ServletGestionEquipement?action=creerOffre" class="nav-link">Créer une Offre</a></li>
         </ul>
     </div>
     <div class="user-navbar">
