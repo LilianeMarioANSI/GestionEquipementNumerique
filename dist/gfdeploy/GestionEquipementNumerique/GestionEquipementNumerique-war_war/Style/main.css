@@ -15,7 +15,6 @@ html{
     --light-gray-color : #efefef;
     --gray-color : #d1d1d1;
     --dark-gray-color : #8a8a8a;
-    --gray-text-color : #777;
     --error-bg : #FFBABA;
     --error-color : #D8000C;
     --success-bg : #DFF2BF;
@@ -233,7 +232,7 @@ tbody {
     border: none;
 }
 .custom-table tbody th, .custom-table tbody td {
-    color: var(--gray-text-color);
+    color: #777;
     font-weight: 400;
     padding-bottom: 20px;
     padding-top: 20px;

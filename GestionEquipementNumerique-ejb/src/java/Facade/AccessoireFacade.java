@@ -5,6 +5,7 @@
 package Facade;
 
 import Entite.Accessoire;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,11 @@ public class AccessoireFacade extends AbstractFacade<Accessoire> implements Acce
 
     public AccessoireFacade() {
         super(Accessoire.class);
+    }
+
+    @Override
+    public List<Accessoire> getListeAccessoires() {
+        return em.createQuery("SELECT a FROM Accessoire a").getResultList();
     }
     
 }

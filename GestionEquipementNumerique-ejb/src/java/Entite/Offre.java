@@ -94,7 +94,7 @@ public class Offre implements Serializable {
         return datePublication;
     }
 
-    public void setDatedatePublication(Date datePublication) {
+    public void setDatePublication(Date datePublication) {
         this.datePublication = datePublication;
     }
     
