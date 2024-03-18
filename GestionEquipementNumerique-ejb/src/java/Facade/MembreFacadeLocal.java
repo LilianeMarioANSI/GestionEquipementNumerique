@@ -31,4 +31,6 @@ public interface MembreFacadeLocal {
     int count();
     
     Membre CreerMembre(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence);
+
+    Membre IdentificationMembre(String login, String mdp);
 }
