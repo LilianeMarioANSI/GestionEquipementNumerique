@@ -66,6 +66,46 @@ public class Souhait implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date datePublication;
     
+    public Date getDatePublication() {
+        return datePublication;
+    }
+
+    public void setDatePublication(Date datePublication) {
+        this.datePublication = datePublication;
+    }
+    
+    /*
+        Date de début du besoin
+    */
+    
+    @Column (nullable = false)
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateDebut;
+    
+    public Date getDateDebut() {
+        return dateDebut;
+    }
+
+    public void setDateDebut(Date dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+    
+    /*
+        Date de fin du besoin
+    */
+    
+    @Column (nullable = true)
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateFin;
+    
+    public Date getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
+    }
+    
     /*
         Type souhait
     */
@@ -95,13 +135,25 @@ public class Souhait implements Serializable {
     public void setTypeAccessoire(TypeAccessoire TypeAccessoire) {
         this.TypeAccessoire = TypeAccessoire;
     }
+    
+    @Column(nullable = false)
+    private String description;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    
 
     
     /*
         Relations
     
-        Souhait
+        Personne
     */
     
     @ManyToOne

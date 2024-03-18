@@ -22,7 +22,7 @@ public class Superviseur extends Personne implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @SerializedName("idAdministrateur")
+    @SerializedName("idSuperviseur")
     private Long id;
 
     public Long getId() {
@@ -55,7 +55,7 @@ public class Superviseur extends Personne implements Serializable {
 
     @Override
     public String toString() {
-        return "Entite.Administrateur[ id=" + id + " ]";
+        return "Entite.Superviseur[ id=" + id + " ]";
     }
     
 }

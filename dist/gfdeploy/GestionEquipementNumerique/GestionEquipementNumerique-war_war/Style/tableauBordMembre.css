@@ -1,0 +1,104 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 14 mars 2024, 21:00:52
+    Author     : loulo
+*/
+
+section{
+    padding : 0 40px;
+}
+
+.user-data{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+    border-right : 1px solid var(--gray-color);
+}
+
+.container{
+    background-color: var(--light-gray-color);
+    border : 1px solid var(--gray-color);
+    box-shadow: 0px 0px 12px -4px #737373;
+    max-width: 325px;
+}
+
+.container-header h3{
+    text-align: center;
+    margin: 0;
+    padding: 15px 0;
+}
+
+.container-header{
+    border-bottom : 1px solid var(--gray-color);
+}
+
+.container-body{
+    padding: 20px 30px;
+}
+
+.container-body form{
+    flex-direction: row;
+}
+
+.container-body ul {
+    list-style: none;
+    padding: 10px 32px;
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    margin-bottom: 20px;
+}
+
+.container-body ul li{
+    color: var(--dark-gray-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.container-body ul:before {
+    content: "";
+    position : absolute;
+    align-items: stretch;
+    background: linear-gradient(180deg, rgba(225,25,48,1) 0%, rgba(82,54,171,1) 100%);
+    width: 3px;
+    height: 100%;
+    left: 0;
+    top : 0;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+}
+
+.profil-icon{
+    margin: 0 auto;
+}
+
+.field-wrapper{
+    width: 100%;
+    display: flex;
+    gap : 1em;
+    align-items: center;
+}
+
+.field-wrapper label{
+    min-width: 6em;
+}
+
+.field-wrapper input, .field-wrapper select{
+    width: 100%;
+}
+
+.field-wrapper button{
+    margin: 18px;
+}
+
+

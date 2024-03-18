@@ -4,6 +4,8 @@
  */
 package Entite;
 
+import static Entite.TypeSouhait.values;
+
 /**
  *
  * @author loulo
@@ -22,5 +24,16 @@ public enum TypeAccessoire {
 
     private TypeAccessoire(String label) {
         this.label = label;
+    }
+    
+    
+    //Trouve la valeur à partir du label
+    public static TypeAccessoire valueOfLabel(String label) {
+        for (TypeAccessoire e : values()) {
+            if (e.label.equals(label)) {
+                return e;
+            }
+        }
+        return null;
     }
 }

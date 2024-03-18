@@ -8,7 +8,7 @@
             String titre = (String)request.getAttribute("titrePage");
 
             if(titre == null){
-                titre = "Bonjour";
+                titre = "";
             }
         %>
         <h3 class="page-title"><%=titre%></h3>

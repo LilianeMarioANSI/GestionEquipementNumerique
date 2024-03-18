@@ -10,14 +10,14 @@
         <ul>
             <li><a href="#" class="nav-link">Catalogue</a></li>
             <li class="dropdown">
-                <button class="nav-link nav-btn" id="dropbtn" type="button">Mon espace <img class="tiny-icon arrow" src="Assets/icons/chevron-down-outline.svg" alt="logo"/></button>
+                <a class="nav-link nav-drop" id="dropbtn" href="ServletGestionEquipement?action=tableauBord">Mon espace<img class="tiny-icon arrow" src="Assets/icons/chevron-down-outline.svg" alt="logo"/></a>
                 <div class="dropDownContent">
-                    <a href="#" class="nav-link">Mes souhaits</a>
+                    <a href="ServletGestionEquipement?action=mesSouhaits" class="nav-link">Mes souhaits</a>
                     <a href="#" class="nav-link">Mes offres</a>
                     <a href="#" class="nav-link">Mes demandes</a>
                 </div>
             </li>
-            <li><a href="ServletGestionEquipement?action=tableauBord" class="nav-link">Tableau de bord</a></li>
+            <li><a href="ServletGestionEquipement?action=analytics" class="nav-link">Tableau de bord</a></li>
         </ul>
     </div>
     <div class="user-navbar">
