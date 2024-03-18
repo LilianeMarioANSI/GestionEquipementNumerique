@@ -61,6 +61,10 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         return result.size();
     }
     
+    
+    
+    
+    
     @Override
     public Agence getAgenceById(String agenceId) {
     for (Agence agence : Agence.values()) {
