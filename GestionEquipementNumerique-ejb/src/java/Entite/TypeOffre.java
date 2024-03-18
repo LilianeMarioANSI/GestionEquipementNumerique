@@ -17,4 +17,14 @@ public enum TypeOffre {
     private TypeOffre(String label) {
         this.label = label;
     }
+
+    //Trouve la valeur à partir du label
+    public static TypeOffre valueOfLabel(String label) {
+        for (TypeOffre e : values()) {
+            if (e.label.equals(label)) {
+                return e;
+            }
+        }
+        return null;
+    }
 }

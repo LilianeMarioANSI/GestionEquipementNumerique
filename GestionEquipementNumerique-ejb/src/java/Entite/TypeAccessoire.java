@@ -11,14 +11,14 @@ import static Entite.TypeSouhait.values;
  * @author loulo
  */
 public enum TypeAccessoire {
-    ECRAN("Écran"),
+    ECRAN("Ecran"),
     CLAVIER("Clavier"),
     SOURIS("Souris"),
-    FILTRE_CONFIDENTIALITE("Filtre de confidentialité"),
+    FILTRE_CONFIDENTIALITE("Filtre de confidentialite"),
     ADAPTATEUR_VGA("Adaptateur VGA"),
     CHARGEUR("Chargeur"),
     CASQUE("Casque"),
-    CLE_USB("Clé USB");
+    CLE_USB("Cle USB");
     
     public final String label;
 

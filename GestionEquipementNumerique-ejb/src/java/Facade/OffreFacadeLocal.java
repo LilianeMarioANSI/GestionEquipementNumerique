@@ -45,6 +45,6 @@ public interface OffreFacadeLocal {
     
     int getNombreOffrePublicByType(TypeOffre type);
     
-    Offre creerOffre (String libelle, String description, Date datePublication, TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
+    Offre creerOffre (Offre o);
     
 }

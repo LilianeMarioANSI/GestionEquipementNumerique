@@ -15,6 +15,7 @@ import Entite.TypeAccessoire;
 import Entite.TypeOffre;
 import Entite.TypeSouhait;
 import Facade.AccessoireFacade;
+import Facade.AccessoireFacadeLocal;
 import Facade.MembreFacadeLocal;
 import Facade.OffreFacadeLocal;
 import Facade.OffreFacade;
@@ -35,6 +36,9 @@ import javax.print.attribute.standard.DateTimeAtCreation;
 public class SessionMembre implements SessionMembreLocal {
 
     @EJB
+    private AccessoireFacadeLocal accessoireFacade;
+
+    @EJB
     private OffreFacadeLocal offreFacade;
 
     @EJB
@@ -45,12 +49,8 @@ public class SessionMembre implements SessionMembreLocal {
     
     @EJB
     private MembreFacadeLocal membreFacade;
-
-    @EJB
-    private OffreFacade OffreFacade;
     
-    @EJB
-    private AccessoireFacade accessoireFacade;
+
 
 
     
@@ -110,16 +110,13 @@ public class SessionMembre implements SessionMembreLocal {
     }
     
     @Override
-    public Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre) {
-        Offre o= null;
-        Date datePublication = new Date(System.currentTimeMillis());
-        o = OffreFacade.creerOffre(libelle, description, datePublication, typeOffre, dateDebut, dateFin, accesoires, user, EtatOffre.DISPONIBLE);
-        return o;
+    public Offre creationOffre (Offre O) {
+        return offreFacade.creerOffre(O);
     }
 
     @Override
-    public List<Accessoire> getAllAccesoire() {
-        return accessoireFacade.getListeAccessoires();
+    public Accessoire CreerAccessoire(Accessoire a) {
+        return accessoireFacade.CreerAccessoire(a);
     }
     
 }
