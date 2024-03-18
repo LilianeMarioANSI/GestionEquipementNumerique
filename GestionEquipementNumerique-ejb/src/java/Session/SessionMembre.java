@@ -6,11 +6,13 @@ package Session;
 
 import Entite.Agence;
 import Entite.Membre;
+import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
 import Entite.TypeSouhait;
 import Facade.MembreFacadeLocal;
+import Facade.OffreFacadeLocal;
 import Facade.PersonneFacadeLocal;
 import Facade.SouhaitFacadeLocal;
 import java.sql.Date;
@@ -24,6 +26,9 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class SessionMembre implements SessionMembreLocal {
+
+    @EJB
+    private OffreFacadeLocal offreFacade;
 
     @EJB
     private PersonneFacadeLocal personneFacade;
@@ -51,6 +56,23 @@ public class SessionMembre implements SessionMembreLocal {
     @Override
     public Membre InscriptionUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence) {
         return membreFacade.CreerMembre(login, mdp, nom, prenom, bureau, telephone, agence);
+    }
+    
+    @Override
+    public Membre IdentificationMembre(String log, String mdp){
+        Membre m=membreFacade.IdentificationMembre(log, mdp);
+        return m;
+    }
+    /*
+        Catalogue Offres
+    */
+    @Override
+    public List<Offre> ConsulterCatalogue(){
+        return offreFacade.catalogueOffres();
+    } 
+    
+    public List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie){
+        return offreFacade.catalogueOffresFiltre(type, etat, categorie);
     }
     
     /*

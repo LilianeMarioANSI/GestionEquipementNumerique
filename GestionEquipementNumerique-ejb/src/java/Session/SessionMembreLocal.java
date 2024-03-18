@@ -6,6 +6,7 @@ package Session;
 
 import Entite.Agence;
 import Entite.Membre;
+import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
@@ -30,4 +31,10 @@ public interface SessionMembreLocal {
     public Personne RechercherPersonne(long id);
     
     void SupprimerSouhait(Souhait souhait);
+    
+    Membre IdentificationMembre(String log, String mdp);
+    
+    List<Offre> ConsulterCatalogue();
+    
+    List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie);
 }
