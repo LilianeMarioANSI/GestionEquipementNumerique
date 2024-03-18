@@ -12,7 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import org.mindrot.jbcrypt.BCrypt;
 import javax.persistence.Query;
 
 /**
@@ -61,4 +64,26 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
     
     
     
+    
+    
+    
+    
+    
+    @Override
+    public Membre IdentificationMembre(String login, String mdp) {
+    TypedQuery<Membre> query = getEntityManager().createQuery(
+            "SELECT m FROM Membre m WHERE m.login = :login", Membre.class);
+    query.setParameter("login", login);
+    
+    try {
+        Membre membre = query.getSingleResult();
+        if (BCrypt.checkpw(mdp, membre.getMdp())) {
+            return membre;
+        }
+    } catch (NoResultException e) {
+        System.err.println("Tentative de connexion avec un login invalide : " + login);
+    }
+    
+    return null;
+}
 }

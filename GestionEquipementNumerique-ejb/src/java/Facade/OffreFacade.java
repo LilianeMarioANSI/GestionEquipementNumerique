@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -50,6 +51,41 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     }
     
     @Override
+    public List<Offre> catalogueOffres() {
+        TypedQuery<Offre> query = getEntityManager().createQuery(
+                "SELECT o FROM Offre o", Offre.class);
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<Offre> catalogueOffresFiltre(String type, String etat, String categorie) {
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Offre o WHERE 1=1");
+
+        if (type != null && !type.isEmpty()) {
+            queryBuilder.append(" AND o.TypeOffre = :type");
+        }
+        if (etat != null && !etat.isEmpty()) {
+            queryBuilder.append(" AND o.etat = :etat");
+        }
+        if (categorie != null && !categorie.isEmpty()) {
+            queryBuilder.append(" AND o.accesoire.TypeAccessoire = :categorie");
+        }
+
+        TypedQuery<Offre> query = getEntityManager().createQuery(queryBuilder.toString(), Offre.class);
+
+        if (type != null && !type.isEmpty()) {
+            query.setParameter("type", type);
+        }
+        if (etat != null && !etat.isEmpty()) {
+            query.setParameter("etat", etat);
+        }
+        if (categorie != null && !categorie.isEmpty()) {
+            query.setParameter("categorie", categorie);
+        }
+
+        return query.getResultList();
+    }
+    }
     public int getNombreOffrePublic() {
         List<String> resultList = new ArrayList<>();
         String txt = "SELECT o FROM Offre o WHERE o.etat = :disponible OR o.etat = :enCours";

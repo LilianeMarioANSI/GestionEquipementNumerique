@@ -8,7 +8,7 @@
     </div>
     <div class="primary-navbar">
         <ul>
-            <li><a href="#" class="nav-link">Catalogue</a></li>
+            <li><a href="ServletGestionEquipement?action=afficherCatalogue" class="nav-link">Catalogue</a></li>
             <li class="dropdown">
                 <a class="nav-link nav-drop" id="dropbtn" href="ServletGestionEquipement?action=tableauBord">Mon espace<img class="tiny-icon arrow" src="Assets/icons/chevron-down-outline.svg" alt="logo"/></a>
                 <div class="dropDownContent">
