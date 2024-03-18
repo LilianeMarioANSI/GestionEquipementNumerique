@@ -5,6 +5,7 @@
 package Facade;
 
 import Entite.Offre;
+import Entite.TypeOffre;
 import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
@@ -35,5 +36,8 @@ public interface OffreFacadeLocal {
     List<Offre> catalogueOffres();
     
     List<Offre> catalogueOffresFiltre(String type, String etat, String categorie);
+    int getNombreOffrePublic();
+    
+    int getNombreOffrePublicByType(TypeOffre type);
     
 }

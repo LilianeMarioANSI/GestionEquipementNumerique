@@ -10,6 +10,7 @@ import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
+import Entite.TypeOffre;
 import Entite.TypeSouhait;
 import Facade.SouhaitFacadeLocal;
 import Session.SessionAdministrateurLocal;
@@ -148,11 +149,20 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("dateDeb",dateDebut_String);
                 request.setAttribute("dateFin",dateFin_String);
             }
-            //Récupération des données concernant les offres de la période
-            Collection <String> listesOffres = sessionAdministrateur.getOffresParPeriode_Json(dateDeb_sql, dateFin_sql);
-            out.println(listesOffres);
-            request.setAttribute("dataOffres", listesOffres);
             
+            //Récupération des données pour le tableau de bord
+            Collection <String> listesOffres = sessionAdministrateur.getOffresParPeriode_Json(dateDeb_sql, dateFin_sql);
+            int nombreMembre = sessionAdministrateur.getNombreMembre();
+            int nombreOffrePublic = sessionAdministrateur.getNombreOffrePublic();
+            int nombreDonPublic = sessionAdministrateur.getNombreOffrePublicByType(TypeOffre.DON);
+            int nombrePretPublic = sessionAdministrateur.getNombreOffrePublicByType(TypeOffre.PRET);
+            
+            //Réglage des attributs
+            request.setAttribute("dataOffres", listesOffres);
+            request.setAttribute("nbMembre", Integer.toString(nombreMembre));
+            request.setAttribute("nbOffrePublic", Integer.toString(nombreOffrePublic));
+            request.setAttribute("nbDonPublic", Integer.toString(nombreDonPublic));
+            request.setAttribute("nbPretPublic", Integer.toString(nombrePretPublic));
             
         }else if(action.equals("tableauBord")){
             

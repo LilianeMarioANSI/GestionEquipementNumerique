@@ -15,17 +15,47 @@
         <link rel="stylesheet" type="text/css" href="Style/navigation.css">
         <link rel="stylesheet" type="text/css" href="Style/header.css">
         <link rel="stylesheet" type="text/css" href="Style/chart.css">
+        <link rel="stylesheet" type="text/css" href="Style/tableauBordAdmin.css">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
         <%@include file="/WEB-INF/jspf/navigation.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
-        <main>
+        <main class="vertical">
             
             <%
+                String nbMembre = (String)request.getAttribute("nbMembre");
+                String nbOffrePublic = (String)request.getAttribute("nbOffrePublic");
+                String nbDonPublic = (String)request.getAttribute("nbDonPublic");
+                String nbPretPublic = (String)request.getAttribute("nbPretPublic");
                 String dateDeb = (String)request.getAttribute("dateDeb");
                 String dateFin = (String)request.getAttribute("dateFin");
             %>
+            
+            <div class="container">
+                <div class="container-section">
+                    <h3><%=nbMembre%></h3>
+                    <p>Nombre de membre</p>
+                </div>
+                    
+                <div class="container-section">
+                    <h3><%=nbOffrePublic%></h3>
+                    <p>Nombre d'offre public</p>
+                </div>
+                    
+                <div class="container-section">
+                    <h3><%=nbDonPublic%></h3>
+                    <p>Nombre d'offre de don</p>
+                </div>
+                
+                <div class="container-section">
+                    <h3><%=nbPretPublic%></h3>
+                    <p>Nombre d'offre de prêt</p>
+                </div>
+            </div>
+            
+            
+            
             
             <form action="ServletGestionEquipement" method="post">
                 <label for="dateDeb">Date de début</label>
@@ -37,6 +67,8 @@
                 <input type="hidden" name="action" value="tableauBord">
                 <button type="submit" class="submit">Appliquer</button>
             </form>
+            
+            
             <%@include file="/WEB-INF/jspf/GraphiqueOffrePublie.jspf" %>
         </main>
     </body>
