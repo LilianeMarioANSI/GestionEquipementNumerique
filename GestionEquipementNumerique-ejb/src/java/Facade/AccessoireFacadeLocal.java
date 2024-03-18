@@ -8,6 +8,7 @@ import Entite.Accessoire;
 import java.util.List;
 import javax.ejb.Local;
 
+
 /**
  *
  * @author loulo
@@ -28,5 +29,6 @@ public interface AccessoireFacadeLocal {
     List<Accessoire> findRange(int[] range);
 
     int count();
+    List<Accessoire> getListeAccessoires();
     
 }
