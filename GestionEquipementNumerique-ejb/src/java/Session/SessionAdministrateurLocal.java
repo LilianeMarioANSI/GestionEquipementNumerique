@@ -5,6 +5,7 @@
 package Session;
 
 import Entite.Offre;
+import Entite.TypeOffre;
 import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
@@ -17,5 +18,11 @@ import javax.ejb.Local;
 public interface SessionAdministrateurLocal {
     
     List <String> getOffresParPeriode_Json(Date dateDebut, Date dateFin);
+    
+    public int getNombreMembre();
+    
+    int getNombreOffrePublic();
+    
+    int getNombreOffrePublicByType(TypeOffre type);
     
 }
