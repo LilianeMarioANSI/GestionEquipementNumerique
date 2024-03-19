@@ -6,6 +6,7 @@ package Session;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.Demande;
 import Entite.EtatOffre;
 import Entite.Membre;
 import Entite.Offre;
@@ -33,6 +34,10 @@ public interface SessionMembreLocal {
 
     public Personne RechercherPersonne(long id);
     
+    boolean SupprimerMembre(long idmembre);
+    
+    boolean ModifierMembre (long idmembre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence agence);
+    
     void SupprimerSouhait(Souhait souhait);
     
     Membre IdentificationMembre(String log, String mdp);
@@ -40,7 +45,11 @@ public interface SessionMembreLocal {
     List<Offre> ConsulterCatalogue();
     
     List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie);
-    
+
+    Agence getAgenceById(String agenceId);
     Offre creationOffre (Offre O);
     Accessoire CreerAccessoire(Accessoire a);
+
+    List<Demande> listeDon(Personne p);
+    List<Demande> listePrêts(Personne p);
 }

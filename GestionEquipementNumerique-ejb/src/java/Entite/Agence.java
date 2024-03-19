@@ -55,4 +55,9 @@ public enum Agence {
         return null;
     }
     
+    @Override
+    public String toString() {
+        return label;
+    }
+    
 }

@@ -104,14 +104,14 @@ public class Offre implements Serializable {
     
     @Expose
     @Column(nullable = false)
-    private TypeOffre TypeOffre;
+    private TypeOffre typeOffre;
 
     public TypeOffre getTypeOffre() {
-        return TypeOffre;
+        return typeOffre;
     }
 
-    public void setTypeOffre(TypeOffre TypeOffre) {
-        this.TypeOffre = TypeOffre;
+    public void setTypeOffre(TypeOffre typeOffre) {
+        this.typeOffre = typeOffre;
     }
     
     /*

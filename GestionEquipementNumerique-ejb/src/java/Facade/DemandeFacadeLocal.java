@@ -5,6 +5,8 @@
 package Facade;
 
 import Entite.Demande;
+import Entite.Personne;
+
 import java.util.List;
 import javax.ejb.Local;
 
@@ -27,6 +29,11 @@ public interface DemandeFacadeLocal {
 
     List<Demande> findRange(int[] range);
 
-    int count();
+    int count();   
+    
+    List<Demande> listePrêts(Personne p);
+
+    List<Demande> listeDon(Personne p);
+    
     
 }

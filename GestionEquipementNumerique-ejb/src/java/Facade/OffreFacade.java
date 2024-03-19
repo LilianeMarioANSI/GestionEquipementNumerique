@@ -97,6 +97,8 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         return query.getResultList();
     }
     
+    @Override
+    
     public int getNombreOffrePublic() {
         List<String> resultList = new ArrayList<>();
         String txt = "SELECT o FROM Offre o WHERE o.etat = :disponible OR o.etat = :enCours";
@@ -118,7 +120,6 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         List<Offre> result = req.getResultList();
         return result.size();
     }
-    
     
     
 }
