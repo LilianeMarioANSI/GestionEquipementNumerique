@@ -18,4 +18,14 @@ public enum EtatOffre {
     private EtatOffre(String label) {
         this.label = label;
     }
+
+    public static EtatOffre valueOfLabel(String label) {
+        for (EtatOffre e : values()) {
+            if (e.label.equals(label)) {
+                return e;
+            }
+        }
+        return null;
+    }
+    
 }

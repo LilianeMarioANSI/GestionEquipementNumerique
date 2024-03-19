@@ -6,6 +6,8 @@ package Servlet;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.EtatAccessoire;
+import Entite.EtatOffre;
 import Entite.Membre;
 import Entite.Offre;
 import Entite.Personne;
@@ -27,10 +29,14 @@ import org.mindrot.jbcrypt.BCrypt;
 import Session.SessionMembreLocal;
 import static java.lang.System.out;
 import java.sql.Date;
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.servlet.http.HttpSession;
+import javax.sound.sampled.AudioFileFormat.Type;
+
 import java.util.List;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -72,6 +78,8 @@ public class ServletGestionEquipement extends HttpServlet {
         
         if(action == null){
             jsp = "/WEB-INF/jsp/Accueil.jsp";
+        if(action==null){
+            jsp = "/WEB-INF/jsp/Accueil.jsp";
             
             //Titre de la page
             request.setAttribute("titrePage", "Bienvenue !");
@@ -103,6 +111,8 @@ public class ServletGestionEquipement extends HttpServlet {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("membre", m);
                 // Redirect to the member's dashboard after successful authentication
+                jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
+                // Afficher le profil de l'utilisateur après une authentification réussie
                 jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
             } else {
                 // Redirect to the homepage with an error message if authentication fails
@@ -276,6 +286,7 @@ public class ServletGestionEquipement extends HttpServlet {
             List<Accessoire> listAs= sessionMembre.getAllAccesoire();
             request.setAttribute("listeAccesoire",listAs);
             jsp="/FormCreationOffre.jsp";
+            jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
         }
 
 //        else if (action.equals("ajouterOffre")){
@@ -302,11 +313,80 @@ public class ServletGestionEquipement extends HttpServlet {
         else{
             jsp="/Accueil.jsp";
             request.setAttribute("message","PAGE N'EXISTE PAS");
+        else if (action.equals("AjouterOffre")){
+            // Réception des données du formulaire pour Accessoire 
+            HttpSession session = request.getSession();
+            Membre membre = (Membre) session.getAttribute("membre");
+            // Transmettre les informations du membre à la vue JSP
+            String intituleAccessoire = request.getParameter("nomA");
+            String descriptionAccessoire = request.getParameter("DescriptionA");
+            String typeAccessoire = request.getParameter("TypeA");
+            String etatAccessoire = request.getParameter("etatA");
+            if(intituleAccessoire.trim().isEmpty() || descriptionAccessoire.trim().isEmpty() || typeAccessoire.trim().isEmpty() || etatAccessoire.trim().isEmpty()){
+                jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
+                request.setAttribute("message", "Vous n'avez pas rempli tous les champs obligatoires");
+                request.setAttribute("typeMessage", "error");
+            }
+            else{
+                TypeAccessoire typeAccessoireEnum = TypeAccessoire.valueOfLabel(typeAccessoire);
+                EtatAccessoire etatAccessoireEnum = EtatAccessoire.valueOfLabel(etatAccessoire);
+                Accessoire a = creerAccessoire(intituleAccessoire, descriptionAccessoire, typeAccessoireEnum, etatAccessoireEnum, membre);
+                //Récupération des données du formulaire pour Offre
+                String dateDebut = request.getParameter("DateDeb");
+                String dateFin = request.getParameter("DateFin");
+                String intitule= request.getParameter("titreO");
+                String description = request.getParameter("DescriptionO");
+                String typeOffre= request.getParameter("typeO");
+                Date dd = null;
+                Date df = null;
+                    try {
+                        dd = Date.valueOf(dateDebut);
+                        df = Date.valueOf(dateFin);
+                    } 
+                    catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    }
+                if(intitule.trim().isEmpty() || description.trim().isEmpty() || typeOffre.trim().isEmpty() || dd==null || df==null){
+                    jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
+                    request.setAttribute("message", "Vous n'avez pas rempli tous les champs obligatoires");
+                    request.setAttribute("typeMessage", "error");
+                }
+                else{
+                    TypeOffre typeOffreEnum = TypeOffre.valueOfLabel(typeOffre);
+                    Offre o= creerOffre(intitule, description, typeOffreEnum, dd, df, a, membre);
+                    if(o!=null){
+                        Accessoire accessoire = sessionMembre.CreerAccessoire(a);
+                        Offre offre = sessionMembre.creationOffre(o);
+                        if (offre != null && accessoire != null){
+                            jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
+                        request.setAttribute("message", "Offre crée");
+                        request.setAttribute("typeMessage", "success");
+
+                        }
+                        else{
+                            jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
+                            request.setAttribute("message", "Erreur lors de la création de l'offre");
+                            request.setAttribute("typeMessage", "error");
+                        }
+                    }
+                    else{
+                        jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
+                        request.setAttribute("message", "Erreur lors de la création de l'offre");
+                        request.setAttribute("typeMessage", "error");
+                }
+                
+            }
         }
+        }
+//            else {
+//            jsp="/Acceuil.jsp";
+//            request.setAttribute("message","PAGE N'EXISTE PAS");
+//        }
  
         RequestDispatcher Rd;
         Rd = getServletContext().getRequestDispatcher(jsp);
         Rd.forward(request, response);
+    
     }
     
     protected void doInscrireUtilisateur(HttpServletRequest request, HttpServletResponse response)
@@ -410,4 +490,28 @@ public class ServletGestionEquipement extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    protected Accessoire creerAccessoire (String intituleAccessoire, String descriptionAccessoire, TypeAccessoire typeAccessoire, EtatAccessoire etatAccessoire, Membre membre){
+        Accessoire a= new Accessoire();
+        a.setPersonnes(new ArrayList<Personne>());
+        a.setDesignation(intituleAccessoire);
+        a.setDescription(descriptionAccessoire);
+        a.setTypeAccessoire(typeAccessoire);
+        a.setEtat(etatAccessoire);
+        a.getPersonnes().add(membre);
+        return a;
+    }
+
+    protected Offre creerOffre (String intitule, String description, TypeOffre typeOffreEnum, Date dateDebut, Date dateFin, Accessoire a, Membre membre){
+        Offre o= new Offre();
+        o.setIntitule(intitule);
+        o.setDescription(description);
+        o.setTypeOffre(typeOffreEnum);
+        o.setDateDebut(dateDebut);
+        o.setDateFin(dateFin);
+        o.setDatePublication(new Date(System.currentTimeMillis()));
+        o.setEtat(EtatOffre.DISPONIBLE);
+        o.setAccessoire(a);
+        o.setUtilisateur(membre);
+        return o;
+    }
 }

@@ -146,11 +146,13 @@ public class SessionMembre implements SessionMembreLocal {
         Date datePublication = new Date(System.currentTimeMillis());
         o = offreFacade.creerOffre(libelle, description, datePublication, typeOffre, dateDebut, dateFin, accesoires, user, EtatOffre.DISPONIBLE);
         return o;
+    public Offre creationOffre (Offre O) {
+        return offreFacade.creerOffre(O);
     }
 
     @Override
-    public List<Accessoire> getAllAccesoire() {
-        return accessoireFacade.getListeAccessoires();
+    public Accessoire CreerAccessoire(Accessoire a) {
+        return accessoireFacade.CreerAccessoire(a);
     }
     
 

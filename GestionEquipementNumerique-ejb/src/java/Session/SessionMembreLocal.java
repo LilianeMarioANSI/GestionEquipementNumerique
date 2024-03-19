@@ -50,4 +50,6 @@ public interface SessionMembreLocal {
     List<Accessoire> getAllAccesoire();
     
     Agence getAgenceById(String agenceId);
+    Offre creationOffre (Offre O);
+    Accessoire CreerAccessoire(Accessoire a);
 }
