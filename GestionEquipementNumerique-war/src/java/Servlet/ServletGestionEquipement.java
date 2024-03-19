@@ -117,10 +117,10 @@ public class ServletGestionEquipement extends HttpServlet {
                 // Afficher le profil de l'utilisateur après une authentification réussie
                 jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
             } else {
-                // Redirect to the homepage with an error message if authentication fails
+                // Rediriger vers la page d'accueil avec un message d'erreur si l'authentification échoue
                 String message = "Identifiant ou mot de passe incorrect.";
                 request.setAttribute("message", message);
-                jsp = "/WEB-INF/jsp/Accueil.jsp";
+                request.getRequestDispatcher("/WEB-INF/jsp/Acceuil.jsp").forward(request, response);
             }
         }
         
