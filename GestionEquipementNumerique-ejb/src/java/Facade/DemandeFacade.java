@@ -7,7 +7,15 @@ package Facade;
 import Entite.Demande;
 import java.sql.Date;
 import java.util.List;
+import Entite.Offre;
+import Entite.Personne;
+import Entite.TypeDemande;
+import Entite.TypeOffre;
+
+import java.util.List;
+
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -41,4 +49,22 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
         return count.intValue();
     }
     
+    public List<Demande> listePrêts(Personne p){
+        String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.typeDemande = :typeDemande";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("p", p);
+        req.setParameter("typeDemande", TypeDemande.PRET);
+        List<Demande> result = req.getResultList();
+        return result;
+    }
+
+    @Override
+    public List<Demande> listeDon(Personne p){
+        String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.typeDemande = :typeDemande";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("p", p);
+        req.setParameter("typeDemande", TypeDemande.DON);
+        List<Demande> result = req.getResultList();
+        return result;
+    }
 }

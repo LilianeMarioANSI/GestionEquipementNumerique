@@ -6,6 +6,7 @@ package Session;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.Demande;
 import Entite.EtatOffre;
 import Entite.Membre;
 import Entite.Offre;
@@ -15,6 +16,9 @@ import Entite.TypeAccessoire;
 import Entite.TypeOffre;
 import Entite.TypeSouhait;
 import Facade.AccessoireFacadeLocal;
+import Facade.AccessoireFacade;
+import Facade.AccessoireFacadeLocal;
+import Facade.DemandeFacadeLocal;
 import Facade.MembreFacadeLocal;
 import Facade.OffreFacadeLocal;
 import Facade.OffreFacade;
@@ -33,6 +37,12 @@ import javax.print.attribute.standard.DateTimeAtCreation;
  */
 @Stateless
 public class SessionMembre implements SessionMembreLocal {
+
+    @EJB
+    private DemandeFacadeLocal demandeFacade;
+
+    @EJB
+    private AccessoireFacadeLocal accessoireFacade;
 
     @EJB
     private OffreFacadeLocal offreFacade;
@@ -62,6 +72,9 @@ public class SessionMembre implements SessionMembreLocal {
         return personneFacade.rechercherPersonne(id);
     }
     
+    public Membre RechercherMembre(long id) {
+        return membreFacade.rechercherMembre(id);
+    }
     /*
         Membre
     */
@@ -75,6 +88,32 @@ public class SessionMembre implements SessionMembreLocal {
         Membre m=membreFacade.IdentificationMembre(log, mdp);
         return m;
     }
+    
+    @Override
+    public boolean SupprimerMembre(long idmembre){
+        boolean resultat=false;
+        Membre m=membreFacade.rechercherMembre(idmembre);
+        if(m!=null){
+        membreFacade.SupprimerMembre(m);
+        resultat=true;
+        }
+        return resultat;     } 
+    
+    @Override
+    public boolean ModifierMembre (long idmembre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence agence){
+        boolean resultat=false;
+        Membre m=membreFacade.rechercherMembre(idmembre);
+        if(m!=null){
+        membreFacade.ModifierInformations(m, nouveauNom, nouveauPrenom, nouvelEmail, nouveauTelephone, nouveauBureau, agence);
+        resultat=true;
+        }
+        return resultat;
+    }
+    
+    @Override
+    public Agence getAgenceById(String agenceId){
+        return membreFacade.getAgenceById(agenceId);
+    } 
     /*
         Catalogue Offres
     */
@@ -107,17 +146,24 @@ public class SessionMembre implements SessionMembreLocal {
         souhaitFacade.supprimerSouhait(souhait);
     }
     
-    @Override
-    public Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre) {
-        Offre o= null;
-        Date datePublication = new Date(System.currentTimeMillis());
-        o = offreFacade.creerOffre(libelle, description, datePublication, typeOffre, dateDebut, dateFin, accesoires, user, EtatOffre.DISPONIBLE);
-        return o;
+    public Offre creationOffre (Offre O) {
+        return offreFacade.creerOffre(O);
     }
 
     @Override
-    public List<Accessoire> getAllAccesoire() {
-        return accessoireFacade.getListeAccessoires();
+    public Accessoire CreerAccessoire(Accessoire a) {
+        return accessoireFacade.CreerAccessoire(a);
     }
     
+
+    @Override
+    public List<Demande> listePrêts(Personne p) {
+        return demandeFacade.listePrêts(p);
+    }
+
+    @Override
+    public List<Demande> listeDon(Personne p) {
+        return demandeFacade.listeDon(p);
+    }
+
 }

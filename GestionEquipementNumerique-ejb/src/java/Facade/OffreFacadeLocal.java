@@ -41,11 +41,12 @@ public interface OffreFacadeLocal {
     List<Offre> catalogueOffres();
     
     List<Offre> catalogueOffresFiltre(String type, String etat, String categorie);
+    
     int getNombreOffrePublic();
     
     int getNombreOffrePublicByType(TypeOffre type);
     
-    Offre creerOffre (String libelle, String description, Date datePublication, TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
+    Offre creerOffre (Offre o);
     
     int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin);
     

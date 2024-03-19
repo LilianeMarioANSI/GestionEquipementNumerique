@@ -10,8 +10,9 @@ package Entite;
  */
 public enum EtatAccessoire {
     NEUF("Neuf"),
-    QUASI_NEUF("Quasi neuf"),
-    USAGE("Usagé"),
+    TRES_BON_ETAT("Très bon état"),
+    BON_ETAT("Bon état"),
+    CORRECT("correct"),
     MAUVAIS("Mauvais");
     
     
@@ -19,5 +20,14 @@ public enum EtatAccessoire {
 
     private EtatAccessoire(String label) {
         this.label = label;
+    }
+
+    public static EtatAccessoire valueOfLabel(String label) {
+        for (EtatAccessoire e : values()) {
+            if (e.label.equals(label)) {
+                return e;
+            }
+        }
+        return null;
     }
 }

@@ -121,6 +121,25 @@ public class Demande implements Serializable {
         this.utilisateur = utilisateur;
     }
 
+        private TypeDemande typeDemande;
+
+    /**
+     * Get the value of typeDemande
+     *
+     * @return the value of typeDemande
+     */
+    public TypeDemande getTypeDemande() {
+        return typeDemande;
+    }
+
+    /**
+     * Set the value of typeDemande
+     *
+     * @param typeDemande new value of typeDemande
+     */
+    public void setTypeDemande(TypeDemande typeDemande) {
+        this.typeDemande = typeDemande;
+    }
 
     
 }

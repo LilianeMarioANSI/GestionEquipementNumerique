@@ -32,8 +32,9 @@ public class AccessoireFacade extends AbstractFacade<Accessoire> implements Acce
     }
 
     @Override
-    public List<Accessoire> getListeAccessoires() {
-        return em.createQuery("SELECT a FROM Accessoire a").getResultList();
+    public Accessoire CreerAccessoire(Accessoire a) {
+        em.persist(a);
+        return a;
     }
     
     @Override

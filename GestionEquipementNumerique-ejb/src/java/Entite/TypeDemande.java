@@ -4,32 +4,23 @@
  */
 package Entite;
 
-import static Entite.TypeSouhait.values;
-
 /**
  *
  * @author loulo
  */
-public enum TypeAccessoire {
-    ECRAN("Ecran"),
-    CLAVIER("Clavier"),
-    SOURIS("Souris"),
-    FILTRE_CONFIDENTIALITE("Filtre de confidentialite"),
-    ADAPTATEUR_VGA("Adaptateur VGA"),
-    CHARGEUR("Chargeur"),
-    CASQUE("Casque"),
-    CLE_USB("Cle USB");
+public enum TypeDemande {
+    DON("Don"),
+    PRET("¨Prêt");
     
     public final String label;
 
-    private TypeAccessoire(String label) {
+    private TypeDemande(String label) {
         this.label = label;
     }
-    
-    
+
     //Trouve la valeur à partir du label
-    public static TypeAccessoire valueOfLabel(String label) {
-        for (TypeAccessoire e : values()) {
+    public static TypeDemande valueOfLabel(String label) {
+        for (TypeDemande e : values()) {
             if (e.label.equals(label)) {
                 return e;
             }

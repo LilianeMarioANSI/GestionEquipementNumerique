@@ -59,19 +59,8 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     }
 
     @Override
-    public Offre creerOffre (String libelle, String description, Date datePublication, TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre) {
-        Offre o = new Offre();
-        o.setIntitule(libelle);
-        o.setDescription(description);
-        o.setDatePublication(datePublication);
-        o.setTypeOffre(typeOffre);
-        o.setDateDebut(dateDebut);
-        o.setDateFin(dateFin);
-        o.setAccessoire(accesoires);
-        o.setUtilisateur(user);
-        o.setEtat(etatOffre.DISPONIBLE);
+    public Offre creerOffre (Offre o) {
         em.persist(o);
-        user.getOffres().add(o);
         return o;
     }
     
@@ -112,6 +101,7 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     }
     
     @Override
+    
     public int getNombreOffrePublic() {
         String txt = "SELECT o FROM Offre o WHERE o.etat = :disponible OR o.etat = :enCours";
         Query req = getEntityManager().createQuery(txt);
