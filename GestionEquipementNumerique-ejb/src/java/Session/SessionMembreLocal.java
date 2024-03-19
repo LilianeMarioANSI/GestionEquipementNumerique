@@ -6,6 +6,7 @@ package Session;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.Demande;
 import Entite.EtatOffre;
 import Entite.Membre;
 import Entite.Offre;
@@ -44,12 +45,11 @@ public interface SessionMembreLocal {
     List<Offre> ConsulterCatalogue();
     
     List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie);
-    
-   Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
 
-    List<Accessoire> getAllAccesoire();
-    
     Agence getAgenceById(String agenceId);
     Offre creationOffre (Offre O);
     Accessoire CreerAccessoire(Accessoire a);
+
+    List<Demande> listeDon(Personne p);
+    List<Demande> listePrêts(Personne p);
 }

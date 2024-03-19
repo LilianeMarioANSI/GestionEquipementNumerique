@@ -122,5 +122,4 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     }
     
     
-    
 }

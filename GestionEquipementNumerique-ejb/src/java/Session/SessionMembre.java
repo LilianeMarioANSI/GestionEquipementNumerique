@@ -17,6 +17,7 @@ import Entite.TypeOffre;
 import Entite.TypeSouhait;
 import Facade.AccessoireFacade;
 import Facade.AccessoireFacadeLocal;
+import Facade.DemandeFacadeLocal;
 import Facade.MembreFacadeLocal;
 import Facade.OffreFacadeLocal;
 import Facade.OffreFacade;
@@ -35,6 +36,9 @@ import javax.print.attribute.standard.DateTimeAtCreation;
  */
 @Stateless
 public class SessionMembre implements SessionMembreLocal {
+
+    @EJB
+    private DemandeFacadeLocal demandeFacade;
 
     @EJB
     private AccessoireFacadeLocal accessoireFacade;
@@ -140,12 +144,6 @@ public class SessionMembre implements SessionMembreLocal {
         souhaitFacade.supprimerSouhait(souhait);
     }
     
-    @Override
-    public Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre) {
-        Offre o= null;
-        Date datePublication = new Date(System.currentTimeMillis());
-        o = offreFacade.creerOffre(libelle, description, datePublication, typeOffre, dateDebut, dateFin, accesoires, user, EtatOffre.DISPONIBLE);
-        return o;
     public Offre creationOffre (Offre O) {
         return offreFacade.creerOffre(O);
     }
@@ -155,5 +153,15 @@ public class SessionMembre implements SessionMembreLocal {
         return accessoireFacade.CreerAccessoire(a);
     }
     
+
+    @Override
+    public List<Demande> listePrêts(Personne p) {
+        return demandeFacade.listePrêts(p);
+    }
+
+    @Override
+    public List<Demande> listeDon(Personne p) {
+        return demandeFacade.listeDon(p);
+    }
 
 }
