@@ -6,6 +6,7 @@ package Servlet;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.Demande;
 import Entite.EtatAccessoire;
 import Entite.EtatOffre;
 import Entite.Membre;
@@ -76,11 +77,8 @@ public class ServletGestionEquipement extends HttpServlet {
         String action = request.getParameter("action");
         String jsp = null;
         
-        if(action == null){
-            jsp = "/WEB-INF/jsp/Accueil.jsp";
         if(action==null){
             jsp = "/WEB-INF/jsp/Accueil.jsp";
-            
             //Titre de la page
             request.setAttribute("titrePage", "Bienvenue !");
         }
@@ -103,22 +101,20 @@ public class ServletGestionEquipement extends HttpServlet {
         /*
             Authentification
         */
-        else if (action.equals("authentification")) {
+            else if (action.equals("authentification")) {
             String login = request.getParameter("login");
             String mdp = request.getParameter("mdp");
             Membre m = sessionMembre.IdentificationMembre(login, mdp);
             if (m != null) {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("membre", m);
-                // Redirect to the member's dashboard after successful authentication
-                jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
                 // Afficher le profil de l'utilisateur après une authentification réussie
                 jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
             } else {
-                // Redirect to the homepage with an error message if authentication fails
+                // Rediriger vers la page d'accueil avec un message d'erreur si l'authentification échoue
                 String message = "Identifiant ou mot de passe incorrect.";
                 request.setAttribute("message", message);
-                jsp = "/WEB-INF/jsp/Accueil.jsp";
+                request.getRequestDispatcher("/WEB-INF/jsp/Acceuil.jsp").forward(request, response);
             }
         }
         
@@ -281,38 +277,10 @@ public class ServletGestionEquipement extends HttpServlet {
         /*
             Offre
         */
-        // Mettre l'action sur le bouton pour qu'il puisse charger la liste Accesoire
         else if (action.equals("creerOffre")){
-            List<Accessoire> listAs= sessionMembre.getAllAccesoire();
-            request.setAttribute("listeAccesoire",listAs);
-            jsp="/FormCreationOffre.jsp";
             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
         }
-
-//        else if (action.equals("ajouterOffre")){
-//            jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
-//            //Récupération des données du formulaire
-//            String dateDebut = request.getParameter("dateDebut");
-//            String dateFin = request.getParameter("dateFin");
-//            String intitule= request.getParameter("intitule");
-//            String description = request.getParameter("description");
-//            String typeOffre= request.getParameter("typeOffre");
-//            String accessoire= request.getParameter("accessoire");
-//            Date dd = null;
-//            Date df = null;
-//            dd = Date.valueOf(dateDebut);
-//            df = Date.valueOf(dateFin);
-//                if ( dd != null && df != null && 
-//                dd.before(df) && //La date de début doit être avant la date de fin
-//                dd.after(new Date(System.currentTimeMillis())) &&//La date de début doit être après la date actuelle
-//                df.after(new Date(System.currentTimeMillis())) //La date de fin doit être après la date actuelle
-//                ){
-//                }
-//      }
         
-        else{
-            jsp="/Accueil.jsp";
-            request.setAttribute("message","PAGE N'EXISTE PAS");
         else if (action.equals("AjouterOffre")){
             // Réception des données du formulaire pour Accessoire 
             HttpSession session = request.getSession();
@@ -351,7 +319,11 @@ public class ServletGestionEquipement extends HttpServlet {
                     request.setAttribute("message", "Vous n'avez pas rempli tous les champs obligatoires");
                     request.setAttribute("typeMessage", "error");
                 }
-                else{
+                else if( dd.before(df) && //La date de début doit être avant la date de fin
+                dd.after(new Date(System.currentTimeMillis())) &&//La date de début doit être après la date actuelle
+                df.after(new Date(System.currentTimeMillis())) //La date de fin doit être après la date actuelle
+                )
+                {
                     TypeOffre typeOffreEnum = TypeOffre.valueOfLabel(typeOffre);
                     Offre o= creerOffre(intitule, description, typeOffreEnum, dd, df, a, membre);
                     if(o!=null){
@@ -373,11 +345,40 @@ public class ServletGestionEquipement extends HttpServlet {
                         jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
                         request.setAttribute("message", "Erreur lors de la création de l'offre");
                         request.setAttribute("typeMessage", "error");
+                    }
                 }
-                
-            }
+                else{
+                    jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
+                    request.setAttribute("message", "La date de début doit être après la date actuelle et avant la date de fin, et la date de fin doit être après la date actuelle");
+                    request.setAttribute("typeMessage", "error");
+                    
+                }      
         }
         }
+
+        // Afficher mes prêts 
+        else if (action.equals("mesPrets")) {
+            HttpSession session = request.getSession();
+            Membre membre = (Membre) session.getAttribute("membre");
+            List<Demande> prets = sessionMembre.listePrêts(membre);
+            request.setAttribute("prets", prets);
+            jsp = "/WEB-INF/jsp/mesPrets.jsp";
+        }
+        else if (action.equals("afficherMesPrets")){
+
+        }
+        // Afficher mes dons
+        else if(action.equals("mesDons")){
+            HttpSession session = request.getSession();
+            Membre membre = (Membre) session.getAttribute("membre");
+            List<Demande> dons = sessionMembre.listeDon(membre);
+            request.setAttribute("dons", dons);
+            jsp = "/WEB-INF/jsp/mesDons.jsp";
+        }
+        else if (action.equals("afficherMesDons")){
+            
+        }
+
 //            else {
 //            jsp="/Acceuil.jsp";
 //            request.setAttribute("message","PAGE N'EXISTE PAS");
@@ -515,3 +516,4 @@ public class ServletGestionEquipement extends HttpServlet {
         return o;
     }
 }
+
