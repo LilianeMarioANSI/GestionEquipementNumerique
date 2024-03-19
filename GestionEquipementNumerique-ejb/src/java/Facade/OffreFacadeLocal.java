@@ -47,4 +47,7 @@ public interface OffreFacadeLocal {
     
     Offre creerOffre (String libelle, String description, Date datePublication, TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
     
+    int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin);
+    
+    List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin);
 }

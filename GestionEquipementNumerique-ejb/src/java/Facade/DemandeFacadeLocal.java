@@ -5,6 +5,7 @@
 package Facade;
 
 import Entite.Demande;
+import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -28,5 +29,8 @@ public interface DemandeFacadeLocal {
     List<Demande> findRange(int[] range);
 
     int count();
+    
+    int getNombreMembreAvecDemandeByPeriode(Date dateDebut, Date dateFin);
+    
     
 }

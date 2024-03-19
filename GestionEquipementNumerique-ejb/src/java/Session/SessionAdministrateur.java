@@ -4,8 +4,12 @@
  */
 package Session;
 
+import Entite.Accessoire;
+import Entite.EtatAccessoire;
 import Entite.Offre;
 import Entite.TypeOffre;
+import Facade.AccessoireFacadeLocal;
+import Facade.DemandeFacadeLocal;
 import Facade.MembreFacadeLocal;
 import Facade.OffreFacadeLocal;
 import java.sql.Date;
@@ -19,6 +23,12 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class SessionAdministrateur implements SessionAdministrateurLocal {
+
+    @EJB
+    private AccessoireFacadeLocal accessoireFacade;
+
+    @EJB
+    private DemandeFacadeLocal demandeFacade;
 
     @EJB
     private MembreFacadeLocal membreFacade;
@@ -49,5 +59,26 @@ public class SessionAdministrateur implements SessionAdministrateurLocal {
     @Override
     public int getNombreOffrePublicByType(TypeOffre type) {
         return offreFacade.getNombreOffrePublicByType(type);
+    }
+    
+    
+    @Override
+    public int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin){
+        return offreFacade.getNombreMembreAvecOffreByPeriode(dateDebut, dateFin);
+    }
+    
+    @Override
+    public int getNombreMembreAvecDemandeByPeriode(Date dateDebut, Date dateFin){
+        return demandeFacade.getNombreMembreAvecDemandeByPeriode(dateDebut, dateFin);
+    }
+    
+    @Override
+    public List<Accessoire> getAccessoireByEtat(EtatAccessoire etat){
+        return accessoireFacade.getAccessoireByEtat(etat);
+    }
+    
+    @Override
+    public List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin){
+        return offreFacade.getTop5AgenceByOffre(dateDebut, dateFin);
     }
 }

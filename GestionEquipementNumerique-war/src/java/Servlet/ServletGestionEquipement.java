@@ -4,7 +4,9 @@
  */
 package Servlet;
 
+import Entite.Accessoire;
 import Entite.Agence;
+import Entite.EtatAccessoire;
 import Entite.Membre;
 import Entite.Offre;
 import Entite.Personne;
@@ -12,6 +14,7 @@ import Entite.Souhait;
 import Entite.TypeAccessoire;
 import Entite.TypeOffre;
 import Entite.TypeSouhait;
+import Facade.OffreFacadeLocal;
 import Facade.SouhaitFacadeLocal;
 import Session.SessionAdministrateurLocal;
 import java.io.IOException;
@@ -24,11 +27,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import Session.SessionMembreLocal;
-import static java.lang.System.out;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 /**
@@ -37,6 +39,8 @@ import java.util.List;
  */
 @WebServlet(name = "ServletGestionEquipement", urlPatterns = {"/ServletGestionEquipement"})
 public class ServletGestionEquipement extends HttpServlet {
+
+    
 
    
 
@@ -50,6 +54,8 @@ public class ServletGestionEquipement extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
+    
+    
     @EJB
     private SouhaitFacadeLocal souhaitFacade;
     
@@ -59,6 +65,9 @@ public class ServletGestionEquipement extends HttpServlet {
     @EJB
     private SessionAdministrateurLocal sessionAdministrateur;
     
+    @EJB
+    private OffreFacadeLocal offreFacade;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -66,13 +75,13 @@ public class ServletGestionEquipement extends HttpServlet {
         String action = request.getParameter("action");
         String jsp = null;
         if(action == null){
-            jsp = "/WEB-INF/jsp/Acceuil.jsp";
+            jsp = "/WEB-INF/jsp/Accueil.jsp";
             
             //Titre de la page
             request.setAttribute("titrePage", "Bienvenue !");
         }
         else if(action.equals("creerMembre")){
-            jsp = "/WEB-INF/jsp/Acceuil.jsp";
+            jsp = "/WEB-INF/jsp/Accueil.jsp";
             doInscrireUtilisateur(request, response);
             
             //Titre de la page
@@ -154,16 +163,39 @@ public class ServletGestionEquipement extends HttpServlet {
             //Récupération des données pour le tableau de bord
             Collection <String> listesOffres = sessionAdministrateur.getOffresParPeriode_Json(dateDeb_sql, dateFin_sql);
             int nombreMembre = sessionAdministrateur.getNombreMembre();
+            int nombreMembreAvecOffre = sessionAdministrateur.getNombreMembreAvecOffreByPeriode(dateDeb_sql, dateFin_sql);
+            int nombreMembreAvecDemande = sessionAdministrateur.getNombreMembreAvecDemandeByPeriode(dateDeb_sql, dateFin_sql);
             int nombreOffrePublic = sessionAdministrateur.getNombreOffrePublic();
             int nombreDonPublic = sessionAdministrateur.getNombreOffrePublicByType(TypeOffre.DON);
             int nombrePretPublic = sessionAdministrateur.getNombreOffrePublicByType(TypeOffre.PRET);
+            Collection<String> agenceByOffre = sessionAdministrateur.getTop5AgenceByOffre(dateDeb_sql, dateFin_sql);
+            System.out.println(agenceByOffre);
+            List<String> etatsAccessoiresData = new ArrayList<>();
+    
+            // Récupération du nombre d'accessoires pour chaque état d'accessoire
+            for (EtatAccessoire e : EtatAccessoire.values()) {
+                List<Accessoire> listeAccessoire = sessionAdministrateur.getAccessoireByEtat(e);
+                int nombreAccessoires = listeAccessoire.size(); // Nombre d'accessoires pour cet état
+
+                // Création d'une chaîne représentant les données pour cet état
+                String data = "{\"etat\": \"" + e.label + "\", \"quantite\": " + nombreAccessoires + "}";
+                etatsAccessoiresData.add(data);
+            }
             
-            //Réglage des attributs
+            //Réglage des attributs pour les graphiques
             request.setAttribute("dataOffres", listesOffres);
+            request.setAttribute("dataEtatAccessoire", etatsAccessoiresData);
+            request.setAttribute("dataAgenceByOffre", agenceByOffre);
+            
+            //Réglage des attributs pour les cartes
             request.setAttribute("nbMembre", Integer.toString(nombreMembre));
+            request.setAttribute("nbMembreAvecDemande", Integer.toString(nombreMembreAvecDemande));
+            request.setAttribute("nbMembreAvecOffre", Integer.toString(nombreMembreAvecOffre));
             request.setAttribute("nbOffrePublic", Integer.toString(nombreOffrePublic));
             request.setAttribute("nbDonPublic", Integer.toString(nombreDonPublic));
             request.setAttribute("nbPretPublic", Integer.toString(nombrePretPublic));
+            
+            
             
         }else if(action.equals("tableauBord")){
             
@@ -194,47 +226,50 @@ public class ServletGestionEquipement extends HttpServlet {
         }
         // Mettre l'action sur le bouton pour qu'il puisse charger la liste Accesoire
         else if (action.equals("creerOffre")){
-            List<Accesoires> listAs= sessionMembre.getAllAccesoire();
+            List<Accessoire> listAs= sessionMembre.getAllAccesoire();
             request.setAttribute("listeAccesoire",listAs);
             jsp="/FormCreationOffre.jsp";
+        }else if(action.equals("afficherDetailOffre")){
+            
+            long idOffre = Long.parseLong(request.getParameter("idOffre"));
+            Offre offre = offreFacade.find(idOffre);
+            
+            request.setAttribute("offre",offre);
+            
+            jsp = "/WEB-INF/jsp/DetailOffre.jsp";
         }
-
-        else if (action.equals("ajouterOffre")){
-            jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
-            //Récupération des données du formulaire
-            String dateDebut = request.getParameter("dateDebut");
-            String dateFin = request.getParameter("dateFin");
-            String intitule= request.getParameter("intitule");
-            String description = request.getParameter("description");
-            String typeOffre= request.getParameter("typeOffre");
-            String accessoire= request.getParameter("accessoire");
-            Date dd = null;
-                Date df = null;
-                try {
-                    dd = dateformat.parse(dateDebut);
-                    df = dateformat.parse(dateFin);
-                } 
-                catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                if ( dd != null && df != null && 
-                dd.before(df) && //La date de début doit être avant la date de fin
-                dd.after(new Date(System.currentTimeMillis())) &&//La date de début doit être après la date actuelle
-                df.after(new Date(System.currentTimeMillis())) //La date de fin doit être après la date actuelle
-                ){
-                }
-        }
-
-
-
-
-
-
-
-
+//        
+//        else if (action.equals("ajouterOffre")){
+//            jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
+//            
+//            
+//            //Récupération des données du formulaire
+//            String dateDebut = request.getParameter("dateDebut");
+//            String dateFin = request.getParameter("dateFin");
+//            String intitule= request.getParameter("intitule");
+//            String description = request.getParameter("description");
+//            String typeOffre= request.getParameter("typeOffre");
+//            String accessoire= request.getParameter("accessoire");
+//            Date dd = null;
+//                Date df = null;
+//                try {
+//                    dd = Date.valueOf(dateDebut);
+//                    df = Date.valueOf(dateFin);
+//                } 
+//                catch(ParseException e){
+//                    e.printStackTrace();
+//                }
+//                if ( dd != null && df != null && 
+//                dd.before(df) && //La date de début doit être avant la date de fin
+//                dd.after(new Date(System.currentTimeMillis())) &&//La date de début doit être après la date actuelle
+//                df.after(new Date(System.currentTimeMillis())) //La date de fin doit être après la date actuelle
+//                ){
+//                }
+//        }
         else{
-            jsp="/Acceuil.jsp";
-            request.setAttribute("message","PAGE N'EXISTE PAS");
+            jsp="/Accueil.jsp";
+            request.setAttribute("message","La page n'existe pas");
+            request.setAttribute("typeMessage","error");
         }
  
         RequestDispatcher Rd;

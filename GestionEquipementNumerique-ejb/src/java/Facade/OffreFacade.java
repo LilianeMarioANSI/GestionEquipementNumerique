@@ -16,9 +16,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import Entite.Accessoire;
+import Entite.Agence;
 import Entite.EtatOffre;
 import Entite.Personne;
 import Entite.TypeOffre;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 
 /**
@@ -107,9 +110,9 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
 
         return query.getResultList();
     }
-    }
+    
+    @Override
     public int getNombreOffrePublic() {
-        List<String> resultList = new ArrayList<>();
         String txt = "SELECT o FROM Offre o WHERE o.etat = :disponible OR o.etat = :enCours";
         Query req = getEntityManager().createQuery(txt);
         req.setParameter("disponible", EtatOffre.DISPONIBLE);
@@ -120,7 +123,6 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     
     @Override
     public int getNombreOffrePublicByType(TypeOffre type) {
-        List<String> resultList = new ArrayList<>();
         String txt = "SELECT o FROM Offre o WHERE o.TypeOffre = :typeOffre AND (o.etat = :disponible OR o.etat = :enCours)";
         Query req = getEntityManager().createQuery(txt);
         req.setParameter("disponible", EtatOffre.DISPONIBLE);
@@ -130,6 +132,39 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         return result.size();
     }
     
+    @Override
+    public int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin) {
+        String txt = "SELECT COUNT(DISTINCT o.utilisateur) FROM Offre o WHERE o.datePublication BETWEEN :dateDebut AND :dateFin";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("dateDebut", dateDebut);
+        req.setParameter("dateFin", dateFin);
+        Long count = (Long) req.getSingleResult();
+        return count.intValue();
+    }
     
+    @Override
+    public List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin) {
+    List<String> resultList = new ArrayList<>();
+
+    String txt = "SELECT o.utilisateur.agence, COUNT(o) FROM Offre o WHERE o.datePublication BETWEEN :dateDebut AND :dateFin GROUP BY o.utilisateur.agence ORDER BY COUNT(o) DESC";
+    Query req = getEntityManager().createQuery(txt);
+    req.setParameter("dateDebut", dateDebut);
+    req.setParameter("dateFin", dateFin);
+    
+    List<Object[]> result = req.setMaxResults(5).getResultList();
+    
+    for (Object[] row : result) {
+        // Construction de l'objet JSON représentant le résultat
+        JsonObject jsonObject = new JsonObject();
+        System.out.println(row[0].toString());
+        jsonObject.addProperty("agence", Agence.valueOf(row[0].toString()).label); // Nom de l'agence
+        jsonObject.addProperty("nombre_offres", (Long) row[1]); // Nombre d'offres publiées
+
+        // Conversion de l'objet JSON en chaîne JSON et ajout à la liste des résultats
+        resultList.add(jsonObject.toString());
+    }
+
+    return resultList;
+}
     
 }

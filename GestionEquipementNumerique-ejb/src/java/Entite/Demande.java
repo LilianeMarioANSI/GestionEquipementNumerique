@@ -76,6 +76,7 @@ public class Demande implements Serializable {
     /*
         Date demande
     */
+    
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateDemande;

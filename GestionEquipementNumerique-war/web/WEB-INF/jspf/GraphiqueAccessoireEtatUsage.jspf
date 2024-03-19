@@ -1,0 +1,46 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<jsp:useBean id="dataEtatAccessoire" scope="request" class="java.util.List"></jsp:useBean>
+
+<div class="chart">
+    <canvas id="AccessoireEtatUsage"></canvas>
+</div>
+
+<script>
+
+let dataAccessoire = <%=dataEtatAccessoire%>;
+var labels2 = [];
+var dataCounts2 = [];
+
+// Parcourir chaque élément de l'objet et extraire les valeurs d'état et de quantité dans des listes distinctes
+dataAccessoire.forEach(function(element) {
+    labels2.push(element.etat);
+    dataCounts2.push(element.quantite);
+});
+
+// Traitement des données pour compter le nombre d'offres publiées par mois
+
+// Configuration du graphique avec Chart.js
+var ctx = document.getElementById('AccessoireEtatUsage');
+
+var AccessoireChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: labels2,
+        datasets: [{
+            label: 'Nombre d\'accessoire',
+            data: dataCounts2
+        }]
+    },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                text: 'Accessoires par état d\'usage'
+            }
+        },
+        maintainAspectRatio : false
+    }
+});
+
+</script>
