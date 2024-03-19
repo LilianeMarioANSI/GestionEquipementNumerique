@@ -41,7 +41,6 @@ public interface SessionMembreLocal {
     
     List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie);
     
-   Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
-
-    List<Accessoire> getAllAccesoire();
+    Offre creationOffre (Offre O);
+    Accessoire CreerAccessoire(Accessoire a);
 }
