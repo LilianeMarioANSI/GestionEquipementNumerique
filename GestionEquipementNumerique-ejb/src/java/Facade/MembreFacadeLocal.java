@@ -34,5 +34,14 @@ public interface MembreFacadeLocal {
     Membre CreerMembre(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence);
 
     Membre IdentificationMembre(String login, String mdp);
+    
+    Agence getAgenceById(String agenceId) ;
+    
     int getNombreMembre();
+    
+    void SupprimerMembre(Membre membre);
+    
+    Membre rechercherMembre(long id);
+    
+    void ModifierInformations(Membre membre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence nouvelleAgence);
 }

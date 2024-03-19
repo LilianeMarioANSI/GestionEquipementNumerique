@@ -41,6 +41,7 @@ public interface OffreFacadeLocal {
     List<Offre> catalogueOffres();
     
     List<Offre> catalogueOffresFiltre(String type, String etat, String categorie);
+    
     int getNombreOffrePublic();
     
     int getNombreOffrePublicByType(TypeOffre type);

@@ -6,6 +6,7 @@ package Session;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.Demande;
 import Entite.EtatOffre;
 import Entite.Membre;
 import Entite.Offre;
@@ -15,6 +16,7 @@ import Entite.TypeAccessoire;
 import Entite.TypeOffre;
 import Entite.TypeSouhait;
 import Facade.AccessoireFacade;
+import Facade.AccessoireFacadeLocal;
 import Facade.MembreFacadeLocal;
 import Facade.OffreFacadeLocal;
 import Facade.OffreFacade;
@@ -35,6 +37,9 @@ import javax.print.attribute.standard.DateTimeAtCreation;
 public class SessionMembre implements SessionMembreLocal {
 
     @EJB
+    private AccessoireFacadeLocal accessoireFacade;
+
+    @EJB
     private OffreFacadeLocal offreFacade;
 
     @EJB
@@ -45,12 +50,8 @@ public class SessionMembre implements SessionMembreLocal {
     
     @EJB
     private MembreFacadeLocal membreFacade;
-
-    @EJB
-    private OffreFacade OffreFacade;
     
-    @EJB
-    private AccessoireFacade accessoireFacade;
+
 
 
     
@@ -65,6 +66,9 @@ public class SessionMembre implements SessionMembreLocal {
         return personneFacade.rechercherPersonne(id);
     }
     
+    public Membre RechercherMembre(long id) {
+        return membreFacade.rechercherMembre(id);
+    }
     /*
         Membre
     */
@@ -78,6 +82,32 @@ public class SessionMembre implements SessionMembreLocal {
         Membre m=membreFacade.IdentificationMembre(log, mdp);
         return m;
     }
+    
+    @Override
+    public boolean SupprimerMembre(long idmembre){
+        boolean resultat=false;
+        Membre m=membreFacade.rechercherMembre(idmembre);
+        if(m!=null){
+        membreFacade.SupprimerMembre(m);
+        resultat=true;
+        }
+        return resultat;     } 
+    
+    @Override
+    public boolean ModifierMembre (long idmembre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence agence){
+        boolean resultat=false;
+        Membre m=membreFacade.rechercherMembre(idmembre);
+        if(m!=null){
+        membreFacade.ModifierInformations(m, nouveauNom, nouveauPrenom, nouvelEmail, nouveauTelephone, nouveauBureau, agence);
+        resultat=true;
+        }
+        return resultat;
+    }
+    
+    @Override
+    public Agence getAgenceById(String agenceId){
+        return membreFacade.getAgenceById(agenceId);
+    } 
     /*
         Catalogue Offres
     */
@@ -86,6 +116,7 @@ public class SessionMembre implements SessionMembreLocal {
         return offreFacade.catalogueOffres();
     } 
     
+    @Override
     public List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie){
         return offreFacade.catalogueOffresFiltre(type, etat, categorie);
     }
@@ -113,7 +144,7 @@ public class SessionMembre implements SessionMembreLocal {
     public Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre) {
         Offre o= null;
         Date datePublication = new Date(System.currentTimeMillis());
-        o = OffreFacade.creerOffre(libelle, description, datePublication, typeOffre, dateDebut, dateFin, accesoires, user, EtatOffre.DISPONIBLE);
+        o = offreFacade.creerOffre(libelle, description, datePublication, typeOffre, dateDebut, dateFin, accesoires, user, EtatOffre.DISPONIBLE);
         return o;
     }
 
@@ -122,4 +153,5 @@ public class SessionMembre implements SessionMembreLocal {
         return accessoireFacade.getListeAccessoires();
     }
     
+
 }

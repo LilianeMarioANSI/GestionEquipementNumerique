@@ -10,6 +10,7 @@ import Entite.Personne;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -60,10 +61,16 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         return result.size();
     }
     
-    
-    
-    
-    
+    @Override
+    public Agence getAgenceById(String agenceId) {
+    for (Agence agence : Agence.values()) {
+        if (agence.label.equalsIgnoreCase(agenceId)) {
+            return agence;
+        }
+    }
+    return null; // Aucune agence trouvée avec le nom donné
+}
+
     
     @Override
     public Membre IdentificationMembre(String login, String mdp) {
@@ -81,5 +88,48 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
     }
     
     return null;
+}
+    
+    @Override
+    public void SupprimerMembre(Membre membre) {
+        em.remove(membre);
+    }
+    
+    
+    @Override
+    public Membre rechercherMembre(long id) {
+        Query req = getEntityManager().createQuery("Select m from Membre as m where m.id=:idMembre");
+        req.setParameter("idMembre", id);
+        Membre result = (Membre) req.getResultList().get(0);
+        return result;
+    }
+    
+    @Override
+    public void ModifierInformations(Membre membre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence nouvelleAgence) {
+    // Récupérer le membre existant dans la base de données
+    Membre membreExistant = em.find(Membre.class, membre.getId());
+    
+    // Mettre à jour les champs modifiés
+    if (!Objects.equals(membreExistant.getNom(), nouveauNom)) {
+        membreExistant.setNom(nouveauNom);
+    }
+    if (!Objects.equals(membreExistant.getPrenom(), nouveauPrenom)) {
+        membreExistant.setPrenom(nouveauPrenom);
+    }
+    if (!Objects.equals(membreExistant.getLogin(), nouvelEmail)) {
+        membreExistant.setLogin(nouvelEmail);
+    }
+    if (!Objects.equals(membreExistant.getTelephone(), nouveauTelephone)) {
+        membreExistant.setTelephone(nouveauTelephone);
+    }
+    if (!Objects.equals(membreExistant.getBureau(), nouveauBureau)) {
+        membreExistant.setBureau(nouveauBureau);
+    }
+    if (!Objects.equals(membreExistant.getAgence(), nouvelleAgence)) {
+        membreExistant.setAgence(nouvelleAgence);
+    }
+    
+    // Effectuer la mise à jour dans la base de données
+    em.merge(membreExistant);
 }
 }
