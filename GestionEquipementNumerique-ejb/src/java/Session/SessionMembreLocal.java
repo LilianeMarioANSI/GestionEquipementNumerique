@@ -33,6 +33,10 @@ public interface SessionMembreLocal {
 
     public Personne RechercherPersonne(long id);
     
+    boolean SupprimerMembre(long idmembre);
+    
+    boolean ModifierMembre (long idmembre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence agence);
+    
     void SupprimerSouhait(Souhait souhait);
     
     Membre IdentificationMembre(String log, String mdp);
@@ -41,6 +45,11 @@ public interface SessionMembreLocal {
     
     List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie);
     
+   Offre creationOffre (String libelle, String description,TypeOffre typeOffre, Date dateDebut, Date dateFin, Accessoire accesoires, Personne user, EtatOffre etatOffre);
+
+    List<Accessoire> getAllAccesoire();
+    
+    Agence getAgenceById(String agenceId);
     Offre creationOffre (Offre O);
     Accessoire CreerAccessoire(Accessoire a);
 }

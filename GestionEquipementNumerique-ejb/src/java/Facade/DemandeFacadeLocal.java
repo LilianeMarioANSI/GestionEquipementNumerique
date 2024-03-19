@@ -27,6 +27,7 @@ public interface DemandeFacadeLocal {
 
     List<Demande> findRange(int[] range);
 
-    int count();
+    int count();    
+    
     
 }
