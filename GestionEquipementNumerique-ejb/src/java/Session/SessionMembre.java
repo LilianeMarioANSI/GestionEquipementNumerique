@@ -55,7 +55,8 @@ public class SessionMembre implements SessionMembreLocal {
     @EJB
     private MembreFacadeLocal membreFacade;
     
-
+    @EJB
+    private AccessoireFacadeLocal accessoireFacade;
 
 
     

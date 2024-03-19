@@ -5,10 +5,12 @@
 package Facade;
 
 import Entite.Accessoire;
+import Entite.EtatAccessoire;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -33,6 +35,15 @@ public class AccessoireFacade extends AbstractFacade<Accessoire> implements Acce
     public Accessoire CreerAccessoire(Accessoire a) {
         em.persist(a);
         return a;
+    }
+    
+    @Override
+    public List<Accessoire> getAccessoireByEtat(EtatAccessoire etat) {
+        String txt = "SELECT a FROM Accessoire a WHERE a.etat = :etatAccessoire";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("etatAccessoire", etat);
+        List<Accessoire> result = req.getResultList();
+        return result;
     }
     
 }

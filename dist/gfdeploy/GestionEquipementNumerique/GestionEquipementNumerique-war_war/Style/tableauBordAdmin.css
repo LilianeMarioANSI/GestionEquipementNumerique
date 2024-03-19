@@ -12,7 +12,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     display: flex;
     padding: 18px;
     border-radius: 5px;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .container-section{
@@ -22,13 +22,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     padding: 16px;
 }
 
-.container-section:not(:last-child){
+/*.container-section:not(:last-child){
     border-right: 1px solid var(--gray-color);
-}
+}*/
 
 .container-section p{
     color: var(--gray-text-color);
     margin : 8px 0;
+    text-align: center;
 }
 
 form{
@@ -41,4 +42,17 @@ form{
 form label{
     color : var(--gray-text-color);
     
+}
+
+.separator{
+    width: 1px;
+    align-self: stretch;
+    background-color: var(--gray-color);
+}
+
+.chart-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+/*    flex-wrap: wrap;*/
 }

@@ -4,6 +4,8 @@
  */
 package Session;
 
+import Entite.Accessoire;
+import Entite.EtatAccessoire;
 import Entite.Offre;
 import Entite.TypeOffre;
 import java.sql.Date;
@@ -25,4 +27,11 @@ public interface SessionAdministrateurLocal {
     
     int getNombreOffrePublicByType(TypeOffre type);
     
+    int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin);
+    
+    int getNombreMembreAvecDemandeByPeriode(Date dateDebut, Date dateFin);
+    
+    List<Accessoire> getAccessoireByEtat(EtatAccessoire etat);
+    
+    List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin);
 }

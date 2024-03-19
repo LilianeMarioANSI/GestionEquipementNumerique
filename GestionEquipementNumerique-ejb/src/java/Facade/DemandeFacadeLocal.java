@@ -7,6 +7,7 @@ package Facade;
 import Entite.Demande;
 import Entite.Personne;
 
+import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -34,6 +35,9 @@ public interface DemandeFacadeLocal {
     List<Demande> listePrêts(Personne p);
 
     List<Demande> listeDon(Personne p);
+    
+    
+    int getNombreMembreAvecDemandeByPeriode(Date dateDebut, Date dateFin);
     
     
 }

@@ -5,6 +5,7 @@
 package Facade;
 
 import Entite.Accessoire;
+import Entite.EtatAccessoire;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -30,5 +31,7 @@ public interface AccessoireFacadeLocal {
 
     int count();
     Accessoire CreerAccessoire(Accessoire a);
+    
+    List<Accessoire> getAccessoireByEtat(EtatAccessoire etat);
     
 }

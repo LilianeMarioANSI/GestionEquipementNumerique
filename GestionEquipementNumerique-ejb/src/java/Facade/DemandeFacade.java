@@ -12,10 +12,12 @@ import Entite.TypeOffre;
 
 import java.util.List;
 
+import java.sql.Date;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -55,4 +57,13 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
         List<Demande> result = req.getResultList();
         return result;
     }
+    public int getNombreMembreAvecDemandeByPeriode(Date dateDebut, Date dateFin) {
+        String txt = "SELECT COUNT(DISTINCT d.utilisateur) FROM Demande d WHERE d.dateDemande BETWEEN :dateDebut AND :dateFin";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("dateDebut", dateDebut);
+        req.setParameter("dateFin", dateFin);
+        Long count = (Long) req.getSingleResult();
+        return count.intValue();
+    }
+    
 }
