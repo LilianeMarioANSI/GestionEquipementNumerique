@@ -265,7 +265,6 @@ h4{
     margin-bottom: 16px;
 }
 
-
 /*Icons*/
 .tiny-icon{
     width: 1em;
@@ -278,6 +277,6 @@ h4{
 }
 
 .large-icon{
-    width: 140px;
-    height: 140px;
+    width: 100px;
+    height: 100px;
 }

@@ -8,5 +8,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 */
 
 .chart{
-    width : 400px;
+    box-sizing: border-box;
+    width : 375px;
+    height: 375px;
+    padding: 24px;
+    background-color: var(--light-blue-color);
+    border-radius: 5px;
 }

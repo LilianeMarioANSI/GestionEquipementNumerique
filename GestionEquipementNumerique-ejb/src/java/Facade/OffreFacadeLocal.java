@@ -48,4 +48,7 @@ public interface OffreFacadeLocal {
     
     Offre creerOffre (Offre o);
     
+    int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin);
+    
+    List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin);
 }

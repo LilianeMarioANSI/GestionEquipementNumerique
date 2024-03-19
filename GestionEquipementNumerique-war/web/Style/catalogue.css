@@ -3,15 +3,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to c
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
 */
 /* 
-    Created on : 12 mars 2024, 18:59:20
+    Created on : 19 mars 2024, 15:11:57
     Author     : loulo
 */
 
-.chart{
-    box-sizing: border-box;
-    width : 375px;
-    height: 375px;
-    padding: 24px;
+.offerContainer{
+    padding : 24px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.offer{
+    padding: 16px;
     background-color: var(--light-blue-color);
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

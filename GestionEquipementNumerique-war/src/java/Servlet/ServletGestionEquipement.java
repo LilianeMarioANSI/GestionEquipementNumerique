@@ -16,6 +16,7 @@ import Entite.Souhait;
 import Entite.TypeAccessoire;
 import Entite.TypeOffre;
 import Entite.TypeSouhait;
+import Facade.OffreFacadeLocal;
 import Facade.SouhaitFacadeLocal;
 import Session.SessionAdministrateurLocal;
 import java.io.IOException;
@@ -28,13 +29,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import Session.SessionMembreLocal;
-import static java.lang.System.out;
 import java.sql.Date;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.sound.sampled.AudioFileFormat.Type;
 
@@ -49,6 +48,8 @@ import java.text.SimpleDateFormat;
 @WebServlet(name = "ServletGestionEquipement", urlPatterns = {"/ServletGestionEquipement"})
 public class ServletGestionEquipement extends HttpServlet {
 
+    
+
    
 
     /**
@@ -61,6 +62,8 @@ public class ServletGestionEquipement extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
+    
+    
     @EJB
     private SouhaitFacadeLocal souhaitFacade;
     
@@ -69,6 +72,9 @@ public class ServletGestionEquipement extends HttpServlet {
     
     @EJB
     private SessionAdministrateurLocal sessionAdministrateur;
+    
+    @EJB
+    private OffreFacadeLocal offreFacade;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -180,13 +186,34 @@ public class ServletGestionEquipement extends HttpServlet {
             //Récupération des données pour le tableau de bord
             Collection <String> listesOffres = sessionAdministrateur.getOffresParPeriode_Json(dateDeb_sql, dateFin_sql);
             int nombreMembre = sessionAdministrateur.getNombreMembre();
+            int nombreMembreAvecOffre = sessionAdministrateur.getNombreMembreAvecOffreByPeriode(dateDeb_sql, dateFin_sql);
+            int nombreMembreAvecDemande = sessionAdministrateur.getNombreMembreAvecDemandeByPeriode(dateDeb_sql, dateFin_sql);
             int nombreOffrePublic = sessionAdministrateur.getNombreOffrePublic();
             int nombreDonPublic = sessionAdministrateur.getNombreOffrePublicByType(TypeOffre.DON);
             int nombrePretPublic = sessionAdministrateur.getNombreOffrePublicByType(TypeOffre.PRET);
+            Collection<String> agenceByOffre = sessionAdministrateur.getTop5AgenceByOffre(dateDeb_sql, dateFin_sql);
+            System.out.println(agenceByOffre);
+            List<String> etatsAccessoiresData = new ArrayList<>();
+    
+            // Récupération du nombre d'accessoires pour chaque état d'accessoire
+            for (EtatAccessoire e : EtatAccessoire.values()) {
+                List<Accessoire> listeAccessoire = sessionAdministrateur.getAccessoireByEtat(e);
+                int nombreAccessoires = listeAccessoire.size(); // Nombre d'accessoires pour cet état
+
+                // Création d'une chaîne représentant les données pour cet état
+                String data = "{\"etat\": \"" + e.label + "\", \"quantite\": " + nombreAccessoires + "}";
+                etatsAccessoiresData.add(data);
+            }
             
-            //Réglage des attributs
+            //Réglage des attributs pour les graphiques
             request.setAttribute("dataOffres", listesOffres);
+            request.setAttribute("dataEtatAccessoire", etatsAccessoiresData);
+            request.setAttribute("dataAgenceByOffre", agenceByOffre);
+            
+            //Réglage des attributs pour les cartes
             request.setAttribute("nbMembre", Integer.toString(nombreMembre));
+            request.setAttribute("nbMembreAvecDemande", Integer.toString(nombreMembreAvecDemande));
+            request.setAttribute("nbMembreAvecOffre", Integer.toString(nombreMembreAvecOffre));
             request.setAttribute("nbOffrePublic", Integer.toString(nombreOffrePublic));
             request.setAttribute("nbDonPublic", Integer.toString(nombreDonPublic));
             request.setAttribute("nbPretPublic", Integer.toString(nombrePretPublic));

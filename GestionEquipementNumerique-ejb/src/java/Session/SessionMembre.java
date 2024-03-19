@@ -15,6 +15,7 @@ import Entite.Souhait;
 import Entite.TypeAccessoire;
 import Entite.TypeOffre;
 import Entite.TypeSouhait;
+import Facade.AccessoireFacadeLocal;
 import Facade.AccessoireFacade;
 import Facade.AccessoireFacadeLocal;
 import Facade.DemandeFacadeLocal;
@@ -55,7 +56,8 @@ public class SessionMembre implements SessionMembreLocal {
     @EJB
     private MembreFacadeLocal membreFacade;
     
-
+    @EJB
+    private AccessoireFacadeLocal accessoireFacade;
 
 
     

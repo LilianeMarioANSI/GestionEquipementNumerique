@@ -1,6 +1,4 @@
 <%-- any content can be specified here e.g.: --%>
-<%@page import="com.google.gson.GsonBuilder"%>
-<%@page import="com.google.gson.Gson"%>
 <%@page import="java.util.List"%>
 <%@page import="Entite.Offre"%>
 <%@ page pageEncoding="UTF-8" %>
@@ -61,6 +59,12 @@ var myChart = new Chart(ctx, {
         }]
     },
     options: {
+        plugins: {
+            title: {
+                display: true,
+                text: 'Nombre d\'offres publiés par mois'
+            }
+        },
         scales: {
             y: {
                 
@@ -70,7 +74,8 @@ var myChart = new Chart(ctx, {
                     stepSize: 10
                 }
             }
-        }
+        },
+        maintainAspectRatio : false
     }
 });
 

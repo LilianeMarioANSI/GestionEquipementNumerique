@@ -54,7 +54,6 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
 
     @Override
     public int getNombreMembre() {
-        List<String> resultList = new ArrayList<>();
         String txt = "SELECT m FROM Membre m";
         Query req = getEntityManager().createQuery(txt);
         List<Membre> result = req.getResultList();

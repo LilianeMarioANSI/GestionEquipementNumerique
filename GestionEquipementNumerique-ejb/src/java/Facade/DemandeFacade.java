@@ -5,6 +5,8 @@
 package Facade;
 
 import Entite.Demande;
+import java.sql.Date;
+import java.util.List;
 import Entite.Offre;
 import Entite.Personne;
 import Entite.TypeDemande;
@@ -16,6 +18,7 @@ import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -37,6 +40,15 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
     }
     
     @Override
+    public int getNombreMembreAvecDemandeByPeriode(Date dateDebut, Date dateFin) {
+        String txt = "SELECT COUNT(DISTINCT d.utilisateur) FROM Demande d WHERE d.dateDemande BETWEEN :dateDebut AND :dateFin";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("dateDebut", dateDebut);
+        req.setParameter("dateFin", dateFin);
+        Long count = (Long) req.getSingleResult();
+        return count.intValue();
+    }
+    
     public List<Demande> listePrêts(Personne p){
         String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.typeDemande = :typeDemande";
         Query req = getEntityManager().createQuery(txt);
