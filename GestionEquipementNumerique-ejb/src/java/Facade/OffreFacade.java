@@ -101,7 +101,6 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     }
     
     @Override
-    
     public int getNombreOffrePublic() {
         String txt = "SELECT o FROM Offre o WHERE o.etat = :disponible OR o.etat = :enCours";
         Query req = getEntityManager().createQuery(txt);
