@@ -44,12 +44,21 @@ public interface SessionMembreLocal {
     
     List<Offre> ConsulterCatalogue();
     
-    List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie);
+    List<Offre> FiltrerCatalogue(String etatEquipement, String categorie, String typeOffre);
 
     Agence getAgenceById(String agenceId);
+    
     Offre creationOffre (Offre O);
+    
     Accessoire CreerAccessoire(Accessoire a);
 
     List<Demande> listeDon(Personne p);
+    
     List<Demande> listePrêts(Personne p);
+    
+    List<Offre> listeMesEquipements(long Id);
+    
+    boolean SupprimerDemande(long idDemande);
+    
+    Demande RechercherDemande(long id);
 }

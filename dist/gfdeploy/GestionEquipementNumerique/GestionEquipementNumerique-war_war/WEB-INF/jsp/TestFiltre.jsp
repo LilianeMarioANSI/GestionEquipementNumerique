@@ -1,9 +1,8 @@
 <%-- 
-    Document   : Catalogue
-    Created on : 18 mars 2024, 09:35:13
+    Document   : mesEquipements
+    Created on : 18 mars 2024, 10:12:25
     Author     : Utilisateur
 --%>
-
 
 <%@page import="Entite.TypeAccessoire"%>
 <%@page import="Entite.EtatAccessoire"%>

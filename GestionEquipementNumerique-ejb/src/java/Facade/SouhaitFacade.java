@@ -34,6 +34,9 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
         super(Souhait.class);
     }
     
+    /*
+        Mes souhaits/ Mes demande en cours
+    */
     @Override
     public List<Souhait> getSouhaitByMembre(long idMembre) {
         String txt = "SELECT s FROM Souhait s WHERE s.utilisateur.id = :id";
@@ -44,6 +47,9 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
         return result;
     }
 
+    /*
+        Créer Souhait
+    */
     @Override
     public Souhait creerSouhait(Date datePublication, Date dateDebut, Date dateFin, TypeSouhait typeSouhait, TypeAccessoire typeAccessoire, String description, Personne utilisateur) {
         Souhait s = new Souhait();
@@ -58,6 +64,9 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
         return s;
     }
 
+    /*
+        Supprimer Souhait
+    */
     @Override
     public void supprimerSouhait(Souhait souhait) {
         em.remove(souhait);

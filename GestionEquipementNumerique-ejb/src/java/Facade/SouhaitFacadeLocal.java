@@ -33,6 +33,8 @@ public interface SouhaitFacadeLocal {
 
     int count();
     
+    // nos méthodes
+    
     List<Souhait> getSouhaitByMembre(long idMembre);
 
     Souhait creerSouhait(Date datePublication, Date dateDebut, Date dateFin, TypeSouhait typeSouhait, TypeAccessoire typeAccessoire, String description, Personne utilisateur);

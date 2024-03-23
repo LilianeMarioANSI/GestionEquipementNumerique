@@ -13,7 +13,7 @@
         <title>Détail offre</title>
     </head>
     <body>
-        <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+        <%@include file="/WEB-INF/jspf/navigation_membre.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         
         <p><%=offre.getId()%></p>

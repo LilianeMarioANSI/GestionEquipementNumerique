@@ -20,9 +20,6 @@
         
     </head>
     <body>
-        
-        
-        <%@include file="/WEB-INF/jspf/navigation.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         
         <main>

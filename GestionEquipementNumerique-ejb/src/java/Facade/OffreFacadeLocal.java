@@ -36,6 +36,8 @@ public interface OffreFacadeLocal {
 
     int count();
     
+    // nos méthodes
+    
     List<String> getOffresParPeriode_Json(Date dateDebut, Date dateFin);
     
     List<Offre> catalogueOffres();
@@ -51,4 +53,6 @@ public interface OffreFacadeLocal {
     int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin);
     
     List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin);
+    
+    List<Offre> MesEquipementDisponible(Long idPersonne);
 }

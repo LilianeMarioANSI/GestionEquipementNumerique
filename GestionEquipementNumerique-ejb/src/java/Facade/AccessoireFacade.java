@@ -31,12 +31,19 @@ public class AccessoireFacade extends AbstractFacade<Accessoire> implements Acce
         super(Accessoire.class);
     }
 
+    
+    /*
+        Creation Accessoire pour créer offre
+    */
     @Override
     public Accessoire CreerAccessoire(Accessoire a) {
         em.persist(a);
         return a;
     }
     
+    /*
+        Tableau de bord
+    */
     @Override
     public List<Accessoire> getAccessoireByEtat(EtatAccessoire etat) {
         String txt = "SELECT a FROM Accessoire a WHERE a.etat = :etatAccessoire";

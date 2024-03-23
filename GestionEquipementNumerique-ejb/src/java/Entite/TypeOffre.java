@@ -10,7 +10,7 @@ package Entite;
  */
 public enum TypeOffre {
     DON("Don"),
-    PRET("¨Prêt");
+    PRET("Pret");
     
     public final String label;
 

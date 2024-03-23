@@ -12,7 +12,7 @@ public enum EtatAccessoire {
     NEUF("Neuf"),
     TRES_BON_ETAT("Très bon état"),
     BON_ETAT("Bon état"),
-    CORRECT("correct"),
+    CORRECT("Correct"),
     MAUVAIS("Mauvais");
     
     

@@ -55,8 +55,10 @@
                         <input type="password" name="confirmMdp" id="confirmMdp" placeholder="Confirmer le mot de passe" required>
                     </fieldset>
                     
+                    <input type="checkbox" id="adminCheck" name="adminCheck">
+                    <label for="adminCheck">Administrateur</label>
                     
-                    <input type="hidden" name="action" value="creerMembre">
+                    <input type="hidden" name="action" value="creerUtilisateur">
                     
                     
                     <div class="action-wrapper right">
