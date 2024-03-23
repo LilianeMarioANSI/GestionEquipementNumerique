@@ -6,8 +6,6 @@ package Facade;
 
 import Entite.Demande;
 import Entite.Membre;
-import java.sql.Date;
-import java.util.List;
 import Entite.Offre;
 import Entite.Personne;
 import Entite.StatutDemande;

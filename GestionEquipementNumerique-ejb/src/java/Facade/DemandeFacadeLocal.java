@@ -7,11 +7,9 @@ package Facade;
 import Entite.Demande;
 import Entite.Membre;
 import Entite.Offre;
-import java.sql.Date;
 import Entite.Personne;
 import Entite.StatutDemande;
 import Entite.TypeDemande;
-
 import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;

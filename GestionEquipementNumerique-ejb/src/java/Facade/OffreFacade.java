@@ -17,7 +17,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import Entite.Accessoire;
 import Entite.Agence;
-import static Entite.Demande_.offre;
 import Entite.EtatOffre;
 import Entite.Personne;
 import Entite.TypeOffre;
