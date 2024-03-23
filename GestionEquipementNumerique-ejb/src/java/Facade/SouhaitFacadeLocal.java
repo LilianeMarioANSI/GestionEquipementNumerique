@@ -37,5 +37,4 @@ public interface SouhaitFacadeLocal {
 
     Souhait creerSouhait(Date datePublication, Date dateDebut, Date dateFin, TypeSouhait typeSouhait, TypeAccessoire typeAccessoire, String description, Personne utilisateur);
 
-    void supprimerSouhait(Souhait idSouhait);
 }

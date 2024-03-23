@@ -4,8 +4,6 @@
  */
 package Entite;
 
-import java.util.List;
-
 /**
  *
  * @author loulo
