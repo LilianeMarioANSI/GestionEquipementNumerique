@@ -5,15 +5,15 @@
 package Facade;
 
 import Entite.Demande;
+import Entite.Membre;
 import java.sql.Date;
 import java.util.List;
 import Entite.Offre;
 import Entite.Personne;
+import Entite.StatutDemande;
 import Entite.TypeDemande;
 import Entite.TypeOffre;
-
 import java.util.List;
-
 import java.sql.Date;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -50,6 +50,7 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
         return count.intValue();
     }
     
+    @Override
     public List<Demande> listePrêts(Personne p){
         String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.typeDemande = :typeDemande";
         Query req = getEntityManager().createQuery(txt);
@@ -68,13 +69,18 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
         List<Demande> result = req.getResultList();
         return result;
     }
-    public int getNombreMembreAvecDemandeByPeriode(Date dateDebut, Date dateFin) {
-        String txt = "SELECT COUNT(DISTINCT d.utilisateur) FROM Demande d WHERE d.dateDemande BETWEEN :dateDebut AND :dateFin";
-        Query req = getEntityManager().createQuery(txt);
-        req.setParameter("dateDebut", dateDebut);
-        req.setParameter("dateFin", dateFin);
-        Long count = (Long) req.getSingleResult();
-        return count.intValue();
+
+    @Override
+    public Demande creerDemande(Personne personne, Offre offre) {
+        Demande demande = new Demande();
+        demande.setStatut(StatutDemande.EN_COURS);
+        demande.setDateDemande(new Date(System.currentTimeMillis()));
+        demande.setUtilisateur(personne);
+        demande.setOffre(offre);
+        em.persist(demande);
+        return demande;
     }
+    
+    
     
 }

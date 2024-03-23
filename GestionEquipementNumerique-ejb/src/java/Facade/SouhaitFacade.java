@@ -57,11 +57,6 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
         em.persist(s);
         return s;
     }
-
-    @Override
-    public void supprimerSouhait(Souhait souhait) {
-        em.remove(souhait);
-    }
     
     
     

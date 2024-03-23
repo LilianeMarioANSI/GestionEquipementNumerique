@@ -51,4 +51,6 @@ public interface OffreFacadeLocal {
     int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin);
     
     List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin);
+    
+    void updateEtatOffre(Offre o);
 }

@@ -38,7 +38,6 @@ public interface SessionMembreLocal {
     
     boolean ModifierMembre (long idmembre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence agence);
     
-    void SupprimerSouhait(Souhait souhait);
     
     Membre IdentificationMembre(String log, String mdp);
     
@@ -51,5 +50,11 @@ public interface SessionMembreLocal {
     Accessoire CreerAccessoire(Accessoire a);
 
     List<Demande> listeDon(Personne p);
+    
     List<Demande> listePrêts(Personne p);
+    
+    Demande CreerDemande(Personne personne, Offre offre);
+    
+    void updateEtatOffre(Offre o);
+    
 }

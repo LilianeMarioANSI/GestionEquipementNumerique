@@ -104,7 +104,7 @@ public class Offre implements Serializable {
     
     @Expose
     @Column(nullable = false)
-    private TypeOffre typeOffre;
+        private TypeOffre typeOffre;
 
     public TypeOffre getTypeOffre() {
         return typeOffre;

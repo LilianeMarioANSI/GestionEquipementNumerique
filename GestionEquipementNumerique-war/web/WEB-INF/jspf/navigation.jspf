@@ -15,17 +15,14 @@
                     <a href="ServletGestionEquipement?action=mesSouhaits" class="nav-link">Mes souhaits</a>
                     <a href="#" class="nav-link">Mes offres</a>
                     <a href="#" class="nav-link">Mes demandes</a>
+                    <a href="#" class="nav-link">Mes dons</a>
                 </div>
             </li>
             <li><a href="ServletGestionEquipement?action=analytics" class="nav-link">Tableau de bord</a></li>
             <li><a href="ServletGestionEquipement?action=creerOffre" class="nav-link">Créer une Offre</a></li>
         </ul>
     </div>
-    <div class="user-navbar">
-        <div>
-            <a href="#" class="nav-link"><img class="small-icon" src="Assets/icons/person-circle.svg" alt="logo"/></a>
-        </div>
-    </div>
+    
     
     
 </nav>
