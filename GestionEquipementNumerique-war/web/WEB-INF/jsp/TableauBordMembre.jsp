@@ -26,6 +26,8 @@
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         
         <main>
+            <%@include file="/WEB-INF/jspf/message.jspf" %>
+            
             <section class="user-data">
                 <div class="container">
                     <div class="container-header">

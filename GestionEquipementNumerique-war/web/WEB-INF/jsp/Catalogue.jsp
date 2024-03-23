@@ -4,6 +4,9 @@
     Author     : Utilisateur
 --%>
 
+<%@page import="Entite.TypeOffre"%>
+<%@page import="Entite.TypeAccessoire"%>
+<%@page import="Entite.EtatOffre"%>
 <%@page import="Entite.EtatAccessoire"%>
 <%@page import="java.util.List"%>
 <%@page import="Entite.Offre"%>
@@ -17,7 +20,6 @@
         <link rel="stylesheet" type="text/css" href="Style/main.css">
         <link rel="stylesheet" type="text/css" href="Style/navigation.css">
         <link rel="stylesheet" type="text/css" href="Style/header.css">
-        <link rel="stylesheet" type="text/css" href="Style/inscription.css">
         <link rel="stylesheet" type="text/css" href="Style/catalogue.css">
     </head>
     
@@ -25,27 +27,32 @@
     <%@include file="/WEB-INF/jspf/header.jspf" %>
 
     <body>
-        <h2 class="form-title">Offres en ligne</h2>
-        
-        <form method="get" action="ServletGestionEquipement?action=afficherCatalogue">
-            <label for="type">Type :</label>
-            <select name="type" id="type">
-                <option value="don">Don</option>
-                <option value="pret">Prê        <form method="get" action="ServletGestionEquipement?action=afficherCatalogue">t</option>
-            </select>
+        <main>
+            <form method="post" action="ServletGestionEquipement">
+                <input type="hidden" name="action" value="afficherCatalogue">
+                <label for="type">Type :</label>
+                <select name="type" id="type" required>
+                    <% for (TypeOffre to : TypeOffre.values()) {%>
+                        <option value ="<%=to.label%>"><%=to.label%></option>
+                    <% }%>
+                </select>
 
-            <label for="etat">État :</label>
-            <select name="etat" id="etat" required>
-                <% for (EtatAccessoire e : EtatAccessoire.values()) {%>
-                    <option value ="<%=e.label%>"><%=e.label%></option>
-                <% }%>
-            </select>
+                <label for="etat">État :</label>
+                <select name="etat" id="etat" required>
+                    <% for (EtatAccessoire e : EtatAccessoire.values()) {%>
+                        <option value ="<%=e.label%>"><%=e.label%></option>
+                    <% }%>
+                </select>
 
-            <label for="categorie">Catégorie :</label>
-            <input type="text" name="categorie" id="categorie">
+                <label for="categorie">Catégorie :</label>
+                <select name="categorie" id="categorie" required>
+                    <% for (TypeAccessoire t : TypeAccessoire.values()) {%>
+                        <option value ="<%=t.label%>"><%=t.label%></option>
+                    <% }%>
+                </select>
 
-            <button type="submit">Filtrer</button>
-        </form>
+                <button type="submit">Filtrer</button>
+            </form>
             
             <div class="offerContainer">
                 <%
@@ -54,13 +61,62 @@
                         for(Offre offre : offres) {
                 %>
                     <div class="offer">
-                        <img class="large-icon" src="Assets/icons/computer-mouse-solid.svg" alt="logo"/>
+                        <%
+                            String icon;
+                            TypeAccessoire typeAccessoireOffre = offre.getAccessoire().getTypeAccessoire();
+                            switch(typeAccessoireOffre){
+                                case ECRAN:
+                                    icon = "desktop-solid.svg";
+                                    break;
+                                case CLAVIER:
+                                    icon = "keyboard-solid.svg";
+                                    break;
+                                case SOURIS:
+                                    icon = "computer-mouse-solid.svg";
+                                    break;
+                                case FILTRE_CONFIDENTIALITE:
+                                    icon = "eye-slash-solid.svg";
+                                    break;
+                                case ADAPTATEUR_VGA:
+                                    icon = "plug-solid.svg";
+                                    break;
+                                case CHARGEUR:
+                                    icon = "eye-slash-solid.svg";
+                                    break;
+                                case CASQUE:
+                                    icon = "headphones-solid.svg";
+                                    break;
+                                case CLE_USB:
+                                    icon = "hard-drive-solid.svg";
+                                    break;
+                                default:
+                                    icon = "question-solid.svg";
+                                    break;
+                            }
+                        %>
+                        <img class="large-icon" src="Assets/icons/<%=icon%>" alt="logo"/>
                         <h2><%= offre.getIntitule() %></h2>
-                        <form method="post" action="ServletGestionEquipement">
+                        <p><%=offre.getAccessoire().getTypeAccessoire().label%></p>
+                        <p>Statut : <%=offre.getEtat().label%></p>
+                        <div>
+                            <form method="post" action="ServletGestionEquipement">
                             <input type="hidden" name="action" value="afficherDetailOffre">
                             <input type="hidden" name="idOffre" value="<%=offre.getId()%>">
                             <button type="submit" class="submit">Voir l'offre</button>
                         </form>
+                        <form action="ServletGestionEquipement" method="post">
+                            <input type="hidden" name="action" value="reclamerOffre">
+                            <input type="hidden" name="idUtilisateur" value="<%=membre.getId()%>">
+                            <input type="hidden" name="idOffre" value="<%=offre.getId()%>">
+
+                            <% if(offre.getEtat() != EtatOffre.DISPONIBLE){ %>
+                                <button type="submit" class="submit" disabled>Je veux</button>
+                            <%} else {%>
+                                <button type="submit" class="submit" >Je veux<%=offre.getEtat().label%></button>
+                            <%}%>
+                        </form>
+                        </div>
+                        
                     </div>
                 <%
                         }
@@ -71,6 +127,6 @@
                     }
                 %>
             </div>
-        
+        </main>
     </body>
 </html>

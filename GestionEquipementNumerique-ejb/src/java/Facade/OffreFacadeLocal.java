@@ -52,4 +52,6 @@ public interface OffreFacadeLocal {
     
     List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin);
     List<Offre> listeOffre(Personne p);
+    
+    void updateEtatOffre(Offre o);
 }

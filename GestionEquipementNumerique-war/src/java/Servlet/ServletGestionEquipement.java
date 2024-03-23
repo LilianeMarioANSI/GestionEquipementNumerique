@@ -16,6 +16,7 @@ import Entite.Souhait;
 import Entite.TypeAccessoire;
 import Entite.TypeOffre;
 import Entite.TypeSouhait;
+import Facade.MembreFacadeLocal;
 import Facade.OffreFacadeLocal;
 import Facade.SouhaitFacadeLocal;
 import Session.SessionAdministrateurLocal;
@@ -35,8 +36,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.servlet.http.HttpSession;
-import javax.sound.sampled.AudioFileFormat.Type;
-
 import java.util.List;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -47,6 +46,8 @@ import java.text.SimpleDateFormat;
  */
 @WebServlet(name = "ServletGestionEquipement", urlPatterns = {"/ServletGestionEquipement"})
 public class ServletGestionEquipement extends HttpServlet {
+
+    
 
     
 
@@ -76,6 +77,11 @@ public class ServletGestionEquipement extends HttpServlet {
     @EJB
     private OffreFacadeLocal offreFacade;
     
+    @EJB
+    private MembreFacadeLocal membreFacade;
+    
+    
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -83,10 +89,29 @@ public class ServletGestionEquipement extends HttpServlet {
         String action = request.getParameter("action");
         String jsp = null;
         
-        if(action==null){
-            jsp = "/WEB-INF/jsp/Accueil.jsp";
-            //Titre de la page
-            request.setAttribute("titrePage", "Bienvenue !");
+        if(action==null || action.equals("accueil")){
+            HttpSession session = request.getSession(false);
+            if(session != null){
+                Personne p = (Personne) session.getAttribute("membre");
+                
+                if(p.getId() != null){
+                    jsp = "/ServletGestionEquipement?action=tableauBord";
+                    request.setAttribute("titrePage", "Mon espace !");
+                    request.setAttribute("titrePage", "Bienvenue !");
+                }else{
+                    jsp = "/WEB-INF/jsp/Accueil.jsp";
+                    //Titre de la page
+                    request.setAttribute("titrePage", "Bienvenue !");
+                }
+            }else{
+                jsp = "/WEB-INF/jsp/Accueil.jsp";
+                //Titre de la page
+                request.setAttribute("titrePage", "Bienvenue !");
+            }
+            
+            
+            
+            
         }
         /*
             Inscription
@@ -290,25 +315,35 @@ public class ServletGestionEquipement extends HttpServlet {
             Souhaits
         */
         else if(action.equals("mesSouhaits")){
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(false);
             Membre membre = (Membre) session.getAttribute("membre");
-            long idMembre = membre.getId();
-            Collection<Souhait> listeSouhaits = sessionMembre.GetSouhaitByMembre(idMembre);
             
-            request.setAttribute("listeSouhaits", listeSouhaits); 
-            jsp = "/WEB-INF/jsp/MesSouhaits.jsp";
-            //Titre de la page
-            request.setAttribute("titrePage", "Mes Souhaits");
+            if(membre.getId() != null){
+                System.out.println(membre.getId());
+                long idMembre = membre.getId();
+                Collection<Souhait> listeSouhaits = sessionMembre.GetSouhaitByMembre(idMembre);
+
+                request.setAttribute("listeSouhaits", listeSouhaits); 
+                jsp = "/WEB-INF/jsp/MesSouhaits.jsp";
+                //Titre de la page
+                request.setAttribute("titrePage", "Mes Souhaits");
+            }else {
+                jsp = "/ServletGestionEquipement?action=accueil";
+            }
+            
+            
+            
         }
         
         else if(action.equals("creerSouhait")){
-            jsp = "/WEB-INF/jsp/MesSouhaits.jsp";
+            jsp = "/ServletGestionEquipement?action=mesSouhaits";
             doCreerSouhait(request, response);
         }
         else if(action.equals("supprimerSouhait")){
-            long idSouhait = Long.parseLong(request.getParameter("souhait"));
+            long idSouhait = Long.parseLong(request.getParameter("idSouhait"));
             Souhait souhaitToRemove = souhaitFacade.find(idSouhait);
-            sessionMembre.SupprimerSouhait(souhaitToRemove);
+            souhaitFacade.remove(souhaitToRemove);
+            jsp = "/ServletGestionEquipement?action=mesSouhaits";
         }
         
         /*
@@ -317,7 +352,6 @@ public class ServletGestionEquipement extends HttpServlet {
         else if (action.equals("creerOffre")){
             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
         }
-        
         else if (action.equals("AjouterOffre")){
             // Réception des données du formulaire pour Accessoire 
             HttpSession session = request.getSession();
@@ -415,13 +449,37 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("message", "Vous n'avez aucun prets");
             }
         }
-        
-        
-        
-        
+        else if(action.equals("afficherDetailOffre")){
+            Long idOffre = Long.valueOf(request.getParameter("idOffre"));
+            Offre offre = offreFacade.find(idOffre);
+            
+            request.setAttribute("offre", offre);
+            request.setAttribute("titrePage", "Détail de l\'offre");
+            jsp = "/WEB-INF/jsp/DetailOffre.jsp";
+        }else if(action.equals("reclamerOffre")){
+            String idOffre_string = request.getParameter("idOffre");
+            String idMembre_string = request.getParameter("idUtilisateur");
+            if(idOffre_string.trim().isEmpty() || idMembre_string.trim().isEmpty()){
+                request.setAttribute("message", "Échecs de la réclamation de l'offre");
+                request.setAttribute("typeMessage", "error");
+            }else{
+                Offre offre = offreFacade.find(Long.valueOf(idOffre_string));
+                Membre membre = membreFacade.find(Long.valueOf(idMembre_string));
+                sessionMembre.CreerDemande(membre, offre);
+                
+                
+                sessionMembre.updateEtatOffre(offre);
+                
+                
+                request.setAttribute("message", "Offre réclamé avec succès !");
+                request.setAttribute("typeMessage", "success");
+            }
+            jsp = "/ServletGestionEquipement?action=tableauBord";
+        }
         else {
             jsp = "/WEB-INF/jsp/Accueil.jsp";
         }
+        
  
         RequestDispatcher Rd;
         Rd = getServletContext().getRequestDispatcher(jsp);
@@ -462,29 +520,40 @@ public class ServletGestionEquipement extends HttpServlet {
     protected void doCreerSouhait(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        HttpSession session = request.getSession(false);
+        
         String dateDebut = request.getParameter("dateDebut");
         String dateFin = request.getParameter( "dateFin" );
         String description = request.getParameter( "description" );
-        String idUtilisateur = request.getParameter( "id" ); //Ici récupérer l'id de l'utilisateur connecté dans les attributs de session.
         
-        //On récupère la valeur de l'agence à partir de son label
-        TypeSouhait typeSouhait = TypeSouhait.valueOfLabel(request.getParameter("type"));
+        String typeSouhait_string = request.getParameter("typeSouhait");
+        TypeSouhait typeSouhait;
+        
+        if(typeSouhait_string.equals("DON")){
+            typeSouhait = TypeSouhait.DON;
+        }else{
+            typeSouhait = TypeSouhait.PRET;
+        }
+        
         TypeAccessoire typeAccessoire = TypeAccessoire.valueOfLabel(request.getParameter("categorie"));
         
         
         String message;
         String typeMessage;
         
-        if ( dateDebut.trim().isEmpty() || dateFin.trim().isEmpty()|| description.trim().isEmpty() || idUtilisateur.trim().isEmpty()){
+        if ( dateDebut.trim().isEmpty() || dateFin.trim().isEmpty()|| description.trim().isEmpty()){
             message = "Vous n'avez pas rempli tous les champs obligatoires. ";
             typeMessage = "error";
-        } 
-        else {
+        }else if(session == null){
+            message = "Vous n'avez pas rempli tous les champs obligatoires. ";
+            typeMessage = "error";
+            response.sendRedirect("/ServletGestionEquipement");
+        } else {
+            Membre membre = (Membre) session.getAttribute("membre");
             Date datePublication = Date.valueOf(LocalDate.now());
-            Personne utilisateur = sessionMembre.RechercherPersonne(Long.parseLong(idUtilisateur));
             Date dateDebut_sql = Date.valueOf(dateDebut);
             Date dateFin_sql = Date.valueOf(dateFin);
-            sessionMembre.CreerSouhait(datePublication, dateDebut_sql, dateFin_sql, typeSouhait, typeAccessoire, description, utilisateur);
+            sessionMembre.CreerSouhait(datePublication, dateDebut_sql, dateFin_sql, typeSouhait, typeAccessoire, description, membre);
             message = "Souhait créé avec succès !";
             typeMessage = "success";
         }

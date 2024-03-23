@@ -65,6 +65,17 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     }
     
     @Override
+    public void updateEtatOffre(Offre o){
+        if(o.getTypeOffre() == TypeOffre.DON){
+            o.setEtat(EtatOffre.TERMINEE);
+        }else if(o.getTypeOffre() == TypeOffre.PRET){
+            o.setEtat(EtatOffre.EN_COURS);
+        }
+        
+        em.merge(o);
+    }
+    
+    @Override
     public List<Offre> catalogueOffres() {
         TypedQuery<Offre> query = getEntityManager().createQuery(
                 "SELECT o FROM Offre o", Offre.class);
@@ -112,7 +123,7 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     
     @Override
     public int getNombreOffrePublicByType(TypeOffre type) {
-        String txt = "SELECT o FROM Offre o WHERE o.TypeOffre = :typeOffre AND (o.etat = :disponible OR o.etat = :enCours)";
+        String txt = "SELECT o FROM Offre o WHERE o.typeOffre = :typeOffre AND (o.etat = :disponible OR o.etat = :enCours)";
         Query req = getEntityManager().createQuery(txt);
         req.setParameter("disponible", EtatOffre.DISPONIBLE);
         req.setParameter("enCours", EtatOffre.EN_COURS);
@@ -146,7 +157,7 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         // Construction de l'objet JSON représentant le résultat
         JsonObject jsonObject = new JsonObject();
         System.out.println(row[0].toString());
-        jsonObject.addProperty("agence", Agence.valueOf(row[0].toString()).label); // Nom de l'agence
+        jsonObject.addProperty("agence", row[0].toString()); // Nom de l'agence
         jsonObject.addProperty("nombre_offres", (Long) row[1]); // Nombre d'offres publiées
 
         // Conversion de l'objet JSON en chaîne JSON et ajout à la liste des résultats

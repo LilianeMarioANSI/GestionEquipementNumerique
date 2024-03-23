@@ -12,6 +12,7 @@ import Entite.Membre;
 import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
+import Entite.StatutDemande;
 import Entite.TypeAccessoire;
 import Entite.TypeOffre;
 import Entite.TypeSouhait;
@@ -55,6 +56,11 @@ public class SessionMembre implements SessionMembreLocal {
     
     @EJB
     private MembreFacadeLocal membreFacade;
+    
+
+
+    
+    
     
     /*
         Personne
@@ -123,6 +129,11 @@ public class SessionMembre implements SessionMembreLocal {
     } 
     
     @Override
+    public void updateEtatOffre(Offre o){
+        offreFacade.updateEtatOffre(o);
+    }
+    
+    @Override
     public List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie){
         return offreFacade.catalogueOffresFiltre(type, etat, categorie);
     }
@@ -141,11 +152,8 @@ public class SessionMembre implements SessionMembreLocal {
         return souhaitFacade.creerSouhait(datePublication, dateDebut, dateFin, typeSouhait, typeAccessoire, description, utilisateur);
     }
     
-    @Override
-    public void SupprimerSouhait(Souhait souhait) {
-        souhaitFacade.supprimerSouhait(souhait);
-    }
     
+    @Override
     public Offre creationOffre (Offre O) {
         return offreFacade.creerOffre(O);
     }
@@ -174,6 +182,11 @@ public class SessionMembre implements SessionMembreLocal {
         @Override
     public List<Souhait> listeMesSouhaits(Personne p) {
         return souhaitFacade.listeSouhaits(p);
+
+    }
+    
+    public Demande CreerDemande(Personne personne, Offre offre){
+        return demandeFacade.creerDemande(personne, offre);
     }
 
 }

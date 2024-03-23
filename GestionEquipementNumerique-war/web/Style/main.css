@@ -27,6 +27,10 @@ html{
     font-family: sans-serif;
 }
 
+b{
+    font-weight: bold;
+}
+
 main{
     display: flex;
     margin-top : calc(var(--header-size) + var(--nav-size));
@@ -147,6 +151,13 @@ button.edit{
 button.delete{
    background-color : var(--red-color);
    color : white;
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
 }
 
 /* Table */
