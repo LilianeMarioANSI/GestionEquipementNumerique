@@ -5,13 +5,17 @@
 package Session;
 
 import Entite.Accessoire;
+import Entite.Agence;
 import Entite.EtatAccessoire;
+import Entite.Membre;
 import Entite.Offre;
+import Entite.Superviseur;
 import Entite.TypeOffre;
 import Facade.AccessoireFacadeLocal;
 import Facade.DemandeFacadeLocal;
 import Facade.MembreFacadeLocal;
 import Facade.OffreFacadeLocal;
+import Facade.SuperviseurFacadeLocal;
 import java.sql.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -23,6 +27,9 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class SessionAdministrateur implements SessionAdministrateurLocal {
+
+    @EJB
+    private SuperviseurFacadeLocal superviseurFacade;
 
     @EJB
     private AccessoireFacadeLocal accessoireFacade;
@@ -37,10 +44,41 @@ public class SessionAdministrateur implements SessionAdministrateurLocal {
     private OffreFacadeLocal offreFacade;
     
     
+    
+    
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+   
+    /*
+        Authentification
+    */
+    @Override
+    public Superviseur IdentificationSuperviseur(String log, String mdp){
+        return superviseurFacade.IdentificationSuperviseur(log, mdp);
+    }
     
+    @Override
+    public Superviseur InscriptionUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence) {
+        return superviseurFacade.CreerSuperviseur(login, mdp, nom, prenom, bureau, telephone, agence);
+    }
+    
+    /*
+        Gestion Utilisateur Membre
+    */
+    @Override
+    public List<Membre> ListeMembres(){
+        return membreFacade.ListeMembre();
+    }
+    
+    @Override
+    public Membre getMembre(long login){
+        return membreFacade.rechercherMembre(login);
+    }
+    
+    /*
+        Tableau de bord / Reporting
+    */
     @Override
     public List <String> getOffresParPeriode_Json(Date dateDebut, Date dateFin) {
         return offreFacade.getOffresParPeriode_Json(dateDebut, dateFin);

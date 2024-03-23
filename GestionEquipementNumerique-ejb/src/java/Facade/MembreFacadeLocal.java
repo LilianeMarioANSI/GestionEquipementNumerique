@@ -31,6 +31,8 @@ public interface MembreFacadeLocal {
 
     int count();
     
+    // not méthodes
+    
     Membre CreerMembre(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence);
 
     Membre IdentificationMembre(String login, String mdp);
@@ -44,4 +46,6 @@ public interface MembreFacadeLocal {
     Membre rechercherMembre(long id);
     
     void ModifierInformations(Membre membre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence nouvelleAgence);
+    
+List<Membre> ListeMembre();
 }

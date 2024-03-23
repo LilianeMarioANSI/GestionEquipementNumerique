@@ -13,16 +13,20 @@
                 <a class="nav-link nav-drop" id="dropbtn" href="ServletGestionEquipement?action=tableauBord">Mon espace<img class="tiny-icon arrow" src="Assets/icons/chevron-down-outline.svg" alt="logo"/></a>
                 <div class="dropDownContent">
                     <a href="ServletGestionEquipement?action=mesSouhaits" class="nav-link">Mes souhaits</a>
-                    <a href="#" class="nav-link">Mes offres</a>
-                    <a href="ServletGestionEquipement?action=AfficherMesPrets" class="nav-link">Mes prêts</a>
+                    <a href="ServletGestionEquipement?action=mesEquipements" class="nav-link">Mes equipements (offres)</a>
                     <a href="ServletGestionEquipement?action=AfficherMesDons" class="nav-link">Mes dons</a>
+                    <a href="ServletGestionEquipement?action=AfficherMesPrets" class="nav-link">Mes prêts</a>
+                    <a href="ServletGestionEquipement?action=logout" class="nav-link">Déconnexion</a>
                 </div>
             </li>
-            <li><a href="ServletGestionEquipement?action=analytics" class="nav-link">Tableau de bord</a></li>
             <li><a href="ServletGestionEquipement?action=creerOffre" class="nav-link">Créer une Offre</a></li>
         </ul>
     </div>
-    
+    <div class="user-navbar">
+        <div>
+            <a href="ServletGestionEquipement?action=tableauBord" class="nav-link"><img class="small-icon" src="Assets/icons/person-circle.svg" alt="logo"/></a>
+        </div>
+    </div>
     
     
 </nav>

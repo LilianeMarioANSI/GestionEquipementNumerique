@@ -4,6 +4,7 @@
  */
 package Facade;
 
+import Entite.Agence;
 import Entite.Superviseur;
 import java.util.List;
 import javax.ejb.Local;
@@ -28,5 +29,11 @@ public interface SuperviseurFacadeLocal {
     List<Superviseur> findRange(int[] range);
 
     int count();
+    
+    // nos méthodes
+    
+    Superviseur IdentificationSuperviseur(String login, String mdp);
+    
+    Superviseur CreerSuperviseur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence);
     
 }

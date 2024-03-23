@@ -6,11 +6,14 @@ package Entite;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -19,9 +22,8 @@ import javax.persistence.OneToMany;
  * @author loulo
  */
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Personne implements Serializable {
-
-    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -172,7 +174,7 @@ public class Personne implements Serializable {
         Badges
     */
 
-    @OneToMany(mappedBy = "utilisateur")
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.REMOVE)
     private List<Badge> badges;
 
     public List<Badge> getBadges() {
@@ -187,7 +189,7 @@ public class Personne implements Serializable {
     /*
         Souhaits
     */
-    @OneToMany(mappedBy = "utilisateur")
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.REMOVE)
     private List<Souhait> souhaits;
 
     public List<Souhait> getSouhaits() {
@@ -202,7 +204,7 @@ public class Personne implements Serializable {
         Offres
     */
     
-    @OneToMany(mappedBy = "utilisateur")
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.REMOVE)
     private List<Offre> offres;
 
     public List<Offre> getOffres() {
@@ -217,7 +219,7 @@ public class Personne implements Serializable {
         Demandes
     */
     
-    @OneToMany(mappedBy = "utilisateur")
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.REMOVE)
     private List<Demande> demandes;
 
     public List<Demande> getDemandes() {
@@ -232,7 +234,7 @@ public class Personne implements Serializable {
         Accessoires
     */
     
-    @ManyToMany(mappedBy = "utilisateurs")
+    @ManyToMany(mappedBy = "utilisateurs", cascade = CascadeType.REMOVE)
     private List<Accessoire> accessoires;
 
     public List<Accessoire> getAccessoires() {

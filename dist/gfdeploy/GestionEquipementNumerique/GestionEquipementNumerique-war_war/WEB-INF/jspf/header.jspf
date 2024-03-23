@@ -1,5 +1,6 @@
 <%-- any content can be specified here e.g.: --%>
 <%@ page pageEncoding="UTF-8" %>
+<jsp:useBean id="membre" scope="session" class="Entite.Membre"></jsp:useBean>
 <header class="fixed-top">
     <div class="banner">
         <div class="pattern right"></div>

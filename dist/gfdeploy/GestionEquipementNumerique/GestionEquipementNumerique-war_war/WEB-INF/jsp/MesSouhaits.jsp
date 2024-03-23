@@ -4,6 +4,9 @@
     Author     : loulo
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="Entite.TypeSouhait"%>
+<%@page import="Entite.TypeOffre"%>
 <%@page import="Entite.TypeAccessoire"%>
 <%@page import="Entite.Souhait"%>
 <%@page import="java.util.List"%>
@@ -21,7 +24,7 @@
         <title>Mes souhaits</title>
     </head>
     <body>
-        <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+        <%@include file="/WEB-INF/jspf/navigation_membre.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         
         <main class="vertical">
@@ -53,11 +56,11 @@
                         <h4>Type</h4>
                         
                         <div>
-                            <input type="radio" name="type" id="pret" value="pret" checked>
+                            <input type="radio" name="typeSouhait" id="pret" value="<%=TypeSouhait.PRET%>" checked>
                             <label for="pret">Prêt</label>
                         </div>
                         <div>
-                            <input type="radio" name="type" id="don" value="don" >
+                            <input type="radio" name="typeSouhait" id="don" value="<%=TypeSouhait.DON%>" >
                             <label for="pret">Don</label>
                         </div>
                     </section>
@@ -95,58 +98,29 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="vertical-align: middle">Souris</td>
-                        <td style="vertical-align: middle">2024-02-01</td>
-                        <td style="vertical-align: middle">2024-02-01</td>
-                        <td style="vertical-align: middle"></td>
-                        <td style="vertical-align: middle">Don</td>
-                        <td class="action-cell" style="vertical-align: middle">
-                            <form action="ServletGestionEquipement">
-                                <input type="hidden" name="action" value="AfficherModifierSouhait">
-                                <button class="edit">Modifier</button>
-                            </form>
-
-                            <button class="delete">Supprimer</button>
-                        </td>
-                    </tr>
-                    <tr class="spacer">
-                        <td colspan="100"></td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: middle">Souris</td>
-                        <td style="vertical-align: middle">2024-02-01</td>
-                        <td style="vertical-align: middle">2024-02-01</td>
-                        <td style="vertical-align: middle">2024-02-01</td>
-                        <td style="vertical-align: middle">Prêt</td>
-                        <td class="action-cell" style="vertical-align: middle">
-                            <form action="ServletGestionEquipement">
-                                <input type="hidden" name="action" value="AfficherModifierSouhait">
-                                <button class="edit">Modifier</button>
-                            </form>
-
-                            <button class="delete">Supprimer</button>
-                        </td>
-                    </tr>
-                    <tr class="spacer">
-                        <td colspan="100"></td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: middle">Souris</td>
-                        <td style="vertical-align: middle">2024-02-01</td>
-                        <td style="vertical-align: middle">2024-02-01</td>
-                        <td style="vertical-align: middle">2024-02-01</td>
-                        <td style="vertical-align: middle">Prêt</td>
-                        <td class="action-cell" style="vertical-align: middle">
-                            <form action="ServletGestionEquipement">
-                                <input type="hidden" name="action" value="AfficherModifierSouhait">
-                                <button class="edit">Modifier</button>
-                            </form>
-
-                            <button class="delete">Supprimer</button>
-                        </td>
-                    </tr>
-                </tbody>
+                    <%
+                        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                        
+                        List<Souhait> souhaits = (List<Souhait>) request.getAttribute("listeSouhaits");
+                        for(Souhait s : souhaits){%>
+                            <tr>
+                                <td style="vertical-align: middle"><%=s.getTypeAccessoire().label%></td>
+                                <td style="vertical-align: middle"><%=df.format(s.getDatePublication())%></td>
+                                <td style="vertical-align: middle"><%=df.format(s.getDateDebut())%></td>
+                                <td style="vertical-align: middle"><%=df.format(s.getDateFin())%></td>
+                                <td style="vertical-align: middle"><%=s.getTypeSouhait().label%></td>
+                                <td class="action-cell" style="vertical-align: middle">
+                                    <form action="ServletGestionEquipement">
+                                        <input type="hidden" name="action" value="supprimerSouhait">
+                                        <input type="hidden" name="idSouhait" value="<%=s.getId()%>">
+                                        <button type="submit" class="delete">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr class="spacer">
+                                <td colspan="100"></td>
+                            </tr>
+                        <%}%>
                 </tbody>
                 
                 

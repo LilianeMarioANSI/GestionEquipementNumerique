@@ -33,16 +33,19 @@ public interface DemandeFacadeLocal {
 
     List<Demande> findRange(int[] range);
 
-    int count();   
+    int count(); 
+    
+    // nos méthodes
     
     List<Demande> listePrêts(Personne p);
 
     List<Demande> listeDon(Personne p); 
     
-    
     int getNombreMembreAvecDemandeByPeriode(Date dateDebut, Date dateFin);
 
     Demande creerDemande(Personne personne, Offre offre);
     
+    void supprimerDemande(Demande demande);
     
+    Demande rechercherDemande(long idDemande);
 }

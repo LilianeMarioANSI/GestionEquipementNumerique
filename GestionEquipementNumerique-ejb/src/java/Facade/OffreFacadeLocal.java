@@ -36,6 +36,8 @@ public interface OffreFacadeLocal {
 
     int count();
     
+    // nos méthodes
+    
     List<String> getOffresParPeriode_Json(Date dateDebut, Date dateFin);
     
     List<Offre> catalogueOffres();
@@ -54,4 +56,6 @@ public interface OffreFacadeLocal {
     List<Offre> listeOffre(Personne p);
     
     void updateEtatOffre(Offre o);
+    
+    List<Offre> MesEquipementDisponible(Long idPersonne);
 }
