@@ -107,21 +107,22 @@ public class ServletGestionEquipement extends HttpServlet {
         /*
             Authentification
         */
-            else if (action.equals("authentification")) {
+        else if (action.equals("authentification")) {
             String login = request.getParameter("login");
             String mdp = request.getParameter("mdp");
-            Membre m = sessionMembre.IdentificationMembre(login, mdp);
-            if (m != null) {
-                HttpSession session = request.getSession(true);
-                session.setAttribute("membre", m);
-                // Afficher le profil de l'utilisateur après une authentification réussie
-                jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
-            } else {
-                // Rediriger vers la page d'accueil avec un message d'erreur si l'authentification échoue
-                String message = "Identifiant ou mot de passe incorrect.";
-                request.setAttribute("message", message);
-                request.getRequestDispatcher("/WEB-INF/jsp/Acceuil.jsp").forward(request, response);
-            }
+                Membre m = sessionMembre.IdentificationMembre(login, mdp);
+                if (m != null) {
+                    HttpSession session = request.getSession(true);
+                    session.setAttribute("membre", m);                 
+                    // Afficher le profil de l'utilisateur après une authentification réussie
+                    jsp = "/ServletGestionEquipement?action=tableauBord";
+                } else {
+                    // Rediriger vers la page d'accueil avec un message d'erreur si l'authentification échoue
+                    String message = "Identifiant ou mot de passe incorrect.";
+                    request.setAttribute("message", message);
+                    request.setAttribute("typeMessage", "error");
+                    request.getRequestDispatcher("/WEB-INF/jsp/Accueil.jsp").forward(request, response);
+                }
         }
         
         /*
@@ -226,12 +227,21 @@ public class ServletGestionEquipement extends HttpServlet {
         else if(action.equals("tableauBord")){
             HttpSession session = request.getSession();
             Membre membre = (Membre) session.getAttribute("membre");
-
+            // Pour chaque membre, récupérer la liste de ses dons, prêts, offres, souhaits
+            List<Demande> dons = sessionMembre.listeDon(membre);
+            List<Demande> prets = sessionMembre.listePrêts(membre);
+            List<Offre> offres=sessionMembre.listeMesOffres(membre);
+            List<Souhait> souhaits=sessionMembre.listeMesSouhaits(membre);
+            
+            request.setAttribute("dons", dons);
+            request.setAttribute("prets", prets);
+            request.setAttribute("offres", offres);
+            request.setAttribute("souhaits", souhaits);
             // Transmettre les informations du membre à la vue JSP
             request.setAttribute("membre", membre);
 
             // Rediriger vers la vue JSP du tableau de bord
-            request.getRequestDispatcher("/WEB-INF/jsp/TableauBordMembre.jsp").forward(request, response);
+            jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
         }
         else if(action.equals("mesEquipements")){
             jsp = "/WEB-INF/jsp/mesEquipements.jsp";
@@ -247,9 +257,9 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("message", "Membre supprimée");
             }
             else{
-                    jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
-                    request.setAttribute("message", "Erreur, Membre non supprimée");
-                }
+                jsp="/ServletGestionEquipement?action=tableauBord";
+                request.setAttribute("message", "Erreur, Membre non supprimée");
+            }
         }
         else if(action.equals("ModifierMembre")){
             String nom = request.getParameter("nom");
@@ -267,13 +277,13 @@ public class ServletGestionEquipement extends HttpServlet {
             boolean m = sessionMembre.ModifierMembre(membreId, nom, prenom, email, telephone, bureau, ag);
   
             if(m){
-                jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
+                jsp="/ServletGestionEquipement?action=tableauBord";
                 request.setAttribute("message", "Modifications enregistrées");
             }
             else{
-                    jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
-                    request.setAttribute("message", "Erreur, Modifications non prises en compte");
-                }
+                jsp="/ServletGestionEquipement?action=tableauBord";
+                request.setAttribute("message", "Erreur, Modifications non prises en compte");
+            }
         }
         
         /*
@@ -334,22 +344,22 @@ public class ServletGestionEquipement extends HttpServlet {
                 String typeOffre= request.getParameter("typeO");
                 Date dd = null;
                 Date df = null;
-                    try {
-                        dd = Date.valueOf(dateDebut);
-                        df = Date.valueOf(dateFin);
-                    } 
-                    catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    dd = Date.valueOf(dateDebut);
+                    df = Date.valueOf(dateFin);
+                } 
+                catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
                 if(intitule.trim().isEmpty() || description.trim().isEmpty() || typeOffre.trim().isEmpty() || dd==null || df==null){
                     jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
                     request.setAttribute("message", "Vous n'avez pas rempli tous les champs obligatoires");
                     request.setAttribute("typeMessage", "error");
                 }
                 else if( dd.before(df) && //La date de début doit être avant la date de fin
-                dd.after(new Date(System.currentTimeMillis())) &&//La date de début doit être après la date actuelle
-                df.after(new Date(System.currentTimeMillis())) //La date de fin doit être après la date actuelle
-                )
+                    dd.after(new Date(System.currentTimeMillis())) &&//La date de début doit être après la date actuelle
+                    df.after(new Date(System.currentTimeMillis())) //La date de fin doit être après la date actuelle
+                    )
                 {
                     TypeOffre typeOffreEnum = TypeOffre.valueOfLabel(typeOffre);
                     Offre o= creerOffre(intitule, description, typeOffreEnum, dd, df, a, membre);
@@ -357,10 +367,9 @@ public class ServletGestionEquipement extends HttpServlet {
                         Accessoire accessoire = sessionMembre.CreerAccessoire(a);
                         Offre offre = sessionMembre.creationOffre(o);
                         if (offre != null && accessoire != null){
-                            jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
-                        request.setAttribute("message", "Offre crée");
-                        request.setAttribute("typeMessage", "success");
-
+                            request.setAttribute("message", "Offre crée");
+                            request.setAttribute("typeMessage", "success");
+                            jsp="/ServletGestionEquipement?action=tableauBord";
                         }
                         else{
                             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
@@ -383,33 +392,36 @@ public class ServletGestionEquipement extends HttpServlet {
         }
         }
 
-        // Afficher mes prêts 
-        else if (action.equals("mesPrets")) {
-            HttpSession session = request.getSession();
-            Membre membre = (Membre) session.getAttribute("membre");
-            List<Demande> prets = sessionMembre.listePrêts(membre);
-            request.setAttribute("prets", prets);
-            jsp = "/WEB-INF/jsp/mesPrets.jsp";
-        }
-        else if (action.equals("afficherMesPrets")){
-
-        }
         // Afficher mes dons
-        else if(action.equals("mesDons")){
+        else if(action.equals("AfficherMesDons")){
             HttpSession session = request.getSession();
             Membre membre = (Membre) session.getAttribute("membre");
             List<Demande> dons = sessionMembre.listeDon(membre);
-            request.setAttribute("dons", dons);
             jsp = "/WEB-INF/jsp/mesDons.jsp";
+            request.setAttribute("dons", dons);
+            if(dons.isEmpty()){
+                request.setAttribute("message", "Vous n'avez aucun don");
+            }
         }
-        else if (action.equals("afficherMesDons")){
-            
+        
+        // Afficher mes Prets
+        else if(action.equals("AfficherMesPrets")){
+            HttpSession session = request.getSession();
+            Membre membre = (Membre) session.getAttribute("membre");
+            List<Demande> prets = sessionMembre.listePrêts(membre);
+            jsp = "/WEB-INF/jsp/mesPrets.jsp";
+            request.setAttribute("prets", prets);
+            if(prets.isEmpty()){
+                request.setAttribute("message", "Vous n'avez aucun prets");
+            }
         }
-
-//            else {
-//            jsp="/Acceuil.jsp";
-//            request.setAttribute("message","PAGE N'EXISTE PAS");
-//        }
+        
+        
+        
+        
+        else {
+            jsp = "/WEB-INF/jsp/Accueil.jsp";
+        }
  
         RequestDispatcher Rd;
         Rd = getServletContext().getRequestDispatcher(jsp);
@@ -525,6 +537,7 @@ public class ServletGestionEquipement extends HttpServlet {
         a.setDescription(descriptionAccessoire);
         a.setTypeAccessoire(typeAccessoire);
         a.setEtat(etatAccessoire);
+        a.setDisponibilite(true);
         a.getPersonnes().add(membre);
         return a;
     }
@@ -542,5 +555,6 @@ public class ServletGestionEquipement extends HttpServlet {
         o.setUtilisateur(membre);
         return o;
     }
+
 }
 

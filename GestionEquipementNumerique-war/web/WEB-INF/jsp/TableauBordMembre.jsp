@@ -4,6 +4,10 @@
     Author     : loulo
 --%>
 
+<%@page import="Entite.Souhait"%>
+<%@page import="Entite.Offre"%>
+<%@page import="java.util.List"%>
+<%@page import="Entite.Demande"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -25,16 +29,22 @@
             <section class="user-data">
                 <div class="container">
                     <div class="container-header">
-                        <h3>Mes équipements</h3>
+                        <h3>Mes Offres d'équipement</h3>
                     </div>
-                    
+                    <jsp:useBean id="offres" scope="request" class="java.util.List"></jsp:useBean>
                     <div class="container-body">
-                        
-                        <ul>
-                            <li>Souris sans-fil Dell</li>
-                            <li>Casque Jabra filaire</li>
-                            <li>Adaptateur HDMI/VGA</li>
-                        </ul>
+                        <%
+                            List<Offre> lesOffres= offres;
+                                if (lesOffres.size() == 0) {%>
+                                    <p>Vous n'avez pas encore créer d'offre pour le moment</p>
+                                <%} else {%>
+                                    <ul>
+                                        <%for(Offre o : lesOffres){%>
+                                            <li><%= o.getTypeOffre() %> - <%= o.getAccessoire().getTypeAccessoire()%></li>
+                                        <%}%>
+                                    </ul>
+                                <%}
+                        %>
                         <form class="action-wrapper right">
                             <input type="hidden" name="action" value="mesEquipements">
                             <button type="submit" class="submit">Voir plus</button>
@@ -47,16 +57,24 @@
                     <div class="container-header">
                         <h3>Mes prêts</h3>
                     </div>
-                    
+                    <jsp:useBean id="prets" scope="request" class="java.util.List"></jsp:useBean>
                     <div class="container-body">
-                        
-                        <ul>
-                            <li>Souris sans-fil Dell</li>
-                            <li>Casque Jabra filaire</li>
-                            <li>Adaptateur HDMI/VGA</li>
-                        </ul>
+                        <%
+                            List<Demande> lesPrets= prets;
+                                if (lesPrets.size() == 0) {%>
+                                    <p>Vous n'avez pas encore fait de Prêts</p>
+                                <%} else {%>
+                                    <ul>
+                                        <%for(Demande d : lesPrets){%>
+                                            <li><%= d.getOffre().getIntitule()%></li>
+                                        <%}%>
+                                    </ul>
+                                <%}
+                        %>
                         <form class="action-wrapper right">
-                            <input type="hidden" name="action" value="mesPrets">
+                            <fieldset>
+                                <input type="hidden" name="action" value="AfficherMesPrets">
+                            </fieldset>
                             <button type="submit" class="submit">Voir plus</button>
                         </form>
                     </div>
@@ -66,40 +84,54 @@
                     <div class="container-header">
                         <h3>Mes souhaits</h3>
                     </div>
-                    
+                    <jsp:useBean id="souhaits" scope="request" class="java.util.List"></jsp:useBean>
                     <div class="container-body">
-                        
-                        <ul>
-                            <li>Souris sans-fil Dell</li>
-                            <li>Casque Jabra filaire</li>
-                            <li>Adaptateur HDMI/VGA</li>
-                        </ul>
+                        <%
+                            List<Souhait> lesSouhaits= souhaits;
+                                if (lesSouhaits.size() == 0) {%>
+                                    <p>Vous n'avez pas encore fait de souhaits pour le moment</p>
+                                <%} else {%>
+                                    <ul>
+                                        <%for(Souhait s : lesSouhaits){%>
+                                            <li><%= s.getTypeSouhait()%> - <%= s.getTypeAccessoire() %></li>
+                                        <%}%>
+                                    </ul>
+                                <%}
+                        %>
                         <form class="action-wrapper right">
                             <input type="hidden" name="action" value="mesSouhaits">
                             <button type="submit" class="submit">Voir plus</button>
                         </form>
                     </div>
                 </div>
-                
+                <jsp:useBean id="dons" scope="request" class="java.util.List"></jsp:useBean>
                 <div class="container">
                     <div class="container-header">
                         <h3>Mes dons</h3>
                     </div>
                     
                     <div class="container-body">
-                        
-                        <ul>
-                            <li>Souris sans-fil Dell</li>
-                            <li>Casque Jabra filaire</li>
-                            <li>Adaptateur HDMI/VGA</li>
-                        </ul>
-                        
+                        <%
+                            List<Demande> lesDons= dons;
+                                if (lesDons.size() == 0) {%>
+                                    <p>Vous n'avez pas encore fait de dons</p>
+                                <%} else {%>
+                                    <ul>
+                                        <%for(Demande d : lesDons){%>
+                                            <li><%= d.getOffre().getIntitule()%></li>
+                                        <%}%>
+                                    </ul>
+                                <%}
+                        %>
                         <form class="action-wrapper right">
-                            <input type="hidden" name="action" value="mesDons">
+                            <fieldset>
+                                <input type="hidden" name="action" value="AfficherMesDons">
+                            </fieldset>
                             <button type="submit" class="submit">Voir plus</button>
                         </form>
                     </div>
                 </div>
+                
             </section>
             <section class="user-info">
                 <img class="large-icon profil-icon" src="Assets/icons/person-circle.svg" alt="logo"/>

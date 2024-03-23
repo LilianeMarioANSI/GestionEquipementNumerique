@@ -56,13 +56,6 @@ public class SessionMembre implements SessionMembreLocal {
     @EJB
     private MembreFacadeLocal membreFacade;
     
-    @EJB
-    private AccessoireFacadeLocal accessoireFacade;
-
-
-    
-    
-    
     /*
         Personne
     */
@@ -85,8 +78,15 @@ public class SessionMembre implements SessionMembreLocal {
     
     @Override
     public Membre IdentificationMembre(String log, String mdp){
+        Membre user=null; 
         Membre m=membreFacade.IdentificationMembre(log, mdp);
-        return m;
+        if(m!=null){
+            user=m;
+        }
+        else {
+            user=null;
+        }
+        return user;
     }
     
     @Override
@@ -164,6 +164,16 @@ public class SessionMembre implements SessionMembreLocal {
     @Override
     public List<Demande> listeDon(Personne p) {
         return demandeFacade.listeDon(p);
+    }
+    
+    @Override
+    public List<Offre> listeMesOffres(Personne p) {
+        return offreFacade.listeOffre(p);
+    }
+    
+        @Override
+    public List<Souhait> listeMesSouhaits(Personne p) {
+        return souhaitFacade.listeSouhaits(p);
     }
 
 }

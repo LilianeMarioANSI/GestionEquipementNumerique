@@ -1,7 +1,7 @@
 <%-- 
     Document   : FormCréationOffre
     Created on : 18 mars 2024, 09:27:08
-    Author     : lilia
+    Author     : LILIANE
 --%>
 
 <%@page import="Entite.TypeOffre"%>

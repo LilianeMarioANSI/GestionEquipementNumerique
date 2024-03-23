@@ -51,4 +51,6 @@ public interface SessionMembreLocal {
     Accessoire CreerAccessoire(Accessoire a);
     List<Demande> listeDon(Personne p);
     List<Demande> listePrêts(Personne p);
+    List<Offre> listeMesOffres(Personne p) ;
+    List<Souhait> listeMesSouhaits(Personne p) ;
 }

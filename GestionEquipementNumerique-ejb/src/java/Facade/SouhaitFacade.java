@@ -63,6 +63,13 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
         em.remove(souhait);
     }
     
-    
+    @Override
+    public List<Souhait> listeSouhaits(Personne p){
+        String txt = "SELECT s FROM Souhait s WHERE s.utilisateur = :p";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("p", p);
+        List<Souhait> result = req.getResultList();
+        return result;
+    }
     
 }
