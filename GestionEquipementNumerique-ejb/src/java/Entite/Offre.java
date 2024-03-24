@@ -188,8 +188,7 @@ public class Offre implements Serializable {
         Personne
     */
     
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "UTILISATEUR_ID")
+    @ManyToOne
     @Expose(serialize = false, deserialize = false)
     private Personne utilisateur;
 

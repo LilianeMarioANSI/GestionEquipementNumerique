@@ -144,8 +144,7 @@ public class Accessoire implements Serializable {
     
         Personne
     */
-    @ManyToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "UTILISATEURS_ID")
+    @ManyToMany
     private List<Personne> utilisateurs;
 
     public List<Personne> getPersonnes() {

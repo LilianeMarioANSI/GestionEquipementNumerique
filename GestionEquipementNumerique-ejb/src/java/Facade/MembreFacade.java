@@ -79,11 +79,6 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
     @Override
     public void SupprimerMembre(Membre membre) {
         if (membre != null) {
-            membre.getBadges().clear();
-            membre.getSouhaits().clear();
-            membre.getOffres().clear();
-            membre.getDemandes().clear();
-            membre.getAccessoires().clear();
             em.remove(membre);
         }
     }

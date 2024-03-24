@@ -107,9 +107,6 @@
                 <%@include file="/WEB-INF/jspf/GraphiqueAccessoireEtatUsage.jspf" %>
                 <%@include file="/WEB-INF/jspf/GraphiqueAgenceByOffre.jspf" %>
             </div>
-            <div class="container">
-                <a href="ServletGestionEquipement?action=afficherMembres" class="button">Afficher tous les membres</a>
-            </div>
 
             
             

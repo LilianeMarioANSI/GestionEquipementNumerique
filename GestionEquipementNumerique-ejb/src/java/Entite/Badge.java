@@ -80,8 +80,7 @@ public class Badge implements Serializable {
         Personne
     */
     
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "UTILISATEUR_ID")
+    @ManyToOne
     private Personne utilisateur;
 
     public Personne getUtilisateur() {
