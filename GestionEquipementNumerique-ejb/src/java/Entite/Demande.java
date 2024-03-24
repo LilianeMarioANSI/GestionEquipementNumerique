@@ -4,6 +4,7 @@
  */
 package Entite;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;

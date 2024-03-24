@@ -10,8 +10,8 @@ package Entite;
  */
 public enum EtatAccessoire {
     NEUF("Neuf"),
-    TRES_BON_ETAT("Très bon état"),
-    BON_ETAT("Bon état"),
+    TRES_BON_ETAT("Tres bon etat"),
+    BON_ETAT("Bon etat"),
     CORRECT("correct"),
     MAUVAIS("Mauvais");
     

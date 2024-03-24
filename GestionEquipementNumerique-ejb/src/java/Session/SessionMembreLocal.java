@@ -48,10 +48,11 @@ public interface SessionMembreLocal {
     Agence getAgenceById(String agenceId);
     Offre creationOffre (Offre O);
     Accessoire CreerAccessoire(Accessoire a);
-
     List<Demande> listeDon(Personne p);
     
     List<Demande> listePrêts(Personne p);
+    List<Offre> listeMesOffres(Personne p) ;
+    List<Souhait> listeMesSouhaits(Personne p) ;
     
     Demande CreerDemande(Personne personne, Offre offre);
     

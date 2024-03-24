@@ -37,7 +37,7 @@ public interface DemandeFacadeLocal {
     
     List<Demande> listePrêts(Personne p);
 
-    List<Demande> listeDon(Personne p);
+    List<Demande> listeDon(Personne p); 
     
     
     int getNombreMembreAvecDemandeByPeriode(Date dateDebut, Date dateFin);

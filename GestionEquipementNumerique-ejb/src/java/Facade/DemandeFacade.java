@@ -50,20 +50,20 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
     
     @Override
     public List<Demande> listePrêts(Personne p){
-        String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.typeDemande = :typeDemande";
+        String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.offre.typeOffre = :typeOffre";
         Query req = getEntityManager().createQuery(txt);
         req.setParameter("p", p);
-        req.setParameter("typeDemande", TypeDemande.PRET);
+        req.setParameter("typeOffre", TypeOffre.PRET);
         List<Demande> result = req.getResultList();
         return result;
     }
 
     @Override
     public List<Demande> listeDon(Personne p){
-        String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.typeDemande = :typeDemande";
+        String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.offre.typeOffre = :typeOffre";
         Query req = getEntityManager().createQuery(txt);
         req.setParameter("p", p);
-        req.setParameter("typeDemande", TypeDemande.DON);
+        req.setParameter("typeOffre",TypeOffre.DON);
         List<Demande> result = req.getResultList();
         return result;
     }

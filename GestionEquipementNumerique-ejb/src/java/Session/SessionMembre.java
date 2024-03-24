@@ -84,8 +84,15 @@ public class SessionMembre implements SessionMembreLocal {
     
     @Override
     public Membre IdentificationMembre(String log, String mdp){
+        Membre user=null; 
         Membre m=membreFacade.IdentificationMembre(log, mdp);
-        return m;
+        if(m!=null){
+            user=m;
+        }
+        else {
+            user=null;
+        }
+        return user;
     }
     
     @Override
@@ -168,6 +175,16 @@ public class SessionMembre implements SessionMembreLocal {
     }
     
     @Override
+    public List<Offre> listeMesOffres(Personne p) {
+        return offreFacade.listeOffre(p);
+    }
+    
+        @Override
+    public List<Souhait> listeMesSouhaits(Personne p) {
+        return souhaitFacade.listeSouhaits(p);
+
+    }
+    
     public Demande CreerDemande(Personne personne, Offre offre){
         return demandeFacade.creerDemande(personne, offre);
     }
