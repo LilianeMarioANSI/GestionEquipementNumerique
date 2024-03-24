@@ -1,6 +1,7 @@
 <%-- any content can be specified here e.g.: --%>
+<%@page import="Entite.Superviseur"%>
 <%@ page pageEncoding="UTF-8" %>
-
+<jsp:useBean id="utilisateurAuth" scope="request" class="Entite.Personne"></jsp:useBean>
 <%-- Menu de navigation --%>
 <nav class="navbar fixed-top">
     <div class="logo-wrapper">
@@ -18,7 +19,10 @@
                     <a href="ServletGestionEquipement?action=AfficherMesDons" class="nav-link">Mes dons</a>
                 </div>
             </li>
-            <li><a href="ServletGestionEquipement?action=analytics" class="nav-link">Tableau de bord</a></li>
+            <% if(utilisateurAuth instanceof Superviseur) {%>
+                <li><a href="ServletGestionEquipement?action=analytics" class="nav-link">Tableau de bord</a></li>
+            <% } %>
+            
             <li><a href="ServletGestionEquipement?action=creerOffre" class="nav-link">Créer une Offre</a></li>
         </ul>
     </div>
