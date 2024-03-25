@@ -119,7 +119,7 @@
                             <% if(offre.getEtat() != EtatOffre.DISPONIBLE){ %>
                                 <button type="submit" class="submit" disabled>Je veux</button>
                             <%} else {%>
-                                <button type="submit" class="submit" >Je veux<%=offre.getEtat().label%></button>
+                                <button type="submit" class="submit" >Je veux</button>
                             <%}%>
                         </form>
                         </div>
