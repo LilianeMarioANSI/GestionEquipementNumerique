@@ -215,4 +215,12 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         return query.getResultList();
     }
     
+        @Override
+    public List<Offre> listeOffre(Personne p){
+        String txt = "SELECT o FROM Offre o WHERE o.utilisateur = :p";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("p", p);
+        List<Offre> result = req.getResultList();
+        return result;
+    }
 }

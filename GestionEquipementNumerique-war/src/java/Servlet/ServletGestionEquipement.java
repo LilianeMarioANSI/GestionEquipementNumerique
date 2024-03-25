@@ -516,8 +516,6 @@ public class ServletGestionEquipement extends HttpServlet {
             
             if(membre.getId() != null){
                 System.out.println(membre.getId());
-                long idMembre = membre.getId();
-                Collection<Souhait> listeSouhaits = sessionMembre.GetSouhaitByMembre(idMembre);
 
                 request.setAttribute("listeSouhaits", listeSouhaits); 
                 jsp = "/WEB-INF/jsp/MesSouhaits.jsp";
@@ -720,7 +718,7 @@ public class ServletGestionEquipement extends HttpServlet {
 
             if (d) {
                 Demande demande = sessionMembre.RechercherDemande(demandeId);
-                String demandeType = demande.getTypeDemande().label;
+                String demandeType = demande.getOffre().getTypeOffre().label;
                 if (demandeType != null) {
                     if (demandeType.equals("PRET")) {
                         jsp = "/WEB-INF/jsp/MesPrets.jsp";
