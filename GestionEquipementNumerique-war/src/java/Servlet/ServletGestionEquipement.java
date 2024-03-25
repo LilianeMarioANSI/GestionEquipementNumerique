@@ -339,7 +339,8 @@ public class ServletGestionEquipement extends HttpServlet {
                     typeMessage = "error";
                 } else {
                     String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
-                    sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                    sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                    //sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
                     message = "Compte membre créé avec succès !";
                     
                     typeMessage = "success";
