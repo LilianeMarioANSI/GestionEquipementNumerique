@@ -5,6 +5,8 @@
 package Facade;
 
 import Entite.Badge;
+import Entite.NiveauBadge;
+import Entite.Personne;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,4 +31,9 @@ public interface BadgeFacadeLocal {
 
     int count();
     
+    Badge createBadge(NiveauBadge niveau, Personne utilisateur);
+    
+    boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau);
+    
+    List<Badge> getBadgeByMembre(Personne utilisateur);
 }

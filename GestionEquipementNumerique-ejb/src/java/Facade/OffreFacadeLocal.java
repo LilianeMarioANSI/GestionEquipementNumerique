@@ -59,4 +59,6 @@ public interface OffreFacadeLocal {
     void updateEtatOffre(Offre o);
     
     List<Offre> MesEquipementDisponible(Long idPersonne);
+    int getNombreOffreByMembre(Personne u);
+    
 }

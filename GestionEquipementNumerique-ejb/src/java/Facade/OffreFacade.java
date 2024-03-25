@@ -224,4 +224,13 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         List<Offre> result = req.getResultList();
         return result;
     }
+    
+    @Override
+    public int getNombreOffreByMembre(Personne u) {
+        String txt = "SELECT COUNT(o) FROM Offre o WHERE o.utilisateur.id = :idUtilisateur";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("idUtilisateur", u.getId());
+        Long count = (Long) req.getSingleResult();
+        return count.intValue();
+    }
 }

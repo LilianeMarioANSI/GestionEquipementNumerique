@@ -6,8 +6,10 @@ package Session;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.Badge;
 import Entite.Demande;
 import Entite.Membre;
+import Entite.NiveauBadge;
 import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
@@ -15,6 +17,12 @@ import Entite.StatutDemande;
 import Entite.TypeAccessoire;
 import Entite.TypeSouhait;
 import Facade.AccessoireFacadeLocal;
+<<<<<<< HEAD
+=======
+import Facade.AccessoireFacade;
+import Facade.AccessoireFacadeLocal;
+import Facade.BadgeFacadeLocal;
+>>>>>>> 3b5c20f (Badge + vérification date création offre)
 import Facade.DemandeFacadeLocal;
 import Facade.MembreFacadeLocal;
 import Facade.OffreFacadeLocal;
@@ -35,7 +43,11 @@ import javax.ejb.Stateless;
 public class SessionMembre implements SessionMembreLocal {
 
     @EJB
+<<<<<<< HEAD
     private PersonneFacadeLocal personneFacade;
+=======
+    private BadgeFacadeLocal badgeFacade;
+>>>>>>> 3b5c20f (Badge + vérification date création offre)
 
     @EJB
     private DemandeFacadeLocal demandeFacade;
@@ -213,6 +225,30 @@ public class SessionMembre implements SessionMembreLocal {
     @Override
     public Demande CreerDemande(Personne personne, Offre offre){
         return demandeFacade.creerDemande(personne, offre);
+    }
+    
+    @Override
+    public boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau){
+        return badgeFacade.verificationBadgeExistant(utilisateur, niveau);
+    }
+    
+    @Override
+    public Badge creerBadge(NiveauBadge niveau, Personne membre){
+        return badgeFacade.createBadge(niveau, membre);
+    }
+    
+    @Override
+    public int getNombreDemandeByMembre(Personne u){
+        return demandeFacade.getNombreDemandeByMembre(u);
+    }
+    @Override
+    public int getNombreOffreByMembre(Personne u){
+        return offreFacade.getNombreOffreByMembre(u);
+    }
+    
+    @Override
+    public List<Badge> getBadgeByMembre(Personne u){
+        return badgeFacade.getBadgeByMembre(u);
     }
 
     @Override

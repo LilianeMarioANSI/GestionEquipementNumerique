@@ -9,9 +9,7 @@ package Entite;
  * @author loulo
  */
 public enum NiveauBadge {
-    CLAIRE,
-    DEBUTANT,
-    NOVICE,
-    ALTRUISTE,
-    LOUIS,
+    UN,
+    DEUX,
+    TROIS,
 }

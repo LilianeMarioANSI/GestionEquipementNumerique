@@ -4,6 +4,8 @@
     Author     : loulo
 --%>
 
+<%@page import="Entite.NiveauBadge"%>
+<%@page import="Entite.Badge"%>
 <%@page import="Entite.Souhait"%>
 <%@page import="Entite.Offre"%>
 <%@page import="java.util.List"%>
@@ -74,9 +76,7 @@
                                 <%}
                         %>
                         <form class="action-wrapper right">
-                            <fieldset>
-                                <input type="hidden" name="action" value="AfficherMesPrets">
-                            </fieldset>
+                            <input type="hidden" name="action" value="AfficherMesPrets">
                             <button type="submit" class="submit">Voir plus</button>
                         </form>
                     </div>
@@ -126,9 +126,7 @@
                                 <%}
                         %>
                         <form class="action-wrapper right">
-                            <fieldset>
-                                <input type="hidden" name="action" value="AfficherMesDons">
-                            </fieldset>
+                            <input type="hidden" name="action" value="AfficherMesDons">
                             <button type="submit" class="submit">Voir plus</button>
                         </form>
                     </div>
@@ -136,36 +134,52 @@
                 
             </section>
             <section class="user-info">
+                <jsp:useBean id="badges" scope="request" class="java.util.List"></jsp:useBean>
+                
                 <img class="large-icon profil-icon" src="Assets/icons/person-circle.svg" alt="logo"/>
+                <div class="badge-wrapper">
+                    <% List<Badge> listeBadge = badges;
+                        for (Badge a : listeBadge) {
+                            if(a.getNiveau() == NiveauBadge.UN){%>
+                                <img class="badge" src="Assets/icons/3.svg" alt="logo"/>
+                            <%} else if(a.getNiveau() == NiveauBadge.DEUX){%>
+                                <img class="badge" src="Assets/icons/2.svg" alt="logo"/>
+                            <%} else if(a.getNiveau() == NiveauBadge.TROIS){%>
+                                <img class="badge" src="Assets/icons/1.svg" alt="logo"/>
+                            <%}%>
+                    <% }%>
+                </div>
+                
                 <div class="field-wrapper"><h3>Informations personnelles</h3></div>
                 
-            <form action="ServletGestionEquipement" method="post" id="editForm">
-                    <div class="field-wrapper">
-                        <label for="nom">Nom :</label>
-                        <input type="text" name="nom" id="nom" class="editable" required readonly value="${membre.nom}">
-                    </div>
+                <form action="ServletGestionEquipement" method="post" id="editForm">
+                        <div class="field-wrapper">
+                            <label for="nom">Nom :</label>
+                            <input type="text" name="nom" id="nom" class="editable" required readonly value="${membre.nom}">
+                        </div>
 
-                    <div class="field-wrapper">
-                        <label for="prenom">Prenom :</label>
-                        <input type="text" name="prenom" id="prenom" class="editable" required readonly value="${membre.prenom}">
-                    </div>
+                        <div class="field-wrapper">
+                            <label for="prenom">Prenom :</label>
+                            <input type="text" name="prenom" id="prenom" class="editable" required readonly value="${membre.prenom}">
+                        </div>
 
-                    <div class="field-wrapper">
-                        <label for="email">Email :</label>
-                        <input type="text" name="email" id="email" class="editable" required readonly value="${membre.login}">
-                    </div>
+                        <div class="field-wrapper">
+                            <label for="email">Email :</label>
+                            <input type="text" name="email" id="email" class="editable" required readonly value="${membre.login}">
+                        </div>
 
-                    <div class="field-wrapper">
-                        <label for="telephone">Téléphone :</label>
-                        <input type="tel" id="telephone" name="telephone" pattern="[0-9]{10}" class="editable" required readonly value="${membre.telephone}">
-                    </div>
+                        <div class="field-wrapper">
+                            <label for="telephone">Téléphone :</label>
+                            <input type="tel" id="telephone" name="telephone" pattern="[0-9]{10}" class="editable" required readonly value="${membre.telephone}">
+                        </div>
 
-                    <div class="field-wrapper">
-                        <label for="agence">Agence :</label>
-                        <input type="text" name="agence" id="agence" class="editable" required readonly value="${membre.agence.toString()}">
-                    </div>
+                        <div class="field-wrapper">
+                            <label for="agence">Agence :</label>
+                            <input type="text" name="agence" id="agence" class="editable" required readonly value="${membre.agence.toString()}">
+                        </div>
 
 
+<<<<<<< HEAD
                     <div class="field-wrapper">
                         <label for="bureau">Bureau :</label>
                         <input type="text" name="bureau" id="bureau" class="editable" required readonly value="${membre.bureau}">
@@ -182,6 +196,25 @@
                     <input type="hidden" name="membreId" value="${membre.id}">
                     <button type="submit">Supprimer mon compte</button>
                 </form>
+=======
+                        <div class="field-wrapper">
+                            <label for="bureau">Bureau :</label>
+                            <input type="text" name="bureau" id="bureau" class="editable" required readonly value="${membre.bureau}">
+                        </div>
+                        <div class="action-wrapper right">
+                            <input type="hidden" name="action" value="ModifierMembre">
+                            <button type="button" class="edit" id="toggleEdit"> Modifier </button>
+                            <button type="submit" class="submit"> Enregistrer </button>
+
+                        </div>
+                    </form>
+                    <form action="ServletGestionEquipement" method="post">
+                        <input type="hidden" name="action" value="SupprimerMembre">
+                        <input type="hidden" name="membreId" value="${membre.id}">
+                        <button type="submit">Supprimer mon compte</button>
+                    </form>
+                
+>>>>>>> 3b5c20f (Badge + vérification date création offre)
             </section>
         </main>
     </body>

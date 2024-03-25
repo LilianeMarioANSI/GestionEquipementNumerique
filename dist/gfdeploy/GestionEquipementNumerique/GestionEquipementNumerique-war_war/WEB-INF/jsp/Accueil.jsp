@@ -33,7 +33,7 @@
                 <form method="post" action="ServletGestionEquipement">
                     <fieldset>
                     <!--<label for="login">Votre nom utilisateur <span class="requis">*</span></label>-->
-                    <input type="email" name="login" id="login" placeholder="email" required>
+                    <input type="email" name="login" id="login" placeholder="Email" required>
                     <!--<label for="mdp">Votre mot de passe <span class="requis">*</span></label>-->
                     <input type="password" name="mdp" id="mdp" placeholder="Mot de passe" required>
 
@@ -50,7 +50,5 @@
                 <p>Vous n'avez pas encore de compte ? <a href="ServletGestionEquipement?action=inscription">Inscrivez vous ici.</a></p>
             </section>
         </main>
-        
-        
     </body>
 </html>
