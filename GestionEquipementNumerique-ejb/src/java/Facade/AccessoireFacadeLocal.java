@@ -30,6 +30,8 @@ public interface AccessoireFacadeLocal {
     List<Accessoire> findRange(int[] range);
 
     int count();
+    
+    // nos méthodes
     Accessoire CreerAccessoire(Accessoire a);
     
     List<Accessoire> getAccessoireByEtat(EtatAccessoire etat);

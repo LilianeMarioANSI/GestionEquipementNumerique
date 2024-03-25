@@ -13,6 +13,7 @@ import Entite.Membre;
 import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
+import Entite.Superviseur;
 import Entite.TypeAccessoire;
 import Entite.TypeOffre;
 import Entite.TypeSouhait;
@@ -31,28 +32,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import Session.SessionMembreLocal;
 import java.sql.Date;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 /**
  *
  * @author loulo
  */
 @WebServlet(name = "ServletGestionEquipement", urlPatterns = {"/ServletGestionEquipement"})
 public class ServletGestionEquipement extends HttpServlet {
-
-    
-
-    
-
-   
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -62,8 +52,6 @@ public class ServletGestionEquipement extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-    
     
     @EJB
     private SouhaitFacadeLocal souhaitFacade;
@@ -82,6 +70,7 @@ public class ServletGestionEquipement extends HttpServlet {
     
     
     
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -92,9 +81,9 @@ public class ServletGestionEquipement extends HttpServlet {
         if(action==null || action.equals("accueil")){
             HttpSession session = request.getSession(false);
             if(session != null){
-                Personne p = (Personne) session.getAttribute("membre");
+                Membre m = (Membre) session.getAttribute("membre");
                 
-                if(p.getId() != null){
+                if(m.getId() != null){
                     jsp = "/ServletGestionEquipement?action=tableauBord";
                     request.setAttribute("titrePage", "Mon espace !");
                     request.setAttribute("titrePage", "Bienvenue !");
@@ -108,70 +97,127 @@ public class ServletGestionEquipement extends HttpServlet {
                 //Titre de la page
                 request.setAttribute("titrePage", "Bienvenue !");
             }
-            
-            
-            
-            
-        }
-        /*
-            Inscription
-        */
-        else if(action.equals("creerMembre")){
-            jsp = "/WEB-INF/jsp/Accueil.jsp";
-            doInscrireUtilisateur(request, response);
-            
-            request.setAttribute("titrePage", "Bienvenue !"); //Titre de la page
-        }
-        
-        else if(action.equals("inscription")){
-            jsp = "/WEB-INF/jsp/Inscription.jsp";
-
-            request.setAttribute("titrePage", "Inscription"); //Titre de la page
         }
         
         /*
             Authentification
         */
         else if (action.equals("authentification")) {
-            String login = request.getParameter("login");
-            String mdp = request.getParameter("mdp");
-                Membre m = sessionMembre.IdentificationMembre(login, mdp);
-                if (m != null) {
-                    HttpSession session = request.getSession(true);
-                    session.setAttribute("membre", m);                 
-                    // Afficher le profil de l'utilisateur après une authentification réussie
-                    jsp = "/ServletGestionEquipement?action=tableauBord";
-                } else {
-                    // Rediriger vers la page d'accueil avec un message d'erreur si l'authentification échoue
-                    String message = "Identifiant ou mot de passe incorrect.";
-                    request.setAttribute("message", message);
-                    request.setAttribute("typeMessage", "error");
-                    request.getRequestDispatcher("/WEB-INF/jsp/Accueil.jsp").forward(request, response);
+            HttpSession session = request.getSession(true);
+            Integer tentativesRestantes = (Integer) session.getAttribute("tentativesRestantes");
+
+            if (tentativesRestantes == null || tentativesRestantes > 0) {
+                String login = request.getParameter("login");
+                String mdp = request.getParameter("mdp");
+
+                if (tentativesRestantes == null) {
+                    tentativesRestantes = 2;
                 }
+
+                Membre m = sessionMembre.IdentificationMembre(login, mdp);
+
+                if (m == null) {
+                    Superviseur superviseur = sessionAdministrateur.IdentificationSuperviseur(login, mdp);
+
+                    if (superviseur != null) {
+                        session.setAttribute("administrateur", superviseur);
+                        response.sendRedirect("ServletGestionEquipement?action=analytics");
+                        return;
+                    }
+                } else {
+                    session.setAttribute("membre", m);
+                    //jsp="ServletGestionEquipement?action=tableauBord";
+                    response.sendRedirect("ServletGestionEquipement?action=tableauBord");
+                    return;
+                }
+                
+                tentativesRestantes--;
+                session.setAttribute("tentativesRestantes", tentativesRestantes);
+            } else {
+                // Si le nombre de tentatives est dépassé, redirigez l'utilisateur vers une page d'erreur
+                String message = "Nombre maximal de tentatives de connexion dépassé. Veuillez réessayer plus tard.";
+                request.setAttribute("message", message);
+                //jsp="/WEB-INF/jsp/ErreurConnexion.jsp";
+                request.getRequestDispatcher("/WEB-INF/jsp/ErreurConnexion.jsp").forward(request, response);
+                return;
+            }
+
+            // Si l'utilisateur n'est pas authentifié et qu'il reste des tentatives, affichez un message d'erreur
+            String message = "Identifiant ou mot de passe incorrect.";
+            request.setAttribute("message", message);
+            jsp="/WEB-INF/jsp/Accueil.jsp";
+        }
+
+        // Deconnexion
+        else if(action.equals("logout")){
+                HttpSession session = request.getSession(false);
+                if (session != null) {
+                    session.invalidate();
+                }
+                jsp="/WEB-INF/jsp/Accueil.jsp";
         }
         
         /*
-            Catalogue
+            ADMINISTRATEUR / SUPERVISEUR
         */
-        else if(action.equals("afficherCatalogue")){
-            String type = request.getParameter("type");
-            String etat = request.getParameter("etat");
-            String categorie = request.getParameter("categorie");
-
-            List<Offre> offres;
-
-            // Vérifier s'il y a des paramètres de filtre spécifiés
-            if (type != null || etat != null || categorie != null) {
-                // Si des paramètres de filtre sont spécifiés, récupérer les offres filtrées
-                offres = sessionMembre.ConsulterCatalogueFiltre(type, etat, categorie);
-            } else {
-                offres = sessionMembre.ConsulterCatalogue();
-            }
-
-            request.setAttribute("offres", offres);
-            request.setAttribute("titrePage", "Offres en ligne"); // Titre de la page
-            jsp = "/WEB-INF/jsp/Catalogue.jsp";
+        /* 
+            Gestion utilisateur
+        */
+        else if(action.equals("creationUtilisateur")){
+            jsp = "/WEB-INF/jsp/Creation_admin.jsp";
+            request.setAttribute("titrePage", "Création Utilisateur");
         }
+        else if(action.equals("modificationUtilisateur")){
+            long login = Long.parseLong(request.getParameter("login"));
+            
+            Membre membre = sessionAdministrateur.getMembre(login);
+            request.setAttribute("membre", membre);
+            jsp = "/WEB-INF/jsp/ModifierMembre.jsp";
+            
+        }
+        else if(action.equals("modifierMembre")){
+            String nom = request.getParameter("nom");
+            String prenom = request.getParameter("prenom");
+            String email = request.getParameter("email");
+            String telephone = request.getParameter("telephone");
+            String bureau = request.getParameter("bureau");
+            String agence = request.getParameter("agence");
+            
+            long membreId = Long.parseLong(request.getParameter("id"));
+            
+            Agence ag = sessionMembre.getAgenceById(agence);
+            boolean m = sessionMembre.ModifierMembre(membreId, nom, prenom, email, telephone, bureau, ag);
+  
+            if(m){
+                jsp = "/WEB-INF/jsp/ListeMembres.jsp";
+                List<Membre> listeMembres = sessionAdministrateur.ListeMembres();
+                request.setAttribute("listeMembres", listeMembres);
+                request.setAttribute("titrePage", "Membres CGI");
+                request.setAttribute("message", "Modifications enregistrées");
+            }
+            else{
+                    jsp="/WEB-INF/jsp/ModifierMembre.jsp";
+                    request.setAttribute("message", "Erreur, Modifications non prises en compte");
+                }
+        }
+        else if(action.equals("suppressionUtilisateur")){
+            long login = Long.parseLong(request.getParameter("login"));
+            
+            boolean m = sessionMembre.SupprimerMembre(login);
+            
+            if(m ==true){
+                jsp = "/WEB-INF/jsp/ListeMembres.jsp";
+                List<Membre> listeMembres = sessionAdministrateur.ListeMembres();
+                request.setAttribute("listeMembres", listeMembres);
+                request.setAttribute("titrePage", "Membres CGI");
+                request.setAttribute("message", "Suppression enregistrées");
+            }
+            else{
+                    jsp="/WEB-INF/jsp/TableauBordAdmin.jsp";
+                    request.setAttribute("message", "Erreur, Membre non supprimée");
+                }
+        }
+        
         
         /*
             TDB Reporting 
@@ -208,6 +254,7 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("dateDeb",dateDebut_String);
                 request.setAttribute("dateFin",dateFin_String);
             }
+            
             
             //Récupération des données pour le tableau de bord
             Collection <String> listesOffres = sessionAdministrateur.getOffresParPeriode_Json(dateDeb_sql, dateFin_sql);
@@ -246,6 +293,143 @@ public class ServletGestionEquipement extends HttpServlet {
             
         }
         
+        else if (action.equals("afficherMembres")) {
+            jsp = "/WEB-INF/jsp/ListeMembres.jsp";
+            List<Membre> listeMembres = sessionAdministrateur.ListeMembres();
+            request.setAttribute("listeMembres", listeMembres);
+            request.setAttribute("titrePage", "Membres CGI");
+        }
+
+        
+        /*
+            MEMBRE / UTILISATEUR
+        */
+        
+        /*
+            Inscription
+        */
+        else if(action.equals("creerMembre")){
+            String login = request.getParameter("loginRegister");
+            String mdp = request.getParameter("mdpRegister");
+            String nom = request.getParameter("nom");
+            String prenom = request.getParameter("prenom");
+            String bureau = request.getParameter("bureau");
+            String tel = request.getParameter("telephone");
+            Agence agence = Agence.valueOfLabel(request.getParameter("agence"));
+
+
+            String message;
+            String typeMessage;
+
+            if (prenom.trim().isEmpty() || nom.trim().isEmpty() || login.trim().isEmpty() || mdp.trim().isEmpty() || tel.trim().isEmpty() || agence == null || bureau.trim().isEmpty()){
+                message = "Vous n'avez pas rempli tous les champs obligatoires.";
+                typeMessage = "error";
+            } else {
+                if (mdp.length() < 8) {
+                    message = "Le mot de passe doit avoir au moins 8 caractères.";
+                    typeMessage = "error";
+                } else if (!mdp.matches(".*\\d.*")) {
+                    message = "Le mot de passe doit inclure au moins un chiffre.";
+                    typeMessage = "error";
+                } else if (!mdp.matches(".*[a-zA-Z].*")) {
+                    message = "Le mot de passe doit inclure au moins une lettre.";
+                    typeMessage = "error";
+                } else if (mdp.matches("[a-zA-Z0-9 ]*")) {
+                    message = "Le mot de passe doit inclure au moins un caractère spécial.";
+                    typeMessage = "error";
+                } else {
+                    String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
+                    sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                    //sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                    message = "Compte membre créé avec succès !";
+                    
+                    typeMessage = "success";
+
+                    request.setAttribute("message", message);
+                    request.setAttribute("typeMessage", typeMessage);
+                    request.getRequestDispatcher("/WEB-INF/jsp/Accueil.jsp").forward(request, response);
+                    return;
+                }
+            }
+
+            request.setAttribute("message", message);
+            request.setAttribute("typeMessage", typeMessage);
+            jsp="/WEB-INF/jsp/Inscription.jsp";
+        }
+        
+        else if(action.equals("creerUtilisateur")){
+            String login = request.getParameter("loginRegister");
+            String mdp = request.getParameter("mdpRegister");
+            String nom = request.getParameter("nom");
+            String prenom = request.getParameter("prenom");
+            String bureau = request.getParameter("bureau");
+            String tel = request.getParameter("telephone");
+            Agence agence = Agence.valueOfLabel(request.getParameter("agence"));
+            boolean isAdmin = request.getParameter("adminCheck") != null; 
+
+            String message;
+            String typeMessage;
+
+            if (prenom.trim().isEmpty() || nom.trim().isEmpty() || login.trim().isEmpty() || mdp.trim().isEmpty() || tel.trim().isEmpty() || agence == null || bureau.trim().isEmpty()){
+                message = "Vous n'avez pas rempli tous les champs obligatoires.";
+                typeMessage = "error";
+            } else {
+                if (mdp.length() < 8) {
+                    message = "Le mot de passe doit avoir au moins 8 caractères.";
+                    typeMessage = "error";
+                } else if (!mdp.matches(".*\\d.*")) {
+                    message = "Le mot de passe doit inclure au moins un chiffre.";
+                    typeMessage = "error";
+                } else if (!mdp.matches(".*[a-zA-Z].*")) {
+                    message = "Le mot de passe doit inclure au moins une lettre.";
+                    typeMessage = "error";
+                } else if (mdp.matches("[a-zA-Z0-9 ]*")) {
+                    message = "Le mot de passe doit inclure au moins un caractère spécial.";
+                    typeMessage = "error";
+                } else {
+                    String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
+                    if (isAdmin) {
+                        sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                        message = "Compte administrateur créé avec succès !";
+                    } else {
+                        sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                        message = "Compte membre créé avec succès !";
+                    }
+                    typeMessage = "success";
+
+                    HttpSession session = request.getSession();
+                    Superviseur superviseur = (Superviseur) session.getAttribute("administrateur");
+                    request.setAttribute("membre", superviseur);
+                    request.setAttribute("message", message);
+                    request.setAttribute("typeMessage", typeMessage);
+                    request.setAttribute("titrePage", "Bienvenue !");
+                    response.sendRedirect("ServletGestionEquipement?action=analytics");
+                    return;
+                }
+            }
+
+            request.setAttribute("message", message);
+            request.setAttribute("typeMessage", typeMessage);
+            jsp="/WEB-INF/jsp/Creation_admin.jsp";
+        }
+        
+        else if(action.equals("inscription")){
+            jsp = "/WEB-INF/jsp/Inscription.jsp";
+            request.setAttribute("titrePage", "Inscription"); //Titre de la page
+        }
+ 
+        
+        
+        /*
+            Catalogue
+        */
+        else if(action.equals("afficherCatalogue")){
+            List<Offre> offres = sessionMembre.ConsulterCatalogue();
+            request.setAttribute("offres", offres);
+            request.setAttribute("titrePage", "Offres en ligne"); // Titre de la page
+            jsp = "/WEB-INF/jsp/Catalogue.jsp";
+        }
+
         /* 
             TDB Membre
         */
@@ -267,11 +451,6 @@ public class ServletGestionEquipement extends HttpServlet {
 
             // Rediriger vers la vue JSP du tableau de bord
             jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
-        }
-        else if(action.equals("mesEquipements")){
-            jsp = "/WEB-INF/jsp/mesEquipements.jsp";
-            //Titre de la page
-            request.setAttribute("titrePage", "Mon equipements");
         }
         else if(action.equals("SupprimerMembre")){
             long membreId = Long.parseLong(request.getParameter("membreId"));
@@ -298,7 +477,8 @@ public class ServletGestionEquipement extends HttpServlet {
             Membre membre = (Membre) session.getAttribute("membre");
             long membreId = membre.getId();
             
-            Agence ag = sessionMembre.getAgenceById(agence);
+            Agence ag = Agence.valueOfLabel(agence);
+            //Agence ag = sessionMembre.getAgenceById(agence);
             boolean m = sessionMembre.ModifierMembre(membreId, nom, prenom, email, telephone, bureau, ag);
   
             if(m){
@@ -317,11 +497,11 @@ public class ServletGestionEquipement extends HttpServlet {
         else if(action.equals("mesSouhaits")){
             HttpSession session = request.getSession(false);
             Membre membre = (Membre) session.getAttribute("membre");
+            long idMembre = membre.getId();
+            List<Souhait> listeSouhaits = sessionMembre.GetSouhaitByMembre(idMembre);
             
             if(membre.getId() != null){
                 System.out.println(membre.getId());
-                long idMembre = membre.getId();
-                Collection<Souhait> listeSouhaits = sessionMembre.GetSouhaitByMembre(idMembre);
 
                 request.setAttribute("listeSouhaits", listeSouhaits); 
                 jsp = "/WEB-INF/jsp/MesSouhaits.jsp";
@@ -357,11 +537,13 @@ public class ServletGestionEquipement extends HttpServlet {
             // Réception des données du formulaire pour Accessoire 
             HttpSession session = request.getSession();
             Membre membre = (Membre) session.getAttribute("membre");
+            
             // Transmettre les informations du membre à la vue JSP
             String intituleAccessoire = request.getParameter("nomA");
             String descriptionAccessoire = request.getParameter("DescriptionA");
             String typeAccessoire = request.getParameter("TypeA");
             String etatAccessoire = request.getParameter("etatA");
+            
             if(intituleAccessoire.trim().isEmpty() || descriptionAccessoire.trim().isEmpty() || typeAccessoire.trim().isEmpty() || etatAccessoire.trim().isEmpty()){
                 jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
                 request.setAttribute("message", "Vous n'avez pas rempli tous les champs obligatoires");
@@ -371,6 +553,9 @@ public class ServletGestionEquipement extends HttpServlet {
                 TypeAccessoire typeAccessoireEnum = TypeAccessoire.valueOfLabel(typeAccessoire);
                 EtatAccessoire etatAccessoireEnum = EtatAccessoire.valueOfLabel(etatAccessoire);
                 Accessoire a = creerAccessoire(intituleAccessoire, descriptionAccessoire, typeAccessoireEnum, etatAccessoireEnum, membre);
+                
+                
+                Accessoire accessoire = sessionMembre.CreerAccessoire(a);
                 //Récupération des données du formulaire pour Offre
                 String dateDebut = request.getParameter("DateDeb");
                 String dateFin = request.getParameter("DateFin");
@@ -399,12 +584,13 @@ public class ServletGestionEquipement extends HttpServlet {
                     TypeOffre typeOffreEnum = TypeOffre.valueOfLabel(typeOffre);
                     Offre o= creerOffre(intitule, description, typeOffreEnum, dd, df, a, membre);
                     if(o!=null){
-                        Accessoire accessoire = sessionMembre.CreerAccessoire(a);
+                        //Accessoire accessoire = sessionMembre.CreerAccessoire(a);
                         Offre offre = sessionMembre.creationOffre(o);
                         if (offre != null && accessoire != null){
-                            request.setAttribute("message", "Offre crée");
-                            request.setAttribute("typeMessage", "success");
-                            jsp="/ServletGestionEquipement?action=tableauBord";
+                        jsp = "/ServletGestionEquipement?action=tableauBord";
+                        request.setAttribute("message", "Offre crée");
+                        request.setAttribute("typeMessage", "success");
+
                         }
                         else{
                             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
@@ -424,9 +610,43 @@ public class ServletGestionEquipement extends HttpServlet {
                     request.setAttribute("typeMessage", "error");
                     
                 }      
-        }
+            }
         }
 
+        // Mes equipements
+        else if(action.equals("mesEquipements")){
+            HttpSession session = request.getSession();
+            Membre membre = (Membre) session.getAttribute("membre");
+            long id = membre.getId(); // Assurez-vous que getId() retourne l'ID du membre
+            List<Offre> offres = sessionMembre.listeMesEquipements(id);
+
+            if(offres != null && !offres.isEmpty()) {
+                request.setAttribute("offres", offres);
+            } else {
+                String message = "Aucune offre disponible pour le moment.";
+                request.setAttribute("message", message);
+            }
+
+            jsp = "/WEB-INF/jsp/mesEquipements.jsp";
+            request.setAttribute("titrePage", "Mes equipements");
+        }
+            
+        
+        
+        /*
+            Demande
+        */
+        // Afficher mes prêts 
+        else if (action.equals("mesPrets")) {
+            HttpSession session = request.getSession();
+            Membre membre = (Membre) session.getAttribute("membre");
+            List<Demande> prets = sessionMembre.listePrêts(membre);
+            request.setAttribute("prets", prets);
+            jsp = "/WEB-INF/jsp/mesPrets.jsp";
+        }
+        else if (action.equals("afficherMesPrets")){
+
+        }
         // Afficher mes dons
         else if(action.equals("AfficherMesDons")){
             HttpSession session = request.getSession();
@@ -477,10 +697,25 @@ public class ServletGestionEquipement extends HttpServlet {
             }
             jsp = "/ServletGestionEquipement?action=tableauBord";
         }
-        else {
-            jsp = "/WEB-INF/jsp/Accueil.jsp";
+        
+        else if(action.equals("SupprimerDemande")) {
+            long demandeId = Long.parseLong(request.getParameter("demandeId"));
+
+            Demande demande = sessionMembre.RechercherDemande(demandeId);
+
+            if(demande!=null){
+                boolean d = sessionMembre.SupprimerDemande(demandeId);
+                if(d){
+                    jsp = "/ServletGestionEquipement?action=tableauBord";
+                }
+            }
         }
         
+        else {
+            jsp="/Acceuil.jsp";
+            request.setAttribute("message","PAGE N'EXISTE PAS");
+        }
+ 
         HttpSession session = request.getSession(false);
         if(session != null){
             if(session.getAttribute("membre") != null){
@@ -498,37 +733,46 @@ public class ServletGestionEquipement extends HttpServlet {
         Rd.forward(request, response);
     
     }
-    
-    protected void doInscrireUtilisateur(HttpServletRequest request, HttpServletResponse response)
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String login = request.getParameter("loginRegister");
-        String mdp = request.getParameter("mdpRegister");
-        String nom = request.getParameter( "nom" );
-        String prenom = request.getParameter( "prenom" );
-        String bureau = request.getParameter( "bureau" );
-        String tel = request.getParameter( "telephone" );
-        //On récupère la valeur de l'agence à partir de son label
-        Agence agence = Agence.valueOfLabel(request.getParameter("agence"));
-        
-        String message;
-        String typeMessage;
-        
-        if ( prenom.trim().isEmpty() || nom.trim().isEmpty()|| login.trim().isEmpty() || mdp.trim().isEmpty() || tel.trim().isEmpty() || agence == null || bureau.trim().isEmpty()){
-            message = "Vous n'avez pas rempli tous les champs obligatoires. ";
-            typeMessage = "error";
-        } 
-        else {
-            //Chiffrement du mot de passe
-            String encrytptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
-            sessionMembre.InscriptionUtilisateur(login, encrytptedMdp, nom, prenom, bureau, tel, agence);
-            message = "Compte créé avec succès !";
-            typeMessage = "success";
-        }
-        request.setAttribute( "message", message );
-        request.setAttribute( "typeMessage", typeMessage );
+        processRequest(request, response);
     }
-    
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+        
     protected void doCreerSouhait(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -572,45 +816,7 @@ public class ServletGestionEquipement extends HttpServlet {
         request.setAttribute( "message", message );
         request.setAttribute( "typeMessage", typeMessage );
     }
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+    
     protected Accessoire creerAccessoire (String intituleAccessoire, String descriptionAccessoire, TypeAccessoire typeAccessoire, EtatAccessoire etatAccessoire, Membre membre){
         Accessoire a= new Accessoire();
         a.setPersonnes(new ArrayList<Personne>());

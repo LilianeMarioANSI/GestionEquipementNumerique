@@ -1,0 +1,121 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 20 mars 2024, 09:00:49
+    Author     : loulo
+*/
+
+.offerDetailContainer{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: var(--light-gray-color);
+    padding: 40px;
+    gap : 8px;
+    align-self: stretch;
+    
+    
+}
+
+main{
+    gap: 32px;
+    display: flex;
+    flex-direction: column;
+}
+
+.offer-section{
+    display: flex;
+    justify-content: center;
+    align-items : center;
+}
+
+.offerDetailContainer:before{
+    content: "";
+    position : absolute;
+    align-items: stretch;
+    background: linear-gradient(180deg, rgba(225,25,48,1) 0%, rgba(82,54,171,1) 100%);
+    width:6px;
+    height: 100%;
+    left: 0;
+    top : 0;
+}
+
+.offerDetailContainer:after{
+    content: "";
+    position : absolute;
+    align-items: stretch;
+    background: linear-gradient(180deg, rgba(225,25,48,1) 0%, rgba(82,54,171,1) 100%);
+    width:6px;
+    height: 100%;
+    right: 0;
+    top : 0;
+}
+
+
+.offerDetailContainer div{
+    display: flex;
+    align-items : center;
+    gap : 24px; 
+}
+
+.accessoireDetailContainer{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: var(--light-blue-color);
+    border-radius: 5px 0 0 5px;
+    padding: 40px;
+    gap : 8px;
+    align-self: stretch;
+}
+
+.accessoireDetailContainer img{
+    justify-self: center;
+}
+
+.accessoireDetailContainer div{
+    display: flex;
+    align-items : center;
+    gap : 24px; 
+    min-width: 300px;
+}
+
+.profilDetailContainer{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: var(--light-blue-color);
+    border-radius: 0 5px 5px 0;
+    padding: 40px;
+    gap : 8px;
+    align-self: stretch;
+}
+
+.profilDetailContainer div{
+    display: flex;
+    align-items : center;
+    gap : 24px; 
+    min-width: 300px;
+}
+
+.image-wrapper{
+    justify-content: center;
+}
+
+p{
+    margin : 0;
+}
+
+b{
+    min-width: 160px;
+    text-align: right;
+}
+
+.form-wrapper{
+    margin: 0 auto;
+    display: flex;
+    gap: 16px;
+}
+

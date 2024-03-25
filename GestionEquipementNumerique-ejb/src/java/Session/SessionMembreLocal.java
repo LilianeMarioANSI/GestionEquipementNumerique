@@ -43,19 +43,27 @@ public interface SessionMembreLocal {
     
     List<Offre> ConsulterCatalogue();
     
-    List<Offre> ConsulterCatalogueFiltre(String type, String etat, String categorie);
+    List<Offre> FiltrerCatalogue(String etatEquipement, String categorie, String typeOffre);
 
     Agence getAgenceById(String agenceId);
-    Offre creationOffre (Offre O);
-    Accessoire CreerAccessoire(Accessoire a);
-    List<Demande> listeDon(Personne p);
     
-    List<Demande> listePrêts(Personne p);
-    List<Offre> listeMesOffres(Personne p) ;
-    List<Souhait> listeMesSouhaits(Personne p) ;
+    Offre creationOffre (Offre O);
+    
+    Accessoire CreerAccessoire(Accessoire a);
+    
+    List<Demande> listeDon(Membre m);
+    List<Demande> listePrêts(Membre m);
+    List<Offre> listeMesOffres(Membre m) ;
+    List<Souhait> listeMesSouhaits(Membre m) ;
     
     Demande CreerDemande(Personne personne, Offre offre);
     
     void updateEtatOffre(Offre o);
     
+    
+    List<Offre> listeMesEquipements(long Id);
+    
+    boolean SupprimerDemande(long idDemande);
+    
+    Demande RechercherDemande(long id);
 }

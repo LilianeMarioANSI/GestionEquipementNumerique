@@ -4,6 +4,7 @@
  */
 package Facade;
 
+import Entite.Membre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
@@ -34,6 +35,9 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
         super(Souhait.class);
     }
     
+    /*
+        Mes souhaits/ Mes demande en cours
+    */
     @Override
     public List<Souhait> getSouhaitByMembre(long idMembre) {
         String txt = "SELECT s FROM Souhait s WHERE s.utilisateur.id = :id";
@@ -44,6 +48,9 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
         return result;
     }
 
+    /*
+        Créer Souhait
+    */
     @Override
     public Souhait creerSouhait(Date datePublication, Date dateDebut, Date dateFin, TypeSouhait typeSouhait, TypeAccessoire typeAccessoire, String description, Personne utilisateur) {
         Souhait s = new Souhait();
@@ -58,11 +65,15 @@ public class SouhaitFacade extends AbstractFacade<Souhait> implements SouhaitFac
         return s;
     }
     
+
+    /*
+        Supprimer Souhait
+    */
     @Override
-    public List<Souhait> listeSouhaits(Personne p){
-        String txt = "SELECT s FROM Souhait s WHERE s.utilisateur = :p";
+    public List<Souhait> listeSouhaits(Membre m){
+        String txt = "SELECT s FROM Souhait s WHERE s.utilisateur.id = :p";
         Query req = getEntityManager().createQuery(txt);
-        req.setParameter("p", p);
+        req.setParameter("p", m.getId());
         List<Souhait> result = req.getResultList();
         return result;
     }

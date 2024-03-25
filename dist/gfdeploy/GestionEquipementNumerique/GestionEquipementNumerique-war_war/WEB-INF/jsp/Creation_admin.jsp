@@ -54,13 +54,15 @@
                         <input type="password" name="mdpRegister" id="mdpRegister" placeholder="Mot de passe" required>
                         <input type="password" name="confirmMdp" id="confirmMdp" placeholder="Confirmer le mot de passe" required>
                     </fieldset>
-                    
-                    
-                    <input type="hidden" name="action" value="creerMembre">
+                        
+                    <fieldset>
+                    <label for="adminCheck">Administrateur</label>
+                    <input type="checkbox" id="adminCheck" name="adminCheck">
+                    </fieldset>
+                    <input type="hidden" name="action" value="creerUtilisateur">
                     
                     
                     <div class="action-wrapper right">
-                        <a href="ServletGestionEquipement">Se connecter</a>
                         <button type="submit" class="submit">S'enregistrer</button>
                     </div>
                 </form>

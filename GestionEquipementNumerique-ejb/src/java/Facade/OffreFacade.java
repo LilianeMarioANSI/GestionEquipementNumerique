@@ -19,6 +19,7 @@ import Entite.Accessoire;
 import Entite.Agence;
 import Entite.EtatOffre;
 import Entite.Personne;
+import Entite.Membre;
 import Entite.TypeOffre;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -43,6 +44,10 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         super(Offre.class);
     }
     
+    
+    /*
+        Tableau de bord
+    */
     @Override
     public List<String> getOffresParPeriode_Json(Date dateDebut, Date dateFin) {
         List<String> resultList = new ArrayList<>();
@@ -57,13 +62,102 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         
         return resultList;
     }
+    
+    @Override
+    
+    public int getNombreOffrePublic() {
+        String txt = "SELECT o FROM Offre o WHERE o.etat = :disponible OR o.etat = :enCours";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("disponible", EtatOffre.DISPONIBLE);
+        req.setParameter("enCours", EtatOffre.EN_COURS);
+        List<Offre> result = req.getResultList();
+        return result.size();
+    }
+    
+    @Override
+    public int getNombreOffrePublicByType(TypeOffre type) {
+        String txt = "SELECT o FROM Offre o WHERE o.typeOffre = :typeOffre AND (o.etat = :disponible OR o.etat = :enCours)";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("disponible", EtatOffre.DISPONIBLE);
+        req.setParameter("enCours", EtatOffre.EN_COURS);
+        req.setParameter("typeOffre", type);
+        List<Offre> result = req.getResultList();
+        return result.size();
+    }
+    
+    @Override
+    public int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin) {
+        String txt = "SELECT COUNT(DISTINCT o.utilisateur) FROM Offre o WHERE o.datePublication BETWEEN :dateDebut AND :dateFin";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("dateDebut", dateDebut);
+        req.setParameter("dateFin", dateFin);
+        Long count = (Long) req.getSingleResult();
+        return count.intValue();
+    }
+    
+//    @Override
+//    public List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin) {
+//        List<String> resultList = new ArrayList<>();
+//
+//        String txt = "SELECT o.utilisateur.agence, COUNT(o) FROM Offre o WHERE o.datePublication BETWEEN :dateDebut AND :dateFin GROUP BY o.utilisateur.agence ORDER BY COUNT(o) DESC";
+//        Query req = getEntityManager().createQuery(txt);
+//        req.setParameter("dateDebut", dateDebut);
+//        req.setParameter("dateFin", dateFin);
+//
+//        List<Object[]> result = req.setMaxResults(5).getResultList();
+//
+//        for (Object[] row : result) {
+//            // Construction de l'objet JSON représentant le résultat
+//            JsonObject jsonObject = new JsonObject();
+//            System.out.println(row[0].toString());
+//            jsonObject.addProperty("agence", Agence.valueOf(row[0].toString()).label); // Nom de l'agence
+//            jsonObject.addProperty("nombre_offres", (Long) row[1]); // Nombre d'offres publiées
+//
+//            // Conversion de l'objet JSON en chaîne JSON et ajout à la liste des résultats
+//            resultList.add(jsonObject.toString());
+//        }
+//
+//        return resultList;
+//    }
+    @Override
+    public List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin) {
+        List<String> resultList = new ArrayList<>();
 
+        String txt = "SELECT o.utilisateur.agence, COUNT(o) FROM Offre o WHERE o.datePublication BETWEEN :dateDebut AND :dateFin GROUP BY o.utilisateur.agence ORDER BY COUNT(o) DESC";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("dateDebut", dateDebut);
+        req.setParameter("dateFin", dateFin);
+
+        List<Object[]> result = req.setMaxResults(5).getResultList();
+
+        for (Object[] row : result) {
+            // Extraction de la valeur de l'agence de la première colonne de la ligne
+            Agence agence = (Agence) row[0];
+
+            // Construction de l'objet JSON représentant le résultat
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("agence", agence.label); // Nom de l'agence
+            jsonObject.addProperty("nombre_offres", (Long) row[1]); // Nombre d'offres publiées
+
+            // Conversion de l'objet JSON en chaîne JSON et ajout à la liste des résultats
+            resultList.add(jsonObject.toString());
+        }
+
+        return resultList;
+    }
+
+    /*
+        Créer offre
+    */
     @Override
     public Offre creerOffre (Offre o) {
         em.persist(o);
         return o;
     }
     
+    /*
+        Catalogue et filtres
+    */
     @Override
     public void updateEtatOffre(Offre o){
         if(o.getTypeOffre() == TypeOffre.DON){
@@ -111,66 +205,22 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         return query.getResultList();
     }
     
+    /*
+        Mes équipements
+    */
     @Override
-    public int getNombreOffrePublic() {
-        String txt = "SELECT o FROM Offre o WHERE o.etat = :disponible OR o.etat = :enCours";
-        Query req = getEntityManager().createQuery(txt);
-        req.setParameter("disponible", EtatOffre.DISPONIBLE);
-        req.setParameter("enCours", EtatOffre.EN_COURS);
-        List<Offre> result = req.getResultList();
-        return result.size();
+    public List<Offre> MesEquipementDisponible(Long idPersonne) {
+        TypedQuery<Offre> query = getEntityManager().createQuery(
+                "SELECT o FROM Offre o WHERE o.utilisateur.id = :idPersonne", Offre.class);
+        query.setParameter("idPersonne", idPersonne);
+        return query.getResultList();
     }
     
-    @Override
-    public int getNombreOffrePublicByType(TypeOffre type) {
-        String txt = "SELECT o FROM Offre o WHERE o.typeOffre = :typeOffre AND (o.etat = :disponible OR o.etat = :enCours)";
-        Query req = getEntityManager().createQuery(txt);
-        req.setParameter("disponible", EtatOffre.DISPONIBLE);
-        req.setParameter("enCours", EtatOffre.EN_COURS);
-        req.setParameter("typeOffre", type);
-        List<Offre> result = req.getResultList();
-        return result.size();
-    }
-    
-    @Override
-    public int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin) {
-        String txt = "SELECT COUNT(DISTINCT o.utilisateur) FROM Offre o WHERE o.datePublication BETWEEN :dateDebut AND :dateFin";
-        Query req = getEntityManager().createQuery(txt);
-        req.setParameter("dateDebut", dateDebut);
-        req.setParameter("dateFin", dateFin);
-        Long count = (Long) req.getSingleResult();
-        return count.intValue();
-    }
-    
-    @Override
-    public List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin) {
-    List<String> resultList = new ArrayList<>();
-
-    String txt = "SELECT o.utilisateur.agence, COUNT(o) FROM Offre o WHERE o.datePublication BETWEEN :dateDebut AND :dateFin GROUP BY o.utilisateur.agence ORDER BY COUNT(o) DESC";
-    Query req = getEntityManager().createQuery(txt);
-    req.setParameter("dateDebut", dateDebut);
-    req.setParameter("dateFin", dateFin);
-    
-    List<Object[]> result = req.setMaxResults(5).getResultList();
-    
-    for (Object[] row : result) {
-        // Construction de l'objet JSON représentant le résultat
-        JsonObject jsonObject = new JsonObject();
-        System.out.println(row[0].toString());
-        jsonObject.addProperty("agence", row[0].toString()); // Nom de l'agence
-        jsonObject.addProperty("nombre_offres", (Long) row[1]); // Nombre d'offres publiées
-
-        // Conversion de l'objet JSON en chaîne JSON et ajout à la liste des résultats
-        resultList.add(jsonObject.toString());
-    }
-
-    return resultList;
-}
         @Override
-    public List<Offre> listeOffre(Personne p){
-        String txt = "SELECT o FROM Offre o WHERE o.utilisateur = :p";
+    public List<Offre> listeOffre(Membre m){
+        String txt = "SELECT o FROM Offre o WHERE o.utilisateur.id = :p";
         Query req = getEntityManager().createQuery(txt);
-        req.setParameter("p", p);
+        req.setParameter("p", m.getId());
         List<Offre> result = req.getResultList();
         return result;
     }

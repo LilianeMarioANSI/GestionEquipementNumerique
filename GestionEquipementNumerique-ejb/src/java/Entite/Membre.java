@@ -24,10 +24,13 @@ public class Membre extends Personne implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @SerializedName("idMembre")
     private Long id;
+    
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }

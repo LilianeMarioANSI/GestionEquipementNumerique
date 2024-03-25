@@ -4,6 +4,7 @@
  */
 package Facade;
 
+import Entite.Membre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
@@ -33,9 +34,11 @@ public interface SouhaitFacadeLocal {
 
     int count();
     
+    // nos méthodes
+    
     List<Souhait> getSouhaitByMembre(long idMembre);
 
     Souhait creerSouhait(Date datePublication, Date dateDebut, Date dateFin, TypeSouhait typeSouhait, TypeAccessoire typeAccessoire, String description, Personne utilisateur);
     
-    List<Souhait> listeSouhaits(Personne p);
+     List<Souhait> listeSouhaits(Membre m);
 }

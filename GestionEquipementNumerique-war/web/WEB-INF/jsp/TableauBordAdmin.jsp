@@ -4,6 +4,7 @@
     Author     : loulo
 --%>
 
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,7 +20,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
-        <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+        <%@include file="/WEB-INF/jspf/navigation_admin.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         <main class="vertical">
             
@@ -35,13 +36,23 @@
                 double partDeMembreAvecOffre;
                 double partDeMembreAvecDemande;
                 
-                if(Integer.parseInt(nbMembre) > 0 ){
-                    partDeMembreAvecOffre = Integer.parseInt(nbMembreAvecOffre)/Integer.parseInt(nbMembre);
-                    partDeMembreAvecDemande = Integer.parseInt(nbMembreAvecDemande)/Integer.parseInt(nbMembre);
-                }else{
+                int intNbMembre = nbMembre != null ? Integer.parseInt(nbMembre) : 0;
+                int intNbMembreAvecOffre = nbMembreAvecOffre != null ? Integer.parseInt(nbMembreAvecOffre) : 0;
+                int intNbMembreAvecDemande = nbMembreAvecDemande != null ? Integer.parseInt(nbMembreAvecDemande) : 0;
+                int intNbOffrePublic = nbOffrePublic != null ? Integer.parseInt(nbOffrePublic) : 0;
+                int intNbDonPublic = nbDonPublic != null ? Integer.parseInt(nbDonPublic) : 0;
+                int intNbPretPublic = nbPretPublic != null ? Integer.parseInt(nbPretPublic) : 0;
+
+                if(intNbMembre > 0 ){
+                    partDeMembreAvecOffre = intNbMembreAvecOffre / intNbMembre;
+                    partDeMembreAvecDemande = intNbMembreAvecDemande / intNbMembre;
+                } else {
                     partDeMembreAvecOffre = 0;
                     partDeMembreAvecDemande = 0;
                 }
+                
+                
+
                  
             %>
             
@@ -96,6 +107,7 @@
                 <%@include file="/WEB-INF/jspf/GraphiqueAccessoireEtatUsage.jspf" %>
                 <%@include file="/WEB-INF/jspf/GraphiqueAgenceByOffre.jspf" %>
             </div>
+
             
             
         </main>

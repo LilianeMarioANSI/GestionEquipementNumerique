@@ -5,8 +5,11 @@
 package Session;
 
 import Entite.Accessoire;
+import Entite.Agence;
 import Entite.EtatAccessoire;
+import Entite.Membre;
 import Entite.Offre;
+import Entite.Superviseur;
 import Entite.TypeOffre;
 import java.sql.Date;
 import java.util.List;
@@ -18,6 +21,8 @@ import javax.ejb.Local;
  */
 @Local
 public interface SessionAdministrateurLocal {
+    
+    Superviseur IdentificationSuperviseur(String log, String mdp);
     
     List <String> getOffresParPeriode_Json(Date dateDebut, Date dateFin);
     
@@ -34,4 +39,10 @@ public interface SessionAdministrateurLocal {
     List<Accessoire> getAccessoireByEtat(EtatAccessoire etat);
     
     List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin);
+    
+    List<Membre> ListeMembres();
+    
+    Membre getMembre(long login);
+    
+    Superviseur InscriptionUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence);
 }

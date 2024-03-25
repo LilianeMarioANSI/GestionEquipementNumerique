@@ -22,7 +22,7 @@
         <title>Mon profil</title>
     </head>
     <body>
-        <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+        <%@include file="/WEB-INF/jspf/navigation_membre.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         
         <main>
@@ -114,7 +114,7 @@
                     
                     <div class="container-body">
                         <%
-                            List<Demande> lesDons= dons;
+                            List<Demande> lesDons = dons;
                                 if (lesDons.size() == 0) {%>
                                     <p>Vous n'avez pas encore fait de dons</p>
                                 <%} else {%>
@@ -182,7 +182,6 @@
                     <input type="hidden" name="membreId" value="${membre.id}">
                     <button type="submit">Supprimer mon compte</button>
                 </form>
-                
             </section>
         </main>
     </body>
