@@ -6,6 +6,7 @@ package Facade;
 
 import Entite.Accessoire;
 import Entite.EtatOffre;
+import Entite.Membre;
 import Entite.Offre;
 import Entite.TypeOffre;
 import Entite.Personne;
@@ -53,7 +54,7 @@ public interface OffreFacadeLocal {
     int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin);
     
     List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin);
-    List<Offre> listeOffre(Personne p);
+    List<Offre> listeOffre(Membre m);
     
     void updateEtatOffre(Offre o);
     

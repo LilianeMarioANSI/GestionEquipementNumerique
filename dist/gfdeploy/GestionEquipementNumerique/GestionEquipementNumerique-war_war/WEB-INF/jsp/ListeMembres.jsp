@@ -18,7 +18,7 @@
         <link rel="stylesheet" type="text/css" href="Style/header.css">
         <link rel="stylesheet" type="text/css" href="Style/chart.css">
         <link rel="stylesheet" type="text/css" href="Style/mesSouhaits.css">
-        <jsp:useBean id="listeMembres" scope="request" class="java.util.List"></jsp:useBean>
+        
     </head>
     
     <body>
@@ -40,25 +40,26 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <jsp:useBean id="listeMembres" scope="request" class="java.util.List"></jsp:useBean>
                     <%
                         List<Membre> lesMembres = listeMembres;
                         if (lesMembres != null) {
-                        for (Membre membre : lesMembres) {
+                        for (Membre m : lesMembres) {
                     %>
                     <tr>
-                        <td style="vertical-align: middle"><%= membre.getNom() %></td>
-                        <td style="vertical-align: middle"><%= membre.getPrenom() %></td>
-                        <td style="vertical-align: middle"><%= membre.getTelephone() %></td>
-                        <td style="vertical-align: middle"><%= membre.getLogin() %></td>
+                        <td style="vertical-align: middle"><%= m.getNom() %></td>
+                        <td style="vertical-align: middle"><%= m.getPrenom() %></td>
+                        <td style="vertical-align: middle"><%= m.getTelephone() %></td>
+                        <td style="vertical-align: middle"><%= m.getLogin() %></td>
                         <td class="action-cell" style="vertical-align: middle">
                             <form action="ServletGestionEquipement" method="post">
                                 <input type="hidden" name="action" value="modificationUtilisateur">
-                                <input type="hidden" name="login" value="<%= membre.getId() %>">
+                                <input type="hidden" name="login" value="<%= m.getId() %>">
                                 <button type="submit" class="edit">Modifier</button>
                             </form>
                             <form action="ServletGestionEquipement" method="post">
                                 <input type="hidden" name="action" value="suppressionUtilisateur">
-                                <input type="hidden" name="login" value="<%= membre.getId() %>">
+                                <input type="hidden" name="login" value="<%= m.getId() %>">
                                 <button type="submit" class="delete">Supprimer</button>
                             </form>
                         </td>

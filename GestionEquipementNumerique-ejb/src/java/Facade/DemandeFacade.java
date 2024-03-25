@@ -54,10 +54,10 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
         Mes Prêts
     */
     @Override
-    public List<Demande> listePrêts(Personne p){
-        String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.offre.typeOffre = :typeOffre";
+    public List<Demande> listePrêts(Membre m){
+        String txt = "SELECT d FROM Demande d WHERE d.utilisateur.id = :p AND d.offre.typeOffre = :typeOffre";
         Query req = getEntityManager().createQuery(txt);
-        req.setParameter("p", p);
+        req.setParameter("p", m.getId());
         req.setParameter("typeOffre", TypeOffre.PRET);
         List<Demande> result = req.getResultList();
         return result;
@@ -67,10 +67,10 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
         Mes Dons
     */
     @Override
-    public List<Demande> listeDon(Personne p){
-        String txt = "SELECT d FROM Demande d WHERE d.utilisateur = :p AND d.offre.typeOffre = :typeOffre";
+    public List<Demande> listeDon(Membre m){
+        String txt = "SELECT d FROM Demande d WHERE d.utilisateur.id = :p AND d.offre.typeOffre = :typeOffre";
         Query req = getEntityManager().createQuery(txt);
-        req.setParameter("p", p);
+        req.setParameter("p", m.getId());
         req.setParameter("typeOffre",TypeOffre.DON);
         List<Demande> result = req.getResultList();
         return result;

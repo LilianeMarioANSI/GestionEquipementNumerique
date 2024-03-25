@@ -190,26 +190,27 @@ public class SessionMembre implements SessionMembreLocal {
         Mes Demandes
     */ 
     @Override
-    public List<Demande> listePrêts(Personne p) {
-        return demandeFacade.listePrêts(p);
+    public List<Demande> listePrêts(Membre m) {
+        return demandeFacade.listePrêts(m);
     }
 
     @Override
-    public List<Demande> listeDon(Personne p) {
-        return demandeFacade.listeDon(p);
+    public List<Demande> listeDon(Membre m) {
+        return demandeFacade.listeDon(m);
     }
     
     @Override
-    public List<Offre> listeMesOffres(Personne p) {
-        return offreFacade.listeOffre(p);
+    public List<Offre> listeMesOffres(Membre m) {
+        return offreFacade.listeOffre(m);
     }
     
         @Override
-    public List<Souhait> listeMesSouhaits(Personne p) {
-        return souhaitFacade.listeSouhaits(p);
+    public List<Souhait> listeMesSouhaits(Membre m) {
+        return souhaitFacade.listeSouhaits(m);
 
     }
     
+    @Override
     public Demande CreerDemande(Personne personne, Offre offre){
         return demandeFacade.creerDemande(personne, offre);
     }

@@ -50,11 +50,11 @@ public interface SessionMembreLocal {
     Offre creationOffre (Offre O);
     
     Accessoire CreerAccessoire(Accessoire a);
-    List<Demande> listeDon(Personne p);
     
-    List<Demande> listePrêts(Personne p);
-    List<Offre> listeMesOffres(Personne p) ;
-    List<Souhait> listeMesSouhaits(Personne p) ;
+    List<Demande> listeDon(Membre m);
+    List<Demande> listePrêts(Membre m);
+    List<Offre> listeMesOffres(Membre m) ;
+    List<Souhait> listeMesSouhaits(Membre m) ;
     
     Demande CreerDemande(Personne personne, Offre offre);
     

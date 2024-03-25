@@ -224,6 +224,7 @@ public class Offre implements Serializable {
     @Expose(serialize = false, deserialize = false)
     private List<Demande> demandes;
     
+    
     /*
         Methodes
     */

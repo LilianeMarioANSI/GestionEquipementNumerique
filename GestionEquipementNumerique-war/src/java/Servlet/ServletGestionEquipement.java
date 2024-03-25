@@ -43,13 +43,6 @@ import java.util.List;
  */
 @WebServlet(name = "ServletGestionEquipement", urlPatterns = {"/ServletGestionEquipement"})
 public class ServletGestionEquipement extends HttpServlet {
-
-    
-
-    
-
-   
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -88,9 +81,9 @@ public class ServletGestionEquipement extends HttpServlet {
         if(action==null || action.equals("accueil")){
             HttpSession session = request.getSession(false);
             if(session != null){
-                Personne p = (Personne) session.getAttribute("membre");
+                Membre m = (Membre) session.getAttribute("membre");
                 
-                if(p.getId() != null){
+                if(m.getId() != null){
                     jsp = "/ServletGestionEquipement?action=tableauBord";
                     request.setAttribute("titrePage", "Mon espace !");
                     request.setAttribute("titrePage", "Bienvenue !");
@@ -104,10 +97,6 @@ public class ServletGestionEquipement extends HttpServlet {
                 //Titre de la page
                 request.setAttribute("titrePage", "Bienvenue !");
             }
-            
-            
-            
-            
         }
         
         /*
@@ -137,7 +126,8 @@ public class ServletGestionEquipement extends HttpServlet {
                     }
                 } else {
                     session.setAttribute("membre", m);
-                    request.getRequestDispatcher("/WEB-INF/jsp/TableauBordMembre.jsp").forward(request, response);
+                    //jsp="ServletGestionEquipement?action=tableauBord";
+                    response.sendRedirect("ServletGestionEquipement?action=tableauBord");
                     return;
                 }
                 
@@ -147,6 +137,7 @@ public class ServletGestionEquipement extends HttpServlet {
                 // Si le nombre de tentatives est dépassé, redirigez l'utilisateur vers une page d'erreur
                 String message = "Nombre maximal de tentatives de connexion dépassé. Veuillez réessayer plus tard.";
                 request.setAttribute("message", message);
+                //jsp="/WEB-INF/jsp/ErreurConnexion.jsp";
                 request.getRequestDispatcher("/WEB-INF/jsp/ErreurConnexion.jsp").forward(request, response);
                 return;
             }
@@ -406,7 +397,7 @@ public class ServletGestionEquipement extends HttpServlet {
                     typeMessage = "success";
 
                     HttpSession session = request.getSession();
-                    Superviseur superviseur = (Superviseur) session.getAttribute("membre");
+                    Superviseur superviseur = (Superviseur) session.getAttribute("administrateur");
                     request.setAttribute("membre", superviseur);
                     request.setAttribute("message", message);
                     request.setAttribute("typeMessage", typeMessage);
@@ -460,12 +451,6 @@ public class ServletGestionEquipement extends HttpServlet {
             // Rediriger vers la vue JSP du tableau de bord
             jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
         }
-        else if(action.equals("mesEquipements")){
-            jsp = "/WEB-INF/jsp/mesEquipements.jsp";
-            //Titre de la page
-            request.setAttribute("titrePage", "Mon equipements");
-        }
-        
         else if(action.equals("SupprimerMembre")){
             long membreId = Long.parseLong(request.getParameter("membreId"));
             
@@ -601,7 +586,7 @@ public class ServletGestionEquipement extends HttpServlet {
                         //Accessoire accessoire = sessionMembre.CreerAccessoire(a);
                         Offre offre = sessionMembre.creationOffre(o);
                         if (offre != null && accessoire != null){
-                        jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
+                        jsp = "/ServletGestionEquipement?action=tableauBord";
                         request.setAttribute("message", "Offre crée");
                         request.setAttribute("typeMessage", "success");
 
@@ -641,7 +626,7 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("message", message);
             }
 
-            jsp = "/WEB-INF/jsp/MesEquipements.jsp";
+            jsp = "/WEB-INF/jsp/mesEquipements.jsp";
             request.setAttribute("titrePage", "Mes equipements");
         }
             
@@ -714,23 +699,15 @@ public class ServletGestionEquipement extends HttpServlet {
         
         else if(action.equals("SupprimerDemande")) {
             long demandeId = Long.parseLong(request.getParameter("demandeId"));
-           
-            boolean d = sessionMembre.SupprimerDemande(demandeId);
 
-            if (d) {
-                Demande demande = sessionMembre.RechercherDemande(demandeId);
-                String demandeType = demande.getOffre().getTypeOffre().label;
-                if (demandeType != null) {
-                    if (demandeType.equals("PRET")) {
-                        jsp = "/WEB-INF/jsp/MesPrets.jsp";
-                    } else if (demandeType.equals("DON")) {
-                        jsp = "/WEB-INF/jsp/MesDons.jsp";
-                    }
-                } else {
-                    jsp = "/WEB-INF/jsp/TableauBordMembre.jsp";
-                    request.setAttribute("message", "Erreur, Type de demande non défini");
+            Demande demande = sessionMembre.RechercherDemande(demandeId);
+
+            if(demande!=null){
+                boolean d = sessionMembre.SupprimerDemande(demandeId);
+                if(d){
+                    jsp = "/ServletGestionEquipement?action=tableauBord";
                 }
-            } 
+            }
         }
         
         else {
@@ -798,29 +775,40 @@ public class ServletGestionEquipement extends HttpServlet {
     protected void doCreerSouhait(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        HttpSession session = request.getSession(false);
+        
         String dateDebut = request.getParameter("dateDebut");
         String dateFin = request.getParameter( "dateFin" );
         String description = request.getParameter( "description" );
-        String idUtilisateur = request.getParameter( "id" ); //Ici récupérer l'id de l'utilisateur connecté dans les attributs de session.
         
-        //On récupère la valeur de l'agence à partir de son label
-        TypeSouhait typeSouhait = TypeSouhait.valueOfLabel(request.getParameter("type"));
+        String typeSouhait_string = request.getParameter("typeSouhait");
+        TypeSouhait typeSouhait;
+        
+        if(typeSouhait_string.equals("DON")){
+            typeSouhait = TypeSouhait.DON;
+        }else{
+            typeSouhait = TypeSouhait.PRET;
+        }
+        
         TypeAccessoire typeAccessoire = TypeAccessoire.valueOfLabel(request.getParameter("categorie"));
         
         
         String message;
         String typeMessage;
         
-        if ( dateDebut.trim().isEmpty() || dateFin.trim().isEmpty()|| description.trim().isEmpty() || idUtilisateur.trim().isEmpty()){
+        if ( dateDebut.trim().isEmpty() || dateFin.trim().isEmpty()|| description.trim().isEmpty()){
             message = "Vous n'avez pas rempli tous les champs obligatoires. ";
             typeMessage = "error";
-        } 
-        else {
+        }else if(session == null){
+            message = "Vous n'avez pas rempli tous les champs obligatoires. ";
+            typeMessage = "error";
+            response.sendRedirect("/ServletGestionEquipement");
+        } else {
+            Membre membre = (Membre) session.getAttribute("membre");
             Date datePublication = Date.valueOf(LocalDate.now());
-            Personne utilisateur = sessionMembre.RechercherPersonne(Long.parseLong(idUtilisateur));
             Date dateDebut_sql = Date.valueOf(dateDebut);
             Date dateFin_sql = Date.valueOf(dateFin);
-            sessionMembre.CreerSouhait(datePublication, dateDebut_sql, dateFin_sql, typeSouhait, typeAccessoire, description, utilisateur);
+            sessionMembre.CreerSouhait(datePublication, dateDebut_sql, dateFin_sql, typeSouhait, typeAccessoire, description, membre);
             message = "Souhait créé avec succès !";
             typeMessage = "success";
         }

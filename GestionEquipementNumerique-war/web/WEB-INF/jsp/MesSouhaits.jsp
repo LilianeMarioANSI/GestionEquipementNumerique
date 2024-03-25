@@ -102,7 +102,10 @@
                         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                         
                         List<Souhait> souhaits = (List<Souhait>) request.getAttribute("listeSouhaits");
-                        for(Souhait s : souhaits){%>
+                        if (souhaits != null) {
+                        for(Souhait s : souhaits){
+                        
+    %>
                             <tr>
                                 <td style="vertical-align: middle"><%=s.getTypeAccessoire().label%></td>
                                 <td style="vertical-align: middle"><%=df.format(s.getDatePublication())%></td>
@@ -120,7 +123,10 @@
                             <tr class="spacer">
                                 <td colspan="100"></td>
                             </tr>
-                        <%}%>
+      <% 
+                        } 
+                    }
+                %>
                 </tbody>
                 
                 

@@ -19,6 +19,7 @@ import Entite.Accessoire;
 import Entite.Agence;
 import Entite.EtatOffre;
 import Entite.Personne;
+import Entite.Membre;
 import Entite.TypeOffre;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -216,10 +217,10 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     }
     
         @Override
-    public List<Offre> listeOffre(Personne p){
-        String txt = "SELECT o FROM Offre o WHERE o.utilisateur = :p";
+    public List<Offre> listeOffre(Membre m){
+        String txt = "SELECT o FROM Offre o WHERE o.utilisateur.id = :p";
         Query req = getEntityManager().createQuery(txt);
-        req.setParameter("p", p);
+        req.setParameter("p", m.getId());
         List<Offre> result = req.getResultList();
         return result;
     }

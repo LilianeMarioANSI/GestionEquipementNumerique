@@ -107,9 +107,11 @@
                                 <form action="ServletGestionEquipement">
                                     <input type="hidden" name="action" value="AfficherModifierOffre">
                                     <button class="edit">Modifier</button>
+                                </form>
+                                <form action="ServletGestionEquipement">
+                                    <input type="hidden" name="action" value="SupprimerOffre">
                                     <button class="delete">Supprimer</button>
                                 </form>
-
                                 
                             </td>
                         </tr>

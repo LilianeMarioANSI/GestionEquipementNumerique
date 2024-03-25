@@ -5,6 +5,7 @@
 --%>
 
 
+<%@page import="Entite.EtatOffre"%>
 <%@page import="Entite.TypeAccessoire"%>
 <%@page import="Entite.EtatAccessoire"%>
 <%@page import="Entite.Accessoire"%>

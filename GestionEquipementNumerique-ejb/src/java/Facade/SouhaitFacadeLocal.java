@@ -4,6 +4,7 @@
  */
 package Facade;
 
+import Entite.Membre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
@@ -39,5 +40,5 @@ public interface SouhaitFacadeLocal {
 
     Souhait creerSouhait(Date datePublication, Date dateDebut, Date dateFin, TypeSouhait typeSouhait, TypeAccessoire typeAccessoire, String description, Personne utilisateur);
     
-    List<Souhait> listeSouhaits(Personne p);
+     List<Souhait> listeSouhaits(Membre m);
 }
