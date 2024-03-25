@@ -350,6 +350,7 @@ public class ServletGestionEquipement extends HttpServlet {
             Offre
         */
         else if (action.equals("creerOffre")){
+            request.setAttribute("titrePage", "Création d'un offre");
             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
         }
         else if (action.equals("AjouterOffre")){
@@ -480,7 +481,18 @@ public class ServletGestionEquipement extends HttpServlet {
             jsp = "/WEB-INF/jsp/Accueil.jsp";
         }
         
- 
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            if(session.getAttribute("membre") != null){
+                Personne personne = (Personne) session.getAttribute("membre");
+                request.setAttribute("utilisateurAuth", personne);
+            }
+        }
+        
+        
+        
+        
+        
         RequestDispatcher Rd;
         Rd = getServletContext().getRequestDispatcher(jsp);
         Rd.forward(request, response);
