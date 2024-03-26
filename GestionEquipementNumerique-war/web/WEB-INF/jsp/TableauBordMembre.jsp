@@ -177,30 +177,12 @@
                             <label for="agence">Agence :</label>
                             <input type="text" name="agence" id="agence" class="editable" required readonly value="${membre.agence.toString()}">
                         </div>
-
-
-<<<<<<< HEAD
-                    <div class="field-wrapper">
-                        <label for="bureau">Bureau :</label>
-                        <input type="text" name="bureau" id="bureau" class="editable" required readonly value="${membre.bureau}">
-                    </div>
-                    <div class="action-wrapper right">
-                        <input type="hidden" name="action" value="ModifierMembre">
-                        <button type="button" class="edit" id="toggleEdit"> Modifier </button>
-                        <button type="submit" class="submit"> Enregistrer </button>
                         
-                    </div>
-                </form>
-                <form action="ServletGestionEquipement" method="post">
-                    <input type="hidden" name="action" value="SupprimerMembre">
-                    <input type="hidden" name="membreId" value="${membre.id}">
-                    <button type="submit">Supprimer mon compte</button>
-                </form>
-=======
                         <div class="field-wrapper">
                             <label for="bureau">Bureau :</label>
                             <input type="text" name="bureau" id="bureau" class="editable" required readonly value="${membre.bureau}">
                         </div>
+                        
                         <div class="action-wrapper right">
                             <input type="hidden" name="action" value="ModifierMembre">
                             <button type="button" class="edit" id="toggleEdit"> Modifier </button>
@@ -213,8 +195,6 @@
                         <input type="hidden" name="membreId" value="${membre.id}">
                         <button type="submit">Supprimer mon compte</button>
                     </form>
-                
->>>>>>> 3b5c20f (Badge + vérification date création offre)
             </section>
         </main>
     </body>

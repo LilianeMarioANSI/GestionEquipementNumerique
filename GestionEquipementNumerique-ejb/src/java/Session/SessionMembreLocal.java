@@ -48,52 +48,35 @@ public interface SessionMembreLocal {
     List<Offre> FiltrerCatalogue(String etatEquipement, String categorie, String typeOffre);
 
     Agence getAgenceById(String agenceId);
-<<<<<<< HEAD
     
     Offre creationOffre (Offre O);
     
     Accessoire CreerAccessoire(Accessoire a);
     
     List<Demande> listeDon(Membre m);
+    
     List<Demande> listePrêts(Membre m);
+    
     List<Offre> listeMesOffres(Membre m) ;
+    
     List<Souhait> listeMesSouhaits(Membre m) ;
-=======
-    
-    Offre creationOffre (Offre O);
-    
-    Accessoire CreerAccessoire(Accessoire a);
-    
-    List<Demande> listeDon(Personne p);
-    
-    List<Demande> listePrêts(Personne p);
-    
-    List<Offre> listeMesOffres(Personne p) ;
-    
-    List<Souhait> listeMesSouhaits(Personne p) ;
->>>>>>> 3b5c20f (Badge + vérification date création offre)
     
     Demande CreerDemande(Personne personne, Offre offre);
     
     void updateEtatOffre(Offre o);
     
-<<<<<<< HEAD
     
     List<Offre> listeMesEquipements(long Id);
     
     boolean SupprimerDemande(long idDemande);
     
     Demande RechercherDemande(long id);
-=======
+    
+    Membre RechercherMembre(long id);
     int getNombreDemandeByMembre(Personne u);
-    
     int getNombreOffreByMembre(Personne u);
-
-    boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau);
     
-    Badge creerBadge(NiveauBadge niveau, Personne membre);
-
-    public List<Badge> getBadgeByMembre(Personne u);
-    
->>>>>>> 3b5c20f (Badge + vérification date création offre)
+    List<Badge> getBadgeByMembre(Membre u);
+    Badge creerBadge(NiveauBadge niveau, Membre membre);
+    boolean verificationBadgeExistant(Membre utilisateur, NiveauBadge niveau);
 }

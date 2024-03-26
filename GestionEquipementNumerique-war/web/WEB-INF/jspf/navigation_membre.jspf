@@ -20,12 +20,9 @@
                     <a href="ServletGestionEquipement?action=logout" class="nav-link">Déconnexion</a>
                 </div>
             </li>
-<<<<<<< HEAD:GestionEquipementNumerique-war/web/WEB-INF/jspf/navigation_membre.jspf
-=======
             <% if(utilisateurAuth instanceof Superviseur) {%>
                 <li><a href="ServletGestionEquipement?action=analytics" class="nav-link">Tableau de bord</a></li>
             <% } %>
->>>>>>> 3b5c20f (Badge + vérification date création offre):GestionEquipementNumerique-war/web/WEB-INF/jspf/navigation.jspf
             <li><a href="ServletGestionEquipement?action=creerOffre" class="nav-link">Créer une Offre</a></li>
         </ul>
     </div>

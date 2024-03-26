@@ -17,11 +17,6 @@
         <link rel="stylesheet" type="text/css" href="Style/header.css">
         <link rel="stylesheet" type="text/css" href="Style/inscription.css">
     </head>
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 3b5c20f (Badge + vérification date création offre)
     <%@include file="/WEB-INF/jspf/header.jspf" %>
     
     

@@ -98,27 +98,10 @@ public class ServletGestionEquipement extends HttpServlet {
                 //Titre de la page
                 request.setAttribute("titrePage", "Bienvenue !");
             }
-<<<<<<< HEAD
-=======
-            
-            
-            
-            
-        }
-        /*
-            Inscription
-        */
-        else if(action.equals("creerMembre")){
-            jsp = "/WEB-INF/jsp/Accueil.jsp";
-            doInscrireUtilisateur(request, response);
-            request.setAttribute("titrePage", "Bienvenue !"); //Titre de la page
-        }
-        
-        else if(action.equals("inscription")){
+        }else if(action.equals("inscription")){
             jsp = "/WEB-INF/jsp/Inscription.jsp";
 
             request.setAttribute("titrePage", "Inscription"); //Titre de la page
->>>>>>> 3b5c20f (Badge + vérification date création offre)
         }
         
         /*
@@ -148,7 +131,7 @@ public class ServletGestionEquipement extends HttpServlet {
                     }
                 } else {
                     session.setAttribute("membre", m);
-                    //jsp="ServletGestionEquipement?action=tableauBord";
+                    //jsp = "/ServletGestionEquipement?action=tableauBord";
                     response.sendRedirect("ServletGestionEquipement?action=tableauBord");
                     return;
                 }
@@ -361,8 +344,8 @@ public class ServletGestionEquipement extends HttpServlet {
                     typeMessage = "error";
                 } else {
                     String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
-                    sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
-                    //sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                    //sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                    sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
                     message = "Compte membre créé avec succès !";
                     
                     typeMessage = "success";
@@ -412,9 +395,11 @@ public class ServletGestionEquipement extends HttpServlet {
                     String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
                     if (isAdmin) {
                         sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                        //doVerifierBadge(request, response, membre);
                         message = "Compte administrateur créé avec succès !";
                     } else {
                         sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                        //doVerifierBadge(request, response, membre);
                         message = "Compte membre créé avec succès !";
                     }
                     typeMessage = "success";
@@ -576,8 +561,6 @@ public class ServletGestionEquipement extends HttpServlet {
                 EtatAccessoire etatAccessoireEnum = EtatAccessoire.valueOfLabel(etatAccessoire);
                 Accessoire a = creerAccessoire(intituleAccessoire, descriptionAccessoire, typeAccessoireEnum, etatAccessoireEnum, membre);
                 
-                
-                Accessoire accessoire = sessionMembre.CreerAccessoire(a);
                 //Récupération des données du formulaire pour Offre
                 String dateDebut = request.getParameter("DateDeb");
                 String dateFin = request.getParameter("DateFin");
@@ -599,26 +582,6 @@ public class ServletGestionEquipement extends HttpServlet {
                     jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
                     request.setAttribute("message", "Vous n'avez pas rempli tous les champs obligatoires");
                     request.setAttribute("typeMessage", "error");
-<<<<<<< HEAD
-                }
-                else if( dd.before(df) && //La date de début doit être avant la date de fin
-                    dd.after(new Date(System.currentTimeMillis())) &&//La date de début doit être après la date actuelle
-                    df.after(new Date(System.currentTimeMillis())) //La date de fin doit être après la date actuelle
-                    )
-                {
-                    TypeOffre typeOffreEnum = TypeOffre.valueOfLabel(typeOffre);
-                    Offre o= creerOffre(intitule, description, typeOffreEnum, dd, df, a, membre);
-                    if(o!=null){
-                        //Accessoire accessoire = sessionMembre.CreerAccessoire(a);
-                        Offre offre = sessionMembre.creationOffre(o);
-                        if (offre != null && accessoire != null){
-                        jsp = "/ServletGestionEquipement?action=tableauBord";
-                        request.setAttribute("message", "Offre crée");
-                        request.setAttribute("typeMessage", "success");
-
-                        }
-                        else{
-=======
                 }else{
                     
                     boolean condition = false;
@@ -626,7 +589,6 @@ public class ServletGestionEquipement extends HttpServlet {
                         condition = dd.after(new Date(System.currentTimeMillis()));
                         
                         if(condition == false){
->>>>>>> 3b5c20f (Badge + vérification date création offre)
                             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
                             request.setAttribute("message", "La date de début doit être après la date actuelle.");
                             request.setAttribute("typeMessage", "error");
@@ -646,10 +608,6 @@ public class ServletGestionEquipement extends HttpServlet {
                         request.setAttribute("typeMessage", "error");
                     }
                     
-<<<<<<< HEAD
-                }      
-            }
-=======
                     if(condition){
                         TypeOffre typeOffreEnum = TypeOffre.valueOfLabel(typeOffre);
                         Offre o= creerOffre(intitule, description, typeOffreEnum, dd, df, a, membre);
@@ -671,7 +629,6 @@ public class ServletGestionEquipement extends HttpServlet {
                     }
                 }    
         }
->>>>>>> 3b5c20f (Badge + vérification date création offre)
         }
 
         // Mes equipements
@@ -748,8 +705,6 @@ public class ServletGestionEquipement extends HttpServlet {
                 Offre offre = offreFacade.find(Long.valueOf(idOffre_string));
                 Membre membre = membreFacade.find(Long.valueOf(idMembre_string));
                 sessionMembre.CreerDemande(membre, offre);
-                
-                
                 sessionMembre.updateEtatOffre(offre);
                 doVerifierBadge(request, response, membre);
                 
@@ -807,38 +762,7 @@ public class ServletGestionEquipement extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-<<<<<<< HEAD
         processRequest(request, response);
-=======
-        
-        String login = request.getParameter("loginRegister");
-        String mdp = request.getParameter("mdpRegister");
-        String nom = request.getParameter( "nom" );
-        String prenom = request.getParameter( "prenom" );
-        String bureau = request.getParameter( "bureau" );
-        String tel = request.getParameter( "telephone" );
-        //On récupère la valeur de l'agence à partir de son label
-        Agence agence = Agence.valueOfLabel(request.getParameter("agence"));
-        
-        String message;
-        String typeMessage;
-        
-        if ( prenom.trim().isEmpty() || nom.trim().isEmpty()|| login.trim().isEmpty() || mdp.trim().isEmpty() || tel.trim().isEmpty() || agence == null || bureau.trim().isEmpty()){
-            message = "Vous n'avez pas rempli tous les champs obligatoires. ";
-            typeMessage = "error";
-        } 
-        else {
-            //Chiffrement du mot de passe
-            String encrytptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
-            Membre membre = sessionMembre.InscriptionUtilisateur(login, encrytptedMdp, nom, prenom, bureau, tel, agence);
-            
-            doVerifierBadge(request, response, membre);
-            message = "Compte créé avec succès !";
-            typeMessage = "success";
-        }
-        request.setAttribute( "message", message );
-        request.setAttribute( "typeMessage", typeMessage );
->>>>>>> 3b5c20f (Badge + vérification date création offre)
     }
 
     /**
@@ -936,7 +860,7 @@ public class ServletGestionEquipement extends HttpServlet {
         return o;
     }
     
-    protected void doVerifierBadge(HttpServletRequest request, HttpServletResponse response, Personne membre)
+    protected void doVerifierBadge(HttpServletRequest request, HttpServletResponse response, Membre membre)
             throws ServletException, IOException {
         
             int nbOffre = sessionMembre.getNombreOffreByMembre(membre);
