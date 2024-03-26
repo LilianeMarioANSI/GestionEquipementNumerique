@@ -71,9 +71,10 @@
                             <% SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");%>
                         <label for="DateDeb">Date de début<span class="requis">*</span></label>
                         <input type="Date" id="DateDeb" name="DateDeb" value="<%= dateFormat.format(offre.getDateDebut())%>" size="20" maxlength="20" />
-                        <label for="DateFin">Date de fin<span class="requis">*</span></label>
-                        <input type="Date" id="DateFin" name="DateFin" value="<%=dateFormat.format(offre.getDateFin())%>" size="20" maxlength="20" />
-
+                        <% if(offre.getTypeOffre().equals(TypeOffre.PRET)) {%>
+                            <label for="DateFin">Date de fin<span class="requis">*</span></label>
+                            <input type="Date" id="DateFin" name="DateFin" value="<%=dateFormat.format(offre.getDateFin())%>" size="20" maxlength="20" />
+                        <% }%>
 
                         <input type="hidden" name="action" value="mettreAjOffre">
                     </fieldset>

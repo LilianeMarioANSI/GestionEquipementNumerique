@@ -825,6 +825,9 @@ public class ServletGestionEquipement extends HttpServlet {
             }
         }
         
+        if(jsp==null){
+            jsp="/WEB-INF/jsp/pageErreur.jsp";
+        }
         RequestDispatcher Rd;
         Rd = getServletContext().getRequestDispatcher(jsp);
         Rd.forward(request, response);
