@@ -4,6 +4,7 @@
     Author     : Utilisateur
 --%>
 
+<%@page import="Entite.Superviseur"%>
 <%@page import="Entite.Membre"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -40,6 +41,9 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td colspan="5" style="text-align: center; font-weight: bold;">Membres</td>
+                    </tr>
                     <jsp:useBean id="listeMembres" scope="request" class="java.util.List"></jsp:useBean>
                     <%
                         List<Membre> lesMembres = listeMembres;
