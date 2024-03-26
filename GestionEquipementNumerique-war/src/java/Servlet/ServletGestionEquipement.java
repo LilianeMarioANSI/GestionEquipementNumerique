@@ -720,8 +720,14 @@ public class ServletGestionEquipement extends HttpServlet {
                     }
                     jsp = "/ServletGestionEquipement?action=tableauBord";
                 } else {
+                    request.setAttribute("message", "Échec de la suppression de la demande.");
+                    request.setAttribute("typeMessage", "error");
+                    jsp = "/ServletGestionEquipement?action=tableauBord";
                 }
             } else {
+                request.setAttribute("message", "Vous ne pouvez pas supprimer cette demande.");
+                request.setAttribute("typeMessage", "error");
+                jsp = "/ServletGestionEquipement?action=tableauBord";
             }
         }
         
