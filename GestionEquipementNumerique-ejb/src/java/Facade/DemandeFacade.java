@@ -5,6 +5,7 @@
 package Facade;
 
 import Entite.Demande;
+import Entite.EtatOffre;
 import Entite.Membre;
 import Entite.Offre;
 import Entite.Personne;

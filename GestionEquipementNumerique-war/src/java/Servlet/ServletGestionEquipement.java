@@ -178,6 +178,7 @@ public class ServletGestionEquipement extends HttpServlet {
             Membre membre = sessionAdministrateur.getMembre(login);
             request.setAttribute("membre", membre);
             jsp = "/WEB-INF/jsp/ModifierMembre.jsp";
+            request.setAttribute("titrePage", "Modification Utilisateur");
             
         }
         else if(action.equals("modifierMembre")){
@@ -458,19 +459,6 @@ public class ServletGestionEquipement extends HttpServlet {
             // Rediriger vers la vue JSP du tableau de bord
             jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
         }
-        else if(action.equals("SupprimerMembre")){
-            long membreId = Long.parseLong(request.getParameter("membreId"));
-            
-            boolean m = sessionMembre.SupprimerMembre(membreId);
-            if(m ==true){
-                jsp="/WEB-INF/jsp/Accueil.jsp";
-                request.setAttribute("message", "Membre supprimée");
-            }
-            else{
-                jsp="/ServletGestionEquipement?action=tableauBord";
-                request.setAttribute("message", "Erreur, Membre non supprimée");
-            }
-        }
         else if(action.equals("ModifierMembre")){
             String nom = request.getParameter("nom");
             String prenom = request.getParameter("prenom");
@@ -694,7 +682,8 @@ public class ServletGestionEquipement extends HttpServlet {
             request.setAttribute("offre", offre);
             request.setAttribute("titrePage", "Détail de l\'offre");
             jsp = "/WEB-INF/jsp/DetailOffre.jsp";
-        }else if(action.equals("reclamerOffre")){
+        }
+        else if(action.equals("reclamerOffre")){
             String idOffre_string = request.getParameter("idOffre");
             String idMembre_string = request.getParameter("idUtilisateur");
             if(idOffre_string.trim().isEmpty() || idMembre_string.trim().isEmpty()){
@@ -707,8 +696,11 @@ public class ServletGestionEquipement extends HttpServlet {
                 sessionMembre.updateEtatOffre(offre);
                 doVerifierBadge(request, response, membre);
                 
+                String messageValidation = "Votre réclamation de l'offre a été effectuée avec succès. "
+            + "Votre accessoire est maintenant disponible. Veuillez suivre les instructions suivantes pour le récupérer : [Instructions de mise à disposition].";
+
                 
-                request.setAttribute("message", "Offre réclamé avec succès !");
+                request.setAttribute("message", messageValidation);
                 request.setAttribute("typeMessage", "success");
             }
             jsp = "/ServletGestionEquipement?action=tableauBord";
@@ -719,11 +711,23 @@ public class ServletGestionEquipement extends HttpServlet {
 
             Demande demande = sessionMembre.RechercherDemande(demandeId);
 
-            if(demande!=null){
-                boolean d = sessionMembre.SupprimerDemande(demandeId);
-                if(d){
+            if(demande != null && demande.getOffre().getDateDebut().after(new Date(System.currentTimeMillis()))) {
+                boolean demandeSupprimee = sessionMembre.SupprimerDemande(demandeId);
+                if(demandeSupprimee) {
+                    Offre offre = demande.getOffre();
+                    if(offre != null) {
+                        offre.setEtat(EtatOffre.DISPONIBLE);
+                    }
+                    jsp = "/ServletGestionEquipement?action=tableauBord";
+                } else {
+                    request.setAttribute("message", "Échec de la suppression de la demande.");
+                    request.setAttribute("typeMessage", "error");
                     jsp = "/ServletGestionEquipement?action=tableauBord";
                 }
+            } else {
+                request.setAttribute("message", "Vous ne pouvez pas supprimer cette demande.");
+                request.setAttribute("typeMessage", "error");
+                jsp = "/ServletGestionEquipement?action=tableauBord";
             }
         }
         
@@ -739,11 +743,7 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("utilisateurAuth", personne);
             }
         }
-        
-        
-        
-        
-        
+
         RequestDispatcher Rd;
         Rd = getServletContext().getRequestDispatcher(jsp);
         Rd.forward(request, response);

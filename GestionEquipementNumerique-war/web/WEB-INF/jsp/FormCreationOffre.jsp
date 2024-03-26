@@ -17,8 +17,8 @@
         <link rel="stylesheet" type="text/css" href="Style/main.css">
         <link rel="stylesheet" type="text/css" href="Style/navigation.css">
         <link rel="stylesheet" type="text/css" href="Style/header.css">
+        <link rel="stylesheet" type="text/css" href="Style/footer_creationOffre.css">
         <script src="Js/PageCreationOffre.js"></script>
-
     </head>
     
     <%@include file="/WEB-INF/jspf/navigation_membre.jspf" %>
@@ -75,6 +75,9 @@
                         <button type="submit" class="submit">Créer</button>
             </form>
         </main>
-        
+        <footer>
+            <p id="reminder-message">Les accessoires défectueux doivent être ramenés à la CIL / SITI.</p>
+        </footer>
+
     </body>
 </html>

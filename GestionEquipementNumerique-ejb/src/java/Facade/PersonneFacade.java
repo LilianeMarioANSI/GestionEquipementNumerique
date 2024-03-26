@@ -5,6 +5,7 @@
 package Facade;
 
 import Entite.Personne;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,5 +37,4 @@ public class PersonneFacade extends AbstractFacade<Personne> implements Personne
         Personne result = (Personne) req.getResultList().get(0);
         return result;
     }
-    
 }
