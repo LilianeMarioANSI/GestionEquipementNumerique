@@ -6,15 +6,17 @@ package Session;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.Badge;
 import Entite.Demande;
 import Entite.Membre;
+import Entite.NiveauBadge;
 import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
-import Entite.StatutDemande;
 import Entite.TypeAccessoire;
 import Entite.TypeSouhait;
 import Facade.AccessoireFacadeLocal;
+import Facade.BadgeFacadeLocal;
 import Facade.DemandeFacadeLocal;
 import Facade.MembreFacadeLocal;
 import Facade.OffreFacadeLocal;
@@ -36,7 +38,8 @@ public class SessionMembre implements SessionMembreLocal {
 
     @EJB
     private PersonneFacadeLocal personneFacade;
-
+    @EJB
+    private BadgeFacadeLocal badgeFacade;
     @EJB
     private DemandeFacadeLocal demandeFacade;
 
@@ -114,7 +117,7 @@ public class SessionMembre implements SessionMembreLocal {
     public Agence getAgenceById(String agenceId){
         return membreFacade.getAgenceById(agenceId);
     } 
-    
+    @Override
     public Membre RechercherMembre(long id) {
         return membreFacade.rechercherMembre(id);
     }
@@ -213,6 +216,30 @@ public class SessionMembre implements SessionMembreLocal {
     @Override
     public Demande CreerDemande(Personne personne, Offre offre){
         return demandeFacade.creerDemande(personne, offre);
+    }
+    
+    @Override
+    public boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau){
+        return badgeFacade.verificationBadgeExistant(utilisateur, niveau);
+    }
+    
+    @Override
+    public Badge creerBadge(NiveauBadge niveau, Personne membre){
+        return badgeFacade.creerBadge(niveau, membre);
+    }
+    
+    @Override
+    public int getNombreDemandeByMembre(Personne u){
+        return demandeFacade.getNombreDemandeByMembre(u);
+    }
+    @Override
+    public int getNombreOffreByMembre(Personne u){
+        return offreFacade.getNombreOffreByMembre(u);
+    }
+    
+    @Override
+    public List<Badge> getBadgeByMembre(Membre u){
+        return badgeFacade.getBadgeByMembre(u);
     }
 
     @Override

@@ -6,9 +6,11 @@ package Session;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.Badge;
 import Entite.Demande;
 import Entite.EtatOffre;
 import Entite.Membre;
+import Entite.NiveauBadge;
 import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
@@ -52,8 +54,11 @@ public interface SessionMembreLocal {
     Accessoire CreerAccessoire(Accessoire a);
     
     List<Demande> listeDon(Membre m);
+    
     List<Demande> listePrêts(Membre m);
+    
     List<Offre> listeMesOffres(Membre m) ;
+    
     List<Souhait> listeMesSouhaits(Membre m) ;
     
     Demande CreerDemande(Personne personne, Offre offre);
@@ -66,4 +71,12 @@ public interface SessionMembreLocal {
     boolean SupprimerDemande(long idDemande);
     
     Demande RechercherDemande(long id);
+    
+    Membre RechercherMembre(long id);
+    int getNombreDemandeByMembre(Personne u);
+    int getNombreOffreByMembre(Personne u);
+    
+    List<Badge> getBadgeByMembre(Membre u);
+    Badge creerBadge(NiveauBadge niveau, Personne membre);
+    boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau);
 }

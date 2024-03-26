@@ -17,7 +17,6 @@
         <link rel="stylesheet" type="text/css" href="Style/header.css">
         <link rel="stylesheet" type="text/css" href="Style/inscription.css">
     </head>
-
     <%@include file="/WEB-INF/jspf/header.jspf" %>
     
     

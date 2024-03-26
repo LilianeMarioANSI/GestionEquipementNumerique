@@ -20,6 +20,9 @@
                     <a href="ServletGestionEquipement?action=logout" class="nav-link">Déconnexion</a>
                 </div>
             </li>
+            <% if(utilisateurAuth instanceof Superviseur) {%>
+                <li><a href="ServletGestionEquipement?action=analytics" class="nav-link">Tableau de bord</a></li>
+            <% } %>
             <li><a href="ServletGestionEquipement?action=creerOffre" class="nav-link">Créer une Offre</a></li>
         </ul>
     </div>

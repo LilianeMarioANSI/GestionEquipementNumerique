@@ -6,10 +6,12 @@ package Servlet;
 
 import Entite.Accessoire;
 import Entite.Agence;
+import Entite.Badge;
 import Entite.Demande;
 import Entite.EtatAccessoire;
 import Entite.EtatOffre;
 import Entite.Membre;
+import Entite.NiveauBadge;
 import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
@@ -86,7 +88,6 @@ public class ServletGestionEquipement extends HttpServlet {
                 if(m.getId() != null){
                     jsp = "/ServletGestionEquipement?action=tableauBord";
                     request.setAttribute("titrePage", "Mon espace !");
-                    request.setAttribute("titrePage", "Bienvenue !");
                 }else{
                     jsp = "/WEB-INF/jsp/Accueil.jsp";
                     //Titre de la page
@@ -97,6 +98,10 @@ public class ServletGestionEquipement extends HttpServlet {
                 //Titre de la page
                 request.setAttribute("titrePage", "Bienvenue !");
             }
+        }else if(action.equals("inscription")){
+            jsp = "/WEB-INF/jsp/Inscription.jsp";
+
+            request.setAttribute("titrePage", "Inscription"); //Titre de la page
         }
         
         /*
@@ -126,7 +131,7 @@ public class ServletGestionEquipement extends HttpServlet {
                     }
                 } else {
                     session.setAttribute("membre", m);
-                    //jsp="ServletGestionEquipement?action=tableauBord";
+                    //jsp = "/ServletGestionEquipement?action=tableauBord";
                     response.sendRedirect("ServletGestionEquipement?action=tableauBord");
                     return;
                 }
@@ -392,7 +397,8 @@ public class ServletGestionEquipement extends HttpServlet {
                         sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
                         message = "Compte administrateur créé avec succès !";
                     } else {
-                        sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                        Personne membre = sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                        doVerifierBadge(request, response, membre);
                         message = "Compte membre créé avec succès !";
                     }
                     typeMessage = "success";
@@ -441,14 +447,14 @@ public class ServletGestionEquipement extends HttpServlet {
             List<Demande> prets = sessionMembre.listePrêts(membre);
             List<Offre> offres=sessionMembre.listeMesOffres(membre);
             List<Souhait> souhaits=sessionMembre.listeMesSouhaits(membre);
-            
+            List<Badge> badges=sessionMembre.getBadgeByMembre(membre);
             request.setAttribute("dons", dons);
             request.setAttribute("prets", prets);
             request.setAttribute("offres", offres);
             request.setAttribute("souhaits", souhaits);
             // Transmettre les informations du membre à la vue JSP
             request.setAttribute("membre", membre);
-
+            request.setAttribute("badges", badges);
             // Rediriger vers la vue JSP du tableau de bord
             jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
         }
@@ -530,7 +536,7 @@ public class ServletGestionEquipement extends HttpServlet {
             Offre
         */
         else if (action.equals("creerOffre")){
-            request.setAttribute("titrePage", "Création d'un offre");
+            request.setAttribute("titrePage", "Création d'une offre");
             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
         }
         else if (action.equals("AjouterOffre")){
@@ -554,8 +560,6 @@ public class ServletGestionEquipement extends HttpServlet {
                 EtatAccessoire etatAccessoireEnum = EtatAccessoire.valueOfLabel(etatAccessoire);
                 Accessoire a = creerAccessoire(intituleAccessoire, descriptionAccessoire, typeAccessoireEnum, etatAccessoireEnum, membre);
                 
-                
-                Accessoire accessoire = sessionMembre.CreerAccessoire(a);
                 //Récupération des données du formulaire pour Offre
                 String dateDebut = request.getParameter("DateDeb");
                 String dateFin = request.getParameter("DateFin");
@@ -571,46 +575,59 @@ public class ServletGestionEquipement extends HttpServlet {
                 catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 }
-                if(intitule.trim().isEmpty() || description.trim().isEmpty() || typeOffre.trim().isEmpty() || dd==null || df==null){
+                
+                
+                if(intitule.trim().isEmpty() || description.trim().isEmpty() || typeOffre.trim().isEmpty() || dd==null){
                     jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
                     request.setAttribute("message", "Vous n'avez pas rempli tous les champs obligatoires");
                     request.setAttribute("typeMessage", "error");
-                }
-                else if( dd.before(df) && //La date de début doit être avant la date de fin
-                    dd.after(new Date(System.currentTimeMillis())) &&//La date de début doit être après la date actuelle
-                    df.after(new Date(System.currentTimeMillis())) //La date de fin doit être après la date actuelle
-                    )
-                {
-                    TypeOffre typeOffreEnum = TypeOffre.valueOfLabel(typeOffre);
-                    Offre o= creerOffre(intitule, description, typeOffreEnum, dd, df, a, membre);
-                    if(o!=null){
-                        //Accessoire accessoire = sessionMembre.CreerAccessoire(a);
-                        Offre offre = sessionMembre.creationOffre(o);
-                        if (offre != null && accessoire != null){
-                        jsp = "/ServletGestionEquipement?action=tableauBord";
-                        request.setAttribute("message", "Offre crée");
-                        request.setAttribute("typeMessage", "success");
-
-                        }
-                        else{
+                }else{
+                    
+                    boolean condition = false;
+                    if(TypeOffre.valueOfLabel(typeOffre) == TypeOffre.DON){
+                        condition = dd.after(new Date(System.currentTimeMillis()));
+                        
+                        if(condition == false){
                             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
-                            request.setAttribute("message", "Erreur lors de la création de l'offre");
+                            request.setAttribute("message", "La date de début doit être après la date actuelle.");
                             request.setAttribute("typeMessage", "error");
                         }
-                    }
-                    else{
+                    }else if(TypeOffre.valueOfLabel(typeOffre) == TypeOffre.PRET && df != null){
+                        //La date de début et de fin doit être après la date actuelle
+                        
+                        condition = (dd.after(new Date(System.currentTimeMillis())) && df.after(new Date(System.currentTimeMillis())) && dd.before(df));
+                        if(condition == false){
+                            jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
+                            request.setAttribute("message", "La date de début doit être après la date actuelle et avant la date de fin, et la date de fin doit être après la date actuelle");
+                            request.setAttribute("typeMessage", "error");
+                        }
+                    }else{
                         jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
-                        request.setAttribute("message", "Erreur lors de la création de l'offre");
+                        request.setAttribute("message", "Vous n'avez pas rempli tous les champs obligatoires");
                         request.setAttribute("typeMessage", "error");
                     }
-                }
-                else{
-                    jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
-                    request.setAttribute("message", "La date de début doit être après la date actuelle et avant la date de fin, et la date de fin doit être après la date actuelle");
-                    request.setAttribute("typeMessage", "error");
                     
-                }      
-            }
+                    if(condition){
+                        TypeOffre typeOffreEnum = TypeOffre.valueOfLabel(typeOffre);
+                        Offre o= creerOffre(intitule, description, typeOffreEnum, dd, df, a, membre);
+                        if(o!=null){
+                            Accessoire accessoire = sessionMembre.CreerAccessoire(a);
+                            Offre offre = sessionMembre.creationOffre(o);
+                            doVerifierBadge(request, response, membre);
+                            if (offre != null && accessoire != null){
+                                request.setAttribute("message", "Offre crée");
+                                request.setAttribute("typeMessage", "success");
+                                jsp="/ServletGestionEquipement?action=tableauBord";
+                            }
+                            else{
+                                jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
+                                request.setAttribute("message", "Erreur lors de la création de l'offre");
+                                request.setAttribute("typeMessage", "error");
+                            }
+                        }
+                    }
+                }    
+        }
         }
 
         // Mes equipements
@@ -687,9 +704,8 @@ public class ServletGestionEquipement extends HttpServlet {
                 Offre offre = offreFacade.find(Long.valueOf(idOffre_string));
                 Membre membre = membreFacade.find(Long.valueOf(idMembre_string));
                 sessionMembre.CreerDemande(membre, offre);
-                
-                
                 sessionMembre.updateEtatOffre(offre);
+                doVerifierBadge(request, response, membre);
                 
                 
                 request.setAttribute("message", "Offre réclamé avec succès !");
@@ -841,6 +857,30 @@ public class ServletGestionEquipement extends HttpServlet {
         o.setAccessoire(a);
         o.setUtilisateur(membre);
         return o;
+    }
+    
+    protected void doVerifierBadge(HttpServletRequest request, HttpServletResponse response, Personne membre)
+            throws ServletException, IOException {
+        
+            int nbOffre = sessionMembre.getNombreOffreByMembre(membre);
+            int nbDemande = sessionMembre.getNombreDemandeByMembre(membre);
+            int nbActions = nbOffre + nbDemande;
+            if(nbActions >= 15 && sessionMembre.verificationBadgeExistant(membre, NiveauBadge.TROIS)){
+                //Vérifier si badge 3
+                //ajouter badge 3
+                sessionMembre.creerBadge(NiveauBadge.TROIS, membre);
+                
+            }else if(nbActions >= 10 && sessionMembre.verificationBadgeExistant(membre, NiveauBadge.DEUX)){
+                //Vérifier si badge 2
+                //ajouter badge 2
+                sessionMembre.creerBadge(NiveauBadge.DEUX, membre);
+                
+            }else if(nbActions >= 5 && sessionMembre.verificationBadgeExistant(membre, NiveauBadge.UN)){
+                //ajouter badge débutant
+                sessionMembre.creerBadge(NiveauBadge.UN, membre);
+                
+                
+            }
     }
 
 }

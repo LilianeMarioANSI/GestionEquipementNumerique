@@ -54,7 +54,7 @@
                 <div id="step2" style=""display:none;">
                     <fieldset>
                         <label for="titreO">Titre de l'offre<span class="requis">*</span></label>
-                        <input type="text" id="titreO" name="titreO" value="" size="20" maxlength="20" />
+                        <input type="text" id="titreO" name="titreO" value="" size="20" maxlength="30" />
                         <label for="DescriptionO">Description <span class="requis">*</span></label>
                         <textarea id="DescriptionO" name="DescriptionO" rows="10" cols="50"></textarea>
                         <label for="typeO">Type de l'Offre<span class="requis">*</span></label>
@@ -65,7 +65,7 @@
                         </select>
                         <label for="DateDeb">Date de début<span class="requis">*</span></label>
                         <input type="Date" id="DateDeb" name="DateDeb" value="" size="20" maxlength="20" />
-                        <label for="DateFin">Date de fin<span class="requis">*</span></label>
+                        <label for="DateFin">Date de fin (non requis pour les dons)</label>
                         <input type="Date" id="DateFin" name="DateFin" value="" size="20" maxlength="20" />
 
 

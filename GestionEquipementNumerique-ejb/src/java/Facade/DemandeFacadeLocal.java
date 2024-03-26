@@ -46,6 +46,7 @@ public interface DemandeFacadeLocal {
     Demande creerDemande(Personne personne, Offre offre);
     
     void supprimerDemande(Demande demande);
+    int getNombreDemandeByMembre(Personne u);
     
     Demande rechercherDemande(long idDemande);
 }

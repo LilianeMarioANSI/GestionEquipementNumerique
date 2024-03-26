@@ -87,7 +87,14 @@ public class DemandeFacade extends AbstractFacade<Demande> implements DemandeFac
         return demande;
     }
     
-    
+    @Override
+    public int getNombreDemandeByMembre(Personne u) {
+        String txt = "SELECT COUNT(d) FROM Demande d WHERE d.utilisateur.id = :idUtilisateur";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("idUtilisateur", u.getId());
+        Long count = (Long) req.getSingleResult();
+        return count.intValue();
+    }
     
     
     /*
