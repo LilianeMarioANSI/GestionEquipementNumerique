@@ -795,6 +795,7 @@ public class ServletGestionEquipement extends HttpServlet {
                 Offre offre = offreFacade.find(Long.valueOf(idOffre_string));
                 Membre membre = membreFacade.find(Long.valueOf(idMembre_string));
                 sessionMembre.CreerDemande(membre, offre);
+                
                 sessionMembre.updateEtatOffre(offre);
                 doVerifierBadge(request, response, membre);
                 
@@ -839,20 +840,19 @@ public class ServletGestionEquipement extends HttpServlet {
             Demande demande = sessionMembre.RechercherDemande(demandeId);
 
             if(demande != null && demande.getOffre().getDateDebut().after(new Date(System.currentTimeMillis()))) {
-                Offre offre = demande.getOffre();
-                if(offre != null) {
-                    
-                    offre.setEtat(EtatOffre.DISPONIBLE);
-                    offreFacade.edit(offre);
+                boolean demandeSupprimee = sessionMembre.SupprimerDemande(demandeId);
+                if(demandeSupprimee) {
+                    Offre offre = demande.getOffre();
+                    if(offre != null) {
+                        offre.setEtat(EtatOffre.DISPONIBLE);
+                    }
+                    jsp = "/ServletGestionEquipement?action=tableauBord";
                 }
                 sessionMembre.SupprimerDemande(demandeId);
                 jsp = "/ServletGestionEquipement?action=tableauBord";
                 request.setAttribute("message", "Demande clôturer avec succès !");
                 request.setAttribute("typeMessage", "success");
             } else {
-                request.setAttribute("message", "Vous ne pouvez pas clôturer cette demande.");
-                request.setAttribute("typeMessage", "error");
-                jsp = "/ServletGestionEquipement?action=tableauBord";
             }
         }
         
@@ -867,10 +867,6 @@ public class ServletGestionEquipement extends HttpServlet {
                 Personne personne = (Personne) session.getAttribute("membre");
                 request.setAttribute("utilisateurAuth", personne);
             }
-        }
-        
-        if(jsp==null){
-            jsp="/WEB-INF/jsp/pageErreur.jsp";
         }
         RequestDispatcher Rd;
         Rd = getServletContext().getRequestDispatcher(jsp);
