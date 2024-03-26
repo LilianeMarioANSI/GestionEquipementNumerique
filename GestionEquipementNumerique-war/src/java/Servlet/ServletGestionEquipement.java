@@ -38,6 +38,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.servlet.http.HttpSession;
+import javax.sound.sampled.AudioFileFormat.Type;
+
 import java.util.List;
 /**
  *
@@ -345,7 +347,7 @@ public class ServletGestionEquipement extends HttpServlet {
                     typeMessage = "error";
                 } else {
                     String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
-                    sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                    sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
                     //sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
                     message = "Compte membre créé avec succès !";
                     
@@ -617,6 +619,88 @@ public class ServletGestionEquipement extends HttpServlet {
                 }    
         }
         }
+        
+        else if (action.equals("AfficherModifierOffre")){
+            long idOffre = Long.parseLong(request.getParameter("idOffre"));
+            Offre offre = offreFacade.find(idOffre);
+            request.setAttribute("offre",offre);
+            jsp ="/WEB-INF/jsp/FormModifOffre.jsp";
+
+        }
+        else if (action.equals("mettreAjOffre")){
+            HttpSession session = request.getSession();
+            Membre m = (Membre) session.getAttribute("membre");
+            // Transmettre les informations du membre à la vue JSP
+            String intitule= request.getParameter("titreO");
+            String description = request.getParameter("DescriptionO");
+            String typeOffre= request.getParameter("typeO");
+            String dateDebut = request.getParameter("DateDeb");
+            String dateFin = request.getParameter("DateFin");
+            Long idOffre = Long.parseLong(request.getParameter("idO"));
+            Date dd = null;
+            Date df = null;
+            try {
+                dd = Date.valueOf(dateDebut);
+                df = Date.valueOf(dateFin);
+            } 
+            catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+            TypeOffre typeOffreEnum = TypeOffre.valueOf(typeOffre);
+            if (!intitule.trim().isEmpty() && !description.trim().isEmpty() && !typeOffre.trim().isEmpty() && dd!=null){
+                // Verification pour offre = don 
+                if(typeOffreEnum==TypeOffre.DON){
+                    if(dd.after(new Date(System.currentTimeMillis())) && df==null){
+                        Boolean resultat = sessionMembre.ModifierOffre(idOffre, intitule, description, typeOffreEnum, dd, df);
+                        if(resultat){
+                            jsp = "/ServletGestionEquipement?action=tableauBord";
+                        }
+                        else{
+                            jsp="/WEB-INF/jsp/FormModifOffre.jsp";
+                            request.setAttribute("message", "Erreur lors de la modification de l'offre");
+                            request.setAttribute("typeMessage", "error");
+                        }
+                    }
+                    else{
+                        jsp="/WEB-INF/jsp/FormModifOffre.jsp";
+                        request.setAttribute("message", "La date de début doit être après la date actuelle et il ne doit pas y avoir de date de fin pour un don");
+                        request.setAttribute("typeMessage", "error");
+                    }
+                }
+                // Verification pour offre = pret
+                else if(typeOffreEnum==TypeOffre.PRET){
+                    if(dd.after(new Date(System.currentTimeMillis())) && df.after(new Date(System.currentTimeMillis())) && dd.before(df)){
+                        Boolean resultat = sessionMembre.ModifierOffre(idOffre,intitule, description, typeOffreEnum, dd, df);
+                        if(resultat){
+                            jsp = "/ServletGestionEquipement?action=tableauBord";
+                        }
+                        else{
+                            jsp="/WEB-INF/jsp/FormModifOffre.jsp";
+                            request.setAttribute("message", "Erreur lors de la modification de l'offre");
+                            request.setAttribute("typeMessage", "error");
+                        }
+                    }
+                    else{
+                        jsp="/WEB-INF/jsp/FormModifOffre.jsp";
+                        request.setAttribute("message", "La date de début doit être après la date actuelle et avant la date de fin, et la date de fin doit être après la date actuelle");
+                        request.setAttribute("typeMessage", "error");
+                    }
+                }
+            }
+            else {
+                jsp="/WEB-INF/jsp/FormModifOffre.jsp";
+                request.setAttribute("message", "Vous devez remplir tous les champs sauf la date de fin si vous faites un don");
+                request.setAttribute("typeMessage", "error");
+            }
+
+        }
+        
+        else if (action.equals("SupprimerOffre")){
+            long idOffre = Long.parseLong(request.getParameter("idOffre"));
+            Offre offreToRemove = offreFacade.find(idOffre);
+            offreFacade.remove(offreToRemove);
+            jsp = "/ServletGestionEquipement?action=tableauBord";
+        }
 
         // Mes equipements
         else if(action.equals("mesEquipements")){
@@ -648,9 +732,6 @@ public class ServletGestionEquipement extends HttpServlet {
             List<Demande> prets = sessionMembre.listePrêts(membre);
             request.setAttribute("prets", prets);
             jsp = "/WEB-INF/jsp/mesPrets.jsp";
-        }
-        else if (action.equals("afficherMesPrets")){
-
         }
         // Afficher mes dons
         else if(action.equals("AfficherMesDons")){
@@ -732,7 +813,7 @@ public class ServletGestionEquipement extends HttpServlet {
         }
         
         else {
-            jsp="/Acceuil.jsp";
+            jsp="/WEB-INF/jsp/pageErreur.jsp";
             request.setAttribute("message","PAGE N'EXISTE PAS");
         }
  
@@ -743,7 +824,7 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("utilisateurAuth", personne);
             }
         }
-
+        
         RequestDispatcher Rd;
         Rd = getServletContext().getRequestDispatcher(jsp);
         Rd.forward(request, response);

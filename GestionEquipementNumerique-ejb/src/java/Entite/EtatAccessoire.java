@@ -24,7 +24,7 @@ public enum EtatAccessoire {
 
     public static EtatAccessoire valueOfLabel(String label) {
         for (EtatAccessoire e : values()) {
-            if (e.label.equals(label)) {
+            if (e.label.equalsIgnoreCase(label)) {
                 return e;
             }
         }

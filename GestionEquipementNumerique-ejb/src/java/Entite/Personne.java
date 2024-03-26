@@ -24,7 +24,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type")
+@DiscriminatorColumn(name="type")
 public class Personne implements Serializable {
 
     private static final long serialVersionUID = 1L;

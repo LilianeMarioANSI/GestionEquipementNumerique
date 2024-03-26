@@ -79,4 +79,6 @@ public interface SessionMembreLocal {
     List<Badge> getBadgeByMembre(Membre u);
     Badge creerBadge(NiveauBadge niveau, Personne membre);
     boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau);
+
+    boolean ModifierOffre(Long idOffre, String intitule, String description, TypeOffre typeOffreEnum, Date dd, Date df);
 }
