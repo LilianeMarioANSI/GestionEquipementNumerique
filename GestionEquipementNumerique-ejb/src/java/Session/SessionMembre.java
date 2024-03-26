@@ -219,12 +219,12 @@ public class SessionMembre implements SessionMembreLocal {
     }
     
     @Override
-    public boolean verificationBadgeExistant(Membre utilisateur, NiveauBadge niveau){
+    public boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau){
         return badgeFacade.verificationBadgeExistant(utilisateur, niveau);
     }
     
     @Override
-    public Badge creerBadge(NiveauBadge niveau, Membre membre){
+    public Badge creerBadge(NiveauBadge niveau, Personne membre){
         return badgeFacade.creerBadge(niveau, membre);
     }
     

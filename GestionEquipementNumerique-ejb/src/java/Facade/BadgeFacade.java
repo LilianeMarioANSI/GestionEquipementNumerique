@@ -7,6 +7,7 @@ package Facade;
 import Entite.Badge;
 import Entite.Membre;
 import Entite.NiveauBadge;
+import Entite.Personne;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -33,7 +34,7 @@ public class BadgeFacade extends AbstractFacade<Badge> implements BadgeFacadeLoc
     }
 
     @Override
-    public Badge creerBadge(NiveauBadge niveau, Membre utilisateur) {
+    public Badge creerBadge(NiveauBadge niveau, Personne utilisateur) {
         Badge b = new Badge();
         b.setNiveau(niveau);
         b.setUtilisateur(utilisateur);
@@ -42,9 +43,9 @@ public class BadgeFacade extends AbstractFacade<Badge> implements BadgeFacadeLoc
     }
     
     @Override
-    public boolean verificationBadgeExistant(Membre utilisateur, NiveauBadge niveau){
+    public boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau){
         
-        String txt = "SELECT b FROM Badge b WHERE b.getUtilisateur.id= :idUtilisateur AND b.niveau = :niveauBadge";
+        String txt = "SELECT b FROM Badge b WHERE b.utilisateur.id= :idUtilisateur AND b.niveau = :niveauBadge";
         Query req = getEntityManager().createQuery(txt);
         req.setParameter("idUtilisateur", utilisateur.getId());
         req.setParameter("niveauBadge", niveau);
@@ -53,7 +54,7 @@ public class BadgeFacade extends AbstractFacade<Badge> implements BadgeFacadeLoc
     }
     
     @Override
-    public List<Badge> getBadgeByMembre(Membre utilisateur){
+    public List<Badge> getBadgeByMembre(Personne utilisateur){
         String txt = "SELECT b FROM Badge b WHERE b.utilisateur.id= :idUtilisateur";
         Query req = getEntityManager().createQuery(txt);
         req.setParameter("idUtilisateur", utilisateur.getId());

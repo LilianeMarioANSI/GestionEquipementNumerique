@@ -77,6 +77,6 @@ public interface SessionMembreLocal {
     int getNombreOffreByMembre(Personne u);
     
     List<Badge> getBadgeByMembre(Membre u);
-    Badge creerBadge(NiveauBadge niveau, Membre membre);
-    boolean verificationBadgeExistant(Membre utilisateur, NiveauBadge niveau);
+    Badge creerBadge(NiveauBadge niveau, Personne membre);
+    boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau);
 }

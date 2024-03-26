@@ -344,8 +344,8 @@ public class ServletGestionEquipement extends HttpServlet {
                     typeMessage = "error";
                 } else {
                     String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
-                    //sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
-                    sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                    sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                    //sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
                     message = "Compte membre créé avec succès !";
                     
                     typeMessage = "success";
@@ -395,11 +395,10 @@ public class ServletGestionEquipement extends HttpServlet {
                     String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
                     if (isAdmin) {
                         sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
-                        //doVerifierBadge(request, response, membre);
                         message = "Compte administrateur créé avec succès !";
                     } else {
-                        sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
-                        //doVerifierBadge(request, response, membre);
+                        Personne membre = sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                        doVerifierBadge(request, response, membre);
                         message = "Compte membre créé avec succès !";
                     }
                     typeMessage = "success";
@@ -537,7 +536,7 @@ public class ServletGestionEquipement extends HttpServlet {
             Offre
         */
         else if (action.equals("creerOffre")){
-            request.setAttribute("titrePage", "Création d'un offre");
+            request.setAttribute("titrePage", "Création d'une offre");
             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
         }
         else if (action.equals("AjouterOffre")){
@@ -860,7 +859,7 @@ public class ServletGestionEquipement extends HttpServlet {
         return o;
     }
     
-    protected void doVerifierBadge(HttpServletRequest request, HttpServletResponse response, Membre membre)
+    protected void doVerifierBadge(HttpServletRequest request, HttpServletResponse response, Personne membre)
             throws ServletException, IOException {
         
             int nbOffre = sessionMembre.getNombreOffreByMembre(membre);

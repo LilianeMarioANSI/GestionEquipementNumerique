@@ -5,6 +5,7 @@
 package Entite;
 
 import java.io.Serializable;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
  * @author loulo
  */
 @Entity
+@DiscriminatorValue("SuperAdministrateur")
 public class SuperAdministrateur extends Personne implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -22,10 +24,12 @@ public class SuperAdministrateur extends Personne implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
