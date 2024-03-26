@@ -14,6 +14,7 @@ import Entite.Offre;
 import Entite.Personne;
 import Entite.Souhait;
 import Entite.TypeAccessoire;
+import Entite.TypeOffre;
 import Entite.TypeSouhait;
 import Facade.AccessoireFacadeLocal;
 import Facade.BadgeFacadeLocal;
@@ -256,5 +257,23 @@ public class SessionMembre implements SessionMembreLocal {
     @Override
     public Demande RechercherDemande(long id) {
         return demandeFacade.rechercherDemande(id);
+    }
+
+    @Override
+    public boolean ModifierOffre(Long idOffre, String intitule, String description, TypeOffre typeOffreEnum, Date dd, Date df){
+        Offre o= offreFacade.find(idOffre);
+        if (o==null){
+            return false;
+        }
+        else {
+            o.setIntitule(intitule);
+            o.setDescription(description);
+            o.setTypeOffre(typeOffreEnum);
+            o.setDateDebut(dd);
+            o.setDateFin(df);
+            offreFacade.modifierOffre(o);
+            return true;
+        }
+
     }
 }

@@ -178,8 +178,20 @@
                             <input type="text" name="agence" id="agence" class="editable" required readonly value="${membre.agence.toString()}">
                         </div>
                         
-                    </div>
-                </form>
+                        
+                        
+                     <div class="field-wrapper">
+                            <label for="bureau">Bureau :</label>
+                            <input type="text" name="bureau" id="bureau" class="editable" required readonly value="${membre.bureau}">
+                        </div>
+                        
+                        <div class="action-wrapper right">
+                            <input type="hidden" name="action" value="ModifierMembre">
+                            <button type="button" class="edit" id="toggleEdit"> Modifier </button>
+                            <button type="submit" class="submit"> Enregistrer </button>
+
+                        </div>
+                    </form>
             </section>
         </main>
     </body>

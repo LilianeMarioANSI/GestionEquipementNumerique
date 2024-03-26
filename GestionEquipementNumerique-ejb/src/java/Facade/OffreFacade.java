@@ -232,5 +232,12 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
         req.setParameter("idUtilisateur", u.getId());
         Long count = (Long) req.getSingleResult();
         return count.intValue();
+
+    }
+
+    @Override
+    public Boolean modifierOffre(Offre o) {
+        em.merge(o);
+        return true;
     }
 }

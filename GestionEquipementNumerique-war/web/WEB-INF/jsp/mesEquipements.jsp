@@ -4,6 +4,7 @@
     Author     : Utilisateur
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Entite.Accessoire"%>
 <%@page import="Entite.Offre"%>
 <%@page import="Entite.Membre"%>
@@ -92,6 +93,7 @@
                   </tr>
                 </thead>
                 <tbody>
+                    <% SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");%>
                     <%
                         List<Offre> lesOffres = (List<Offre>) request.getAttribute("offres");
                         if (lesOffres != null) {
@@ -100,16 +102,18 @@
                         <tr class="offre-item" data-offre-type="<%= offre.getTypeOffre() %>">
                             <td style="vertical-align: middle"><%= offre.getIntitule()%></td>
                             <td style="vertical-align: middle"><%= offre.getDescription()%></td>
-                            <td style="vertical-align: middle"><%= offre.getDatePublication() %></td>
+                            <td style="vertical-align: middle"><%= dateFormat.format(offre.getDatePublication()) %></td>
                             <td style="vertical-align: middle"><%= offre.getTypeOffre() %></td>
                             <td style="vertical-align: middle"><%= offre.getAccessoire().getDesignation() %></td>
                             <td class="action-cell" style="vertical-align: middle">
                                 <form action="ServletGestionEquipement">
                                     <input type="hidden" name="action" value="AfficherModifierOffre">
+                                    <input type="hidden" name="idOffre" value="<%= offre.getId()%>">
                                     <button class="edit">Modifier</button>
                                 </form>
                                 <form action="ServletGestionEquipement">
                                     <input type="hidden" name="action" value="SupprimerOffre">
+                                    <input type="hidden" name="idOffre" value="<%= offre.getId()%>">
                                     <button class="delete">Supprimer</button>
                                 </form>
                                 

@@ -46,7 +46,7 @@ public enum Agence {
     //Trouve la valeur à partir du label
     public static Agence valueOfLabel(String label) {
         for (Agence e : values()) {
-            if (e.label.equals(label)) {
+            if (e.label.equalsIgnoreCase(label)) {
                 return e;
             }
         }
