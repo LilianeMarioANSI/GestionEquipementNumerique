@@ -6,6 +6,7 @@ package Facade;
 
 import Entite.Agence;
 import Entite.Membre;
+import Entite.Personne;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -131,9 +132,18 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
     }
     
     @Override
-    public List<Membre> ListeMembre() {
+    public List<Membre> ListeMembres() {
         String txt = "SELECT m FROM Membre m";
         Query req = getEntityManager().createQuery(txt);
+        List<Membre> result = req.getResultList();
+        return result;
+    }
+    
+    @Override
+    public List<Membre> ListeMembresMemeAgence(Personne utilisateur) {
+        String txt = "SELECT m FROM Membre m WHERE m.agence = :paramAgence";
+        Query req = getEntityManager().createQuery(txt);
+        req.setParameter("paramAgence", utilisateur.getAgence());
         List<Membre> result = req.getResultList();
         return result;
     }

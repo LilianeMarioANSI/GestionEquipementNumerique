@@ -74,10 +74,8 @@
                 </div>
                         <button type="submit" class="submit">Créer</button>
             </form>
-        </main>
-        <footer>
             <p id="reminder-message">Les accessoires défectueux doivent être ramenés à la CIL / SITI.</p>
-        </footer>
-
+        </main>
+        <%@include file="/WEB-INF/jspf/Footer.jspf" %>                
     </body>
 </html>

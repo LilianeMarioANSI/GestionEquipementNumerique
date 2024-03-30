@@ -10,13 +10,10 @@
         <ul>
             <li><a href="ServletGestionEquipement?action=analytics" class="nav-link">Tableau de bord</a></li>
             <li><a href="ServletGestionEquipement?action=afficherMembres" class="nav-link">Gestion utilisateurs</a></li>
-            <li><a href="ServletGestionEquipement?action=logout" class="nav-link">Déconnexion</a></li>
         </ul>
     </div>
     <div class="user-navbar">
-        <div>
-            <a href="#" class="nav-link"><img class="small-icon" src="Assets/icons/person-circle.svg" alt="logo"/></a>
-        </div>
+        <li><a href="ServletGestionEquipement?action=logout" class="nav-link">Déconnexion</a></li>
     </div>
     
     

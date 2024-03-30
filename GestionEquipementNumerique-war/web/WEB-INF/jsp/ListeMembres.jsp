@@ -4,6 +4,7 @@
     Author     : Utilisateur
 --%>
 
+<%@page import="Entite.Personne"%>
 <%@page import="Entite.Superviseur"%>
 <%@page import="Entite.Membre"%>
 <%@page import="java.util.List"%>
@@ -78,5 +79,6 @@
                 </tbody>
             </table>
         </main>
+        <%@include file="/WEB-INF/jspf/Footer.jspf" %>        
     </body>
 </html>

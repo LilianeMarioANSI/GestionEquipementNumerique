@@ -1,0 +1,10 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<link rel="stylesheet" type="text/css" href="Style/footer.css">
+
+<footer>
+    <div>
+        <a href='politiqueConfidentialite.jsp'>Politique de confidentialité</a>
+        <a href='mentionLegale.jsp'>Mention légale</a>
+    </div>
+</footer>

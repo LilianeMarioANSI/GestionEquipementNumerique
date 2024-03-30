@@ -50,5 +50,6 @@
                 <p>Vous n'avez pas encore de compte ? <a href="ServletGestionEquipement?action=inscription">Inscrivez vous ici.</a></p>
             </section>
         </main>
+        <%@include file="/WEB-INF/jspf/Footer.jspf" %>
     </body>
 </html>

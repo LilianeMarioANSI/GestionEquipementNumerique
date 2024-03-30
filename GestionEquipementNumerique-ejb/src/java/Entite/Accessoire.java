@@ -4,17 +4,24 @@
  */
 package Entite;
 
+import Facade.AccessoireFacadeLocal;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -23,7 +30,6 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Accessoire implements Serializable {
 
-    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -169,6 +175,14 @@ public class Accessoire implements Serializable {
 
     public void setOffre(Offre offre) {
         this.offre = offre;
+    }
+    
+    public void supprimerUnProprietaire(Personne p){
+
+        if (utilisateurs != null) {
+            utilisateurs.remove(p);
+            
+        }
     }
 
     

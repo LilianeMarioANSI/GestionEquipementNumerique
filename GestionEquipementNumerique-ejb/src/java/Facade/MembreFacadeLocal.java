@@ -6,6 +6,7 @@ package Facade;
 
 import Entite.Agence;
 import Entite.Membre;
+import Entite.Personne;
 import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
@@ -47,5 +48,7 @@ public interface MembreFacadeLocal {
     
     void ModifierInformations(Membre membre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence nouvelleAgence);
     
-List<Membre> ListeMembre();
+    List<Membre> ListeMembres();
+    
+    List<Membre> ListeMembresMemeAgence(Personne utilisateur);
 }

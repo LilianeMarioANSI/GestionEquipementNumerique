@@ -33,15 +33,19 @@
         <%@include file="/WEB-INF/jspf/navigation_membre.jspf" %>
         <%@include file="/WEB-INF/jspf/header.jspf" %>
         
-        <main class="vertical">
+        <main >
         
         <%@include file="/WEB-INF/jspf/message.jspf" %>
             <div class="filter-section">
-                <label for="filterDon">Dons :</label>
-                <input type="checkbox" id="filterDon">
-                <label for="filterPret">Prêts :</label>
-                <input type="checkbox" id="filterPret">
-                </br>
+                <span>
+                    <label for="filterDon">Dons :</label>
+                    <input type="checkbox" id="filterDon">
+                </span>
+                <span>
+                    <label for="filterPret">Prêts :</label>
+                    <input type="checkbox" id="filterPret">
+                </span>
+    
                 <label for="etatEquipement">État :</label>
                 <select id="etatEquipement">
                     <option value="Tous">Tous</option>
@@ -49,7 +53,7 @@
                     <option value="<%= e.label %>"><%= e.label %></option>
                     <% } %>
                 </select>
-                </br>
+                
                 <label for="categorie">Catégorie :</label>
                 <select id="categorie">
                     <option value="Toutes">Toutes</option>
@@ -57,9 +61,11 @@
                     <option value="<%= t.label %>"><%= t.label %></option>
                     <% } %>
                 </select>
-                </br>
-                <button id="applyFilterBtn">Appliquer</button>
-                <button id="resetFilterBtn">Réinitialiser</button>
+                <span>
+                    <button class="submit" id="applyFilterBtn">Appliquer</button>
+                    <button id="resetFilterBtn">Réinitialiser</button>
+                </span>
+                
             </div>
             
             <div class="offerContainer">
@@ -68,7 +74,7 @@
                     if(offres != null && !offres.isEmpty()) {
                         for(Offre offre : offres) {
                 %>
-<div class="offre-item" data-offre-type="<%= offre.getTypeOffre() %>" data-etat="<%= offre.getAccessoire().getEtat().label %>" data-categorie="<%= offre.getAccessoire().getTypeAccessoire().label %>">
+<div class="offer offre-item" data-offre-type="<%= offre.getTypeOffre() %>" data-etat="<%= offre.getAccessoire().getEtat().label %>" data-categorie="<%= offre.getAccessoire().getTypeAccessoire().label %>">
                         <%
                             String icon;
                             TypeAccessoire typeAccessoireOffre = offre.getAccessoire().getTypeAccessoire();
@@ -136,5 +142,6 @@
                 %>
             </div>
         </main>
+        <%@include file="/WEB-INF/jspf/Footer.jspf" %>
     </body>
 </html>

@@ -9,6 +9,7 @@ import Entite.Agence;
 import Entite.EtatAccessoire;
 import Entite.Membre;
 import Entite.Offre;
+import Entite.Personne;
 import Entite.Superviseur;
 import Entite.TypeOffre;
 import Facade.AccessoireFacadeLocal;
@@ -68,7 +69,12 @@ public class SessionAdministrateur implements SessionAdministrateurLocal {
     */
     @Override
     public List<Membre> ListeMembres(){
-        return membreFacade.ListeMembre();
+        return membreFacade.ListeMembres();
+    }
+    
+    @Override
+    public List<Membre> ListeMembresMemeAgence(Personne utilisateur){
+        return membreFacade.ListeMembresMemeAgence(utilisateur);
     }
     
     @Override
