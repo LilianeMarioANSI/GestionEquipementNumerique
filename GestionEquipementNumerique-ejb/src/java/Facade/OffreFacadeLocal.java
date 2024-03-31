@@ -62,4 +62,6 @@ public interface OffreFacadeLocal {
     List<Offre> MesEquipementDisponible(Long idPersonne);
     int getNombreOffreByMembre(Personne u);
     
+    
+    Boolean modifierOffre(Offre o);
 }
