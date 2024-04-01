@@ -172,27 +172,31 @@
                             <label for="telephone">Téléphone :</label>
                             <input type="tel" id="telephone" name="telephone" pattern="[0-9]{10}" class="editable" required readonly value="${membre.telephone}">
                         </div>
+                        
+                        <div class="field-wrapper">
+                            <label for="bureau">Bureau :</label>
+                            <input type="text" name="bureau" id="bureau" class="editable" required readonly value="${membre.bureau.toString()}">
+                        </div>
 
                         <div class="field-wrapper">
                             <label for="agence">Agence :</label>
                             <input type="text" name="agence" id="agence" class="editable" required readonly value="${membre.agence.toString()}">
                         </div>
                         
-                        
-                        
-                     <div class="field-wrapper">
-                            <label for="bureau">Bureau :</label>
-                            <input type="text" name="bureau" id="bureau" class="editable" required readonly value="${membre.bureau}">
+                        <div class='action-wrapper right'>
+                            <button type='button' id='toggleEdit'>Modifier</button>
+                            <form method='post' action='ServeletGestionEquipement'> 
+                                <input type='hidden' name='action' value='ModifierMembre'>
+                                <button type='submit' class='submit'>Enregistrer</button>
+                            </form>
                         </div>
                         
-                        <div class="action-wrapper right">
-                            <input type="hidden" name="action" value="ModifierMembre">
-                            <button type="button" class="edit" id="toggleEdit"> Modifier </button>
-                            <button type="submit" class="submit"> Enregistrer </button>
-
-                        </div>
-                    </form>
+                        
+                        
+                    </div>
+                </form>
             </section>
         </main>
+        <%@include file="/WEB-INF/jspf/Footer.jspf" %>                
     </body>
 </html>

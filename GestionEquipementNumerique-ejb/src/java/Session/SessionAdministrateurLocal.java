@@ -9,6 +9,7 @@ import Entite.Agence;
 import Entite.EtatAccessoire;
 import Entite.Membre;
 import Entite.Offre;
+import Entite.Personne;
 import Entite.Superviseur;
 import Entite.TypeOffre;
 import java.sql.Date;
@@ -39,6 +40,8 @@ public interface SessionAdministrateurLocal {
     List<Accessoire> getAccessoireByEtat(EtatAccessoire etat);
     
     List<String> getTop5AgenceByOffre(Date dateDebut, Date dateFin);
+    
+    List<Membre> ListeMembresMemeAgence(Personne utilisateur);
     
     List<Membre> ListeMembres();
     

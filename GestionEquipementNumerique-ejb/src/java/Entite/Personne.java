@@ -17,6 +17,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 
 /**
  *
@@ -206,7 +207,7 @@ public class Personne implements Serializable {
         Offres
     */
     
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "utilisateur")
     private List<Offre> offres;
 
     public List<Offre> getOffres() {
@@ -236,7 +237,7 @@ public class Personne implements Serializable {
         Accessoires
     */
     
-    @ManyToMany(mappedBy = "utilisateurs", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "utilisateurs")
     private List<Accessoire> accessoires;
 
     public List<Accessoire> getAccessoires() {
@@ -246,5 +247,22 @@ public class Personne implements Serializable {
     public void setAccessoires(List<Accessoire> accessoires) {
         this.accessoires = accessoires;
     }
+    
+    @PreRemove
+    private void supprimerPersonneDesOffres() {
+        for (Offre p : offres) {
+            p.setUtilisateur(null);
+        }
+        
+        for (Accessoire a : accessoires) {
+            a.supprimerUnProprietaire(this);
+        }
+        
+        for (Badge b : badges) {
+            b.setUtilisateur(null);
+        }
+        
+    }
+    
     
 }

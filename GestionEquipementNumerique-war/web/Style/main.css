@@ -25,6 +25,8 @@ html{
     --header-size : 80px;
     --nav-size : 60px;
     font-family: sans-serif;
+    min-height: 100%;
+    position: relative;
 }
 
 b{

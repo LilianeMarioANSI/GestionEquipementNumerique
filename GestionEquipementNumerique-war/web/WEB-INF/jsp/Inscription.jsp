@@ -53,7 +53,8 @@
 
 
                         <input type="hidden" name="action" value="creerMembre">
-
+                        <p>En créant un compte, vous acceptez les conditions d'utilisation et <br/>
+                            adhérez à notre politique de confidentialité.</p>
 
                         <div class="action-wrapper right">
                             <a href="ServletGestionEquipement">Se connecter</a>
@@ -61,6 +62,7 @@
                         </div>
                     </form>
             </section>
-        </main>                 
+        </main>
+        <%@include file="/WEB-INF/jspf/Footer.jspf" %>
     </body>
 </html>

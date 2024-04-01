@@ -44,8 +44,8 @@
                 int intNbPretPublic = nbPretPublic != null ? Integer.parseInt(nbPretPublic) : 0;
 
                 if(intNbMembre > 0 ){
-                    partDeMembreAvecOffre = intNbMembreAvecOffre / intNbMembre;
-                    partDeMembreAvecDemande = intNbMembreAvecDemande / intNbMembre;
+                    partDeMembreAvecOffre = (intNbMembreAvecOffre / intNbMembre) * 100;
+                    partDeMembreAvecDemande = (intNbMembreAvecDemande / intNbMembre) * 100;
                 } else {
                     partDeMembreAvecOffre = 0;
                     partDeMembreAvecDemande = 0;
@@ -111,5 +111,6 @@
             
             
         </main>
+        <%@include file="/WEB-INF/jspf/Footer.jspf" %>    
     </body>
 </html>

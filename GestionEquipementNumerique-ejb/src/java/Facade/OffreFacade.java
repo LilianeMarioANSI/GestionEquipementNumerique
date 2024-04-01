@@ -172,7 +172,8 @@ public class OffreFacade extends AbstractFacade<Offre> implements OffreFacadeLoc
     @Override
     public List<Offre> catalogueOffres() {
         TypedQuery<Offre> query = getEntityManager().createQuery(
-                "SELECT o FROM Offre o", Offre.class);
+                "SELECT o FROM Offre o WHERE o.utilisateur IS NOT NULL AND o.etat = :etatOffre", Offre.class);
+        query.setParameter("etatOffre", EtatOffre.DISPONIBLE);
         return query.getResultList();
     }
     

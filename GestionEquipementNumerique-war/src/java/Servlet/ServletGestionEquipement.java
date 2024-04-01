@@ -215,7 +215,9 @@ public class ServletGestionEquipement extends HttpServlet {
             
             if(m ==true){
                 jsp = "/WEB-INF/jsp/ListeMembres.jsp";
-                List<Membre> listeMembres = sessionAdministrateur.ListeMembres();
+                HttpSession session = request.getSession(false);
+                Personne membre = (Personne) session.getAttribute("administrateur");
+                List<Membre> listeMembres = sessionAdministrateur.ListeMembresMemeAgence(membre);
                 request.setAttribute("listeMembres", listeMembres);
                 request.setAttribute("titrePage", "Membres CGI");
                 request.setAttribute("message", "Suppression enregistrées");
@@ -302,8 +304,10 @@ public class ServletGestionEquipement extends HttpServlet {
         }
         
         else if (action.equals("afficherMembres")) {
+            HttpSession session = request.getSession(false);
+            Personne membre = (Personne) session.getAttribute("administrateur");
             jsp = "/WEB-INF/jsp/ListeMembres.jsp";
-            List<Membre> listeMembres = sessionAdministrateur.ListeMembres();
+            List<Membre> listeMembres = sessionAdministrateur.ListeMembresMemeAgence(membre);
             request.setAttribute("listeMembres", listeMembres);
             request.setAttribute("titrePage", "Membres CGI");
         }
@@ -347,8 +351,8 @@ public class ServletGestionEquipement extends HttpServlet {
                     typeMessage = "error";
                 } else {
                     String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
+                    //sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
                     sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
-                    //sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
                     message = "Compte membre créé avec succès !";
                     
                     typeMessage = "success";
@@ -778,7 +782,7 @@ public class ServletGestionEquipement extends HttpServlet {
                 doVerifierBadge(request, response, membre);
                 
                 String messageValidation = "Votre réclamation de l'offre a été effectuée avec succès. "
-            + "Votre accessoire est maintenant disponible. Veuillez suivre les instructions suivantes pour le récupérer : [Instructions de mise à disposition].";
+            + "Votre accessoire est maintenant disponible. Vous trouverez les instructions de récupérations dans les onglets mes Prêts et mes dons.";
 
                 
                 request.setAttribute("message", messageValidation);
@@ -787,26 +791,49 @@ public class ServletGestionEquipement extends HttpServlet {
             jsp = "/ServletGestionEquipement?action=tableauBord";
         }
         
-        else if(action.equals("SupprimerDemande")) {
+//        else if(action.equals("SupprimerDemande")) {
+//            long demandeId = Long.parseLong(request.getParameter("demandeId"));
+//
+//            Demande demande = sessionMembre.RechercherDemande(demandeId);
+//
+//            if(demande != null && demande.getOffre().getDateDebut().after(new Date(System.currentTimeMillis()))) {
+//                boolean demandeSupprimee = sessionMembre.SupprimerDemande(demandeId);
+//                if(demandeSupprimee) {
+//                    Offre offre = demande.getOffre();
+//                    if(offre != null) {
+//                        offre.setEtat(EtatOffre.DISPONIBLE);
+//                    }
+//                    jsp = "/ServletGestionEquipement?action=tableauBord";
+//                } else {
+//                    request.setAttribute("message", "Échec de la suppression de la demande.");
+//                    request.setAttribute("typeMessage", "error");
+//                    jsp = "/ServletGestionEquipement?action=tableauBord";
+//                }
+//            } else {
+//                request.setAttribute("message", "Vous ne pouvez pas supprimer cette demande.");
+//                request.setAttribute("typeMessage", "error");
+//                jsp = "/ServletGestionEquipement?action=tableauBord";
+//            }
+//        }
+        
+        else if(action.equals("cloturerDemande")) {
             long demandeId = Long.parseLong(request.getParameter("demandeId"));
 
             Demande demande = sessionMembre.RechercherDemande(demandeId);
 
             if(demande != null && demande.getOffre().getDateDebut().after(new Date(System.currentTimeMillis()))) {
-                boolean demandeSupprimee = sessionMembre.SupprimerDemande(demandeId);
-                if(demandeSupprimee) {
-                    Offre offre = demande.getOffre();
-                    if(offre != null) {
-                        offre.setEtat(EtatOffre.DISPONIBLE);
-                    }
-                    jsp = "/ServletGestionEquipement?action=tableauBord";
-                } else {
-                    request.setAttribute("message", "Échec de la suppression de la demande.");
-                    request.setAttribute("typeMessage", "error");
-                    jsp = "/ServletGestionEquipement?action=tableauBord";
+                Offre offre = demande.getOffre();
+                if(offre != null) {
+                    
+                    offre.setEtat(EtatOffre.DISPONIBLE);
+                    offreFacade.edit(offre);
                 }
+                sessionMembre.SupprimerDemande(demandeId);
+                jsp = "/ServletGestionEquipement?action=tableauBord";
+                request.setAttribute("message", "Demande clôturer avec succès !");
+                request.setAttribute("typeMessage", "success");
             } else {
-                request.setAttribute("message", "Vous ne pouvez pas supprimer cette demande.");
+                request.setAttribute("message", "Vous ne pouvez pas clôturer cette demande.");
                 request.setAttribute("typeMessage", "error");
                 jsp = "/ServletGestionEquipement?action=tableauBord";
             }

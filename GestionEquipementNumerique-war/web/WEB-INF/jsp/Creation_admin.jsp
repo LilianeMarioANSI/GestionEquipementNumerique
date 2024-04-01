@@ -68,6 +68,6 @@
                 </form>
             </section>
     </main>
-                        
+    <%@include file="/WEB-INF/jspf/Footer.jspf" %>                    
     <script src="./Js/ConfirmPassword.js"></script>
 </html>
