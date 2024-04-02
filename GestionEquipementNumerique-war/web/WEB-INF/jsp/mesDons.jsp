@@ -4,6 +4,7 @@
     Author     : LILIANE
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
 <%@page import="Entite.Demande"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -43,6 +44,8 @@
                                 <h2><%= d.getOffre().getIntitule()%></h2>
                                 <p><%= d.getOffre().getAccessoire().getDesignation() %></p>
                                 <p><%= d.getStatut().label%></p>
+                                <% SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");%>
+                                <p>Date Début de l'emprunt: <%= dateFormat.format(d.getDateDemande())%></p>
                                 <div class="action-wrapper right">
                                     <button class="popup-button submit" 
                                             onclick="openPopup('<p>Veuillez vous rendre à l\'agence de <b><%= d.getOffre().getUtilisateur().getAgence().label %></b> au bureau <b><%= d.getOffre().getUtilisateur().getBureau()%></b> ou contactez directement <b><%= d.getOffre().getUtilisateur().getPrenom()%> <%= d.getOffre().getUtilisateur().getNom()%></b> par mail ou téléphone.</p> \n\

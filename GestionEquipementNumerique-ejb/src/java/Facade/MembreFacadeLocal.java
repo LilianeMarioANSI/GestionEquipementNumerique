@@ -51,4 +51,5 @@ public interface MembreFacadeLocal {
     List<Membre> ListeMembres();
     
     List<Membre> ListeMembresMemeAgence(Personne utilisateur);
+    Membre rechercherMembreParLogin(String login);
 }

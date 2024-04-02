@@ -70,6 +70,17 @@ public class SessionMembre implements SessionMembreLocal {
     public Personne RechercherPersonne(long id) {
         return personneFacade.rechercherPersonne(id);
     }
+
+    @Override
+    public Boolean RechercherMembreParLogin(String login) {
+        Membre m =membreFacade.rechercherMembreParLogin(login);
+        if(m!=null){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     
     /*
         Membre
