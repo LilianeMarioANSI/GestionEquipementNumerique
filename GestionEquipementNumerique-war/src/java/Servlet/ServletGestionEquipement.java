@@ -941,24 +941,66 @@ public class ServletGestionEquipement extends HttpServlet {
         String message;
         String typeMessage;
         
-        if ( dateDebut.trim().isEmpty() || dateFin.trim().isEmpty()|| description.trim().isEmpty()){
+        if ( typeAccessoire==null|| typeSouhait==null||description.trim().isEmpty()){
             message = "Vous n'avez pas rempli tous les champs obligatoires. ";
             typeMessage = "error";
+            request.setAttribute( "message", message );
+            request.setAttribute( "typeMessage", typeMessage );
         }else if(session == null){
             message = "Vous n'avez pas rempli tous les champs obligatoires. ";
             typeMessage = "error";
+            request.setAttribute( "message", message );
+            request.setAttribute( "typeMessage", typeMessage );
             response.sendRedirect("/ServletGestionEquipement");
-        } else {
+        }
+        else {
             Membre membre = (Membre) session.getAttribute("membre");
             Date datePublication = Date.valueOf(LocalDate.now());
             Date dateDebut_sql = Date.valueOf(dateDebut);
-            Date dateFin_sql = Date.valueOf(dateFin);
-            sessionMembre.CreerSouhait(datePublication, dateDebut_sql, dateFin_sql, typeSouhait, typeAccessoire, description, membre);
-            message = "Souhait créé avec succès !";
-            typeMessage = "success";
+            
+            if (typeSouhait== TypeSouhait.PRET){
+                Date dateFin_sql;
+                if(!dateFin.trim().isEmpty()){
+                    dateFin_sql = Date.valueOf(dateFin);
+                    if (dateDebut_sql.after(new Date(System.currentTimeMillis())) && dateFin_sql.after(new Date(System.currentTimeMillis())) && dateDebut_sql.before(dateFin_sql)&& ! dateDebut.trim().isEmpty() && ! dateFin.trim().isEmpty()){
+                        sessionMembre.CreerSouhait(datePublication, dateDebut_sql, dateFin_sql, typeSouhait, typeAccessoire, description, membre);
+                        message = "Souhait créé avec succès !";
+                        typeMessage = "success";
+                        request.setAttribute( "message", message );
+                        request.setAttribute( "typeMessage", typeMessage );
+                    }
+                    else{
+                        message = "La date de début doit être après la date actuelle et avant la date de fin, et la date de fin doit être après la date actuelle";
+                        typeMessage = "error";
+                        request.setAttribute( "message", message );
+                        request.setAttribute( "typeMessage", typeMessage );
+                    }
+                }else{
+                    message = "La date de début doit être après la date actuelle et avant la date de fin, et la date de fin doit être après la date actuelle";
+                    typeMessage = "error";
+                    request.setAttribute( "message", message );
+                    request.setAttribute( "typeMessage", typeMessage );
+                }
+                
+            }else{
+                if (typeSouhait == TypeSouhait.DON){
+                    if (dateDebut_sql.after(new Date(System.currentTimeMillis())) && !dateDebut.trim().isEmpty()){
+                        sessionMembre.CreerSouhait(datePublication, dateDebut_sql, null, typeSouhait, typeAccessoire, description, membre);
+                        message = "Souhait créé avec succès !";
+                        typeMessage = "success";
+                        request.setAttribute( "message", message );
+                        request.setAttribute( "typeMessage", typeMessage );
+                    }
+                    else{
+                        message = "La date de début doit être après la date actuelle";
+                        typeMessage = "error";
+                        request.setAttribute( "message", message );
+                        request.setAttribute( "typeMessage", typeMessage );
+                    }
+                }
+            }
+        
         }
-        request.setAttribute( "message", message );
-        request.setAttribute( "typeMessage", typeMessage );
     }
     
     protected Accessoire creerAccessoire (String intituleAccessoire, String descriptionAccessoire, TypeAccessoire typeAccessoire, EtatAccessoire etatAccessoire, Membre membre){

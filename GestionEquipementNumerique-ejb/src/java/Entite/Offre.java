@@ -221,7 +221,7 @@ public class Offre implements Serializable {
         Demande
     */
     
-    @OneToMany(mappedBy = "offre")
+    @OneToMany(mappedBy = "offre", cascade = CascadeType.REMOVE)
     @Expose(serialize = false, deserialize = false)
     private List<Demande> demandes;
     
