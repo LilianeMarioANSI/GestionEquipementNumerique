@@ -53,8 +53,8 @@
 
 
                         <input type="hidden" name="action" value="creerMembre">
-                        <p>En créant un compte, vous acceptez les conditions d'utilisation et <br/>
-                            adhérez à notre politique de confidentialité.</p>
+                        <input type="checkbox" required>
+                        J'accepte les conditions d'utilisation et j'adhére à votre politique de confidentialité
 
                         <div class="action-wrapper right">
                             <a href="ServletGestionEquipement">Se connecter</a>

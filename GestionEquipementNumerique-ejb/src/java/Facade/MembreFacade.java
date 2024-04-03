@@ -158,4 +158,16 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         return result.size();
     }
     
+    @Override
+    public Membre rechercherMembreParLogin(String login) {
+        Query req = getEntityManager().createQuery(
+                "SELECT m FROM Membre m WHERE m.login = :login");
+        req.setParameter("login", login);
+        List<Membre> result = req.getResultList();
+        if(result.isEmpty()){
+            return null;
+        }else{
+            return result.get(0);
+        }
+    }
 }

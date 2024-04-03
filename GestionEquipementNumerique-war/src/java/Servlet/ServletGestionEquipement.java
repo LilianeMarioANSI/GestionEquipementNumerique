@@ -352,15 +352,21 @@ public class ServletGestionEquipement extends HttpServlet {
                 } else {
                     String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
                     //sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
-                    sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
-                    message = "Compte membre créé avec succès !";
-                    
-                    typeMessage = "success";
-
-                    request.setAttribute("message", message);
-                    request.setAttribute("typeMessage", typeMessage);
-                    request.getRequestDispatcher("/WEB-INF/jsp/Accueil.jsp").forward(request, response);
-                    return;
+                    Boolean recherche= sessionMembre.RechercherMembreParLogin(login);
+                    if (recherche==true){
+                        message = "Ce login est déjà utilisé.";
+                        typeMessage = "error";
+                        request.setAttribute("message", message);
+                        request.setAttribute("typeMessage", typeMessage);
+                    }
+                    else {
+                        Membre m= sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                        message = "Compte membre créé avec succès !";
+                        typeMessage = "success";
+                        request.setAttribute("message", message);
+                        request.setAttribute("typeMessage", typeMessage);
+                        jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
+                    }
                 }
             }
 
@@ -631,6 +637,11 @@ public class ServletGestionEquipement extends HttpServlet {
             jsp ="/WEB-INF/jsp/FormModifOffre.jsp";
 
         }
+        // la limite de cette fonctionnalité c'est que quand on souhaite modfifier une date de l'offre 
+        // la verif sur les dates par rapport a la date actuelle ne s'applique pas 
+        // Or elle foudrait la faire appliquer uniquement si l'utilisateur change la date ( il faut comparer la date d'avant et la nouvelle date)
+        // et s'il a modifier la date dans ce cas on applique les verif et s'il a modifié titre/ description/ type on fait aucune verif sur les date mise a part 
+        // la date de debut doit être avant la date de fin donc plus de verif par rapport a  la date d'aujourd'hui 
         else if (action.equals("mettreAjOffre")){
             HttpSession session = request.getSession();
             Membre m = (Membre) session.getAttribute("membre");
@@ -641,6 +652,7 @@ public class ServletGestionEquipement extends HttpServlet {
             String dateDebut = request.getParameter("DateDeb");
             String dateFin = request.getParameter("DateFin");
             Long idOffre = Long.parseLong(request.getParameter("idO"));
+            Offre offre = offreFacade.find(idOffre);
             Date dd = null;
             Date df = null;
             try {
@@ -654,45 +666,50 @@ public class ServletGestionEquipement extends HttpServlet {
             if (!intitule.trim().isEmpty() && !description.trim().isEmpty() && !typeOffre.trim().isEmpty() && dd!=null){
                 // Verification pour offre = don 
                 if(typeOffreEnum==TypeOffre.DON){
-                    if(dd.after(new Date(System.currentTimeMillis())) && df==null){
+                    if(df==null){
                         Boolean resultat = sessionMembre.ModifierOffre(idOffre, intitule, description, typeOffreEnum, dd, df);
                         if(resultat){
                             jsp = "/ServletGestionEquipement?action=tableauBord";
                         }
                         else{
                             jsp="/WEB-INF/jsp/FormModifOffre.jsp";
+                            request.setAttribute("offre",offre);
                             request.setAttribute("message", "Erreur lors de la modification de l'offre");
                             request.setAttribute("typeMessage", "error");
                         }
                     }
                     else{
                         jsp="/WEB-INF/jsp/FormModifOffre.jsp";
-                        request.setAttribute("message", "La date de début doit être après la date actuelle et il ne doit pas y avoir de date de fin pour un don");
+                        request.setAttribute("offre",offre);
+                        request.setAttribute("message", "La date de fin ne doit pas être remplie");
                         request.setAttribute("typeMessage", "error");
                     }
                 }
                 // Verification pour offre = pret
                 else if(typeOffreEnum==TypeOffre.PRET){
-                    if(dd.after(new Date(System.currentTimeMillis())) && df.after(new Date(System.currentTimeMillis())) && dd.before(df)){
+                    if(dd.before(df)){
                         Boolean resultat = sessionMembre.ModifierOffre(idOffre,intitule, description, typeOffreEnum, dd, df);
                         if(resultat){
                             jsp = "/ServletGestionEquipement?action=tableauBord";
                         }
                         else{
                             jsp="/WEB-INF/jsp/FormModifOffre.jsp";
+                            request.setAttribute("offre",offre);
                             request.setAttribute("message", "Erreur lors de la modification de l'offre");
                             request.setAttribute("typeMessage", "error");
                         }
                     }
                     else{
                         jsp="/WEB-INF/jsp/FormModifOffre.jsp";
-                        request.setAttribute("message", "La date de début doit être après la date actuelle et avant la date de fin, et la date de fin doit être après la date actuelle");
+                        request.setAttribute("offre",offre);
+                        request.setAttribute("message", "La date de début doit être avant la date de fin");
                         request.setAttribute("typeMessage", "error");
                     }
                 }
             }
             else {
                 jsp="/WEB-INF/jsp/FormModifOffre.jsp";
+                request.setAttribute("offre",offre);
                 request.setAttribute("message", "Vous devez remplir tous les champs sauf la date de fin si vous faites un don");
                 request.setAttribute("typeMessage", "error");
             }
