@@ -45,10 +45,10 @@
                                 <p><%= d.getOffre().getAccessoire().getDesignation() %></p>
                                 <p><%= d.getStatut().label%></p>
                                 <% SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");%>
-                                <p>Date Début de l'emprunt: <%= dateFormat.format(d.getDateDemande())%></p>
+                                <p>Date Début de l'emprunt: <%= dateFormat.format(d.getOffre().getDateDebut())%></p>
                                 <div class="action-wrapper right">
                                     <button class="popup-button submit" 
-                                            onclick="openPopup('<p>Veuillez vous rendre à l\'agence de <b><%= d.getOffre().getUtilisateur().getAgence().label %></b> au bureau <b><%= d.getOffre().getUtilisateur().getBureau()%></b> ou contactez directement <b><%= d.getOffre().getUtilisateur().getPrenom()%> <%= d.getOffre().getUtilisateur().getNom()%></b> par mail ou téléphone.</p> \n\
+                                            onclick="openPopup('<p>Pour récupérer votre accessoire veuillez vous rendre à l\'agence de <b><%= d.getOffre().getUtilisateur().getAgence().label %></b>  au bureau <b><%= d.getOffre().getUtilisateur().getBureau()%></b> à partir du <b><%= dateFormat.format(d.getOffre().getDateDebut()) %></b> ou contactez directement <b><%= d.getOffre().getUtilisateur().getPrenom()%> <%= d.getOffre().getUtilisateur().getNom()%></b> par mail ou téléphone.</p> \n\
                                                                 Mail : <b><%= d.getOffre().getUtilisateur().getLogin()%></b><br/> \n\
                                                                 Téléphone : <b><%= d.getOffre().getUtilisateur().getTelephone()%></b>')">
                                         Instructions de récupération

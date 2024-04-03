@@ -39,3 +39,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     display: flex;
     gap : 10px;
 }
+
+#aucunResultatMessage{
+    padding : 24px;
+}
