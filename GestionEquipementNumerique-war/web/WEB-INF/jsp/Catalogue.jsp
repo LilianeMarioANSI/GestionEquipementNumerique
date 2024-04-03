@@ -111,7 +111,7 @@
                         <img class="large-icon" src="Assets/icons/<%=icon%>" alt="logo"/>
                         <h2><%= offre.getIntitule() %></h2>
                         <p><%=offre.getAccessoire().getTypeAccessoire().label%></p>
-                        <p>Statut : <%=offre.getEtat().label%></p>
+                        <p>Type : <%=offre.getTypeOffre().label%></p>
                         <div>
                             <form method="post" action="ServletGestionEquipement">
                             <input type="hidden" name="action" value="afficherDetailOffre">
@@ -132,6 +132,7 @@
                         </div>
                         
                     </div>
+                    <p id="aucunResultatMessage">Aucune offre n'est disponible pour le moment.</p>
                 <%
                         }
                     } else {
