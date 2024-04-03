@@ -73,8 +73,8 @@
                             <label for="dateDebut">Date début :</label>
                             <input type="date" name="dateDebut" id="dateDebut" required>
                        
-                            <label for="dateFin">Date fin :</label>
-                            <input type="date" name="dateFin" id="dateFin" required>
+                            <label for="dateFin">Date fin (non requis pour les dons):</label>
+                            <input type="date" name="dateFin" id="dateFin">
                         </div>
                     </section>
                     
@@ -110,7 +110,11 @@
                                 <td style="vertical-align: middle"><%=s.getTypeAccessoire().label%></td>
                                 <td style="vertical-align: middle"><%=df.format(s.getDatePublication())%></td>
                                 <td style="vertical-align: middle"><%=df.format(s.getDateDebut())%></td>
+                                <% if(s.getDateFin()!=null){ %>
                                 <td style="vertical-align: middle"><%=df.format(s.getDateFin())%></td>
+                                <%}else{%>
+                                <td style="vertical-align: middle"> Pas de date de fin</td>
+                                <%}%>
                                 <td style="vertical-align: middle"><%=s.getTypeSouhait().label%></td>
                                 <td class="action-cell" style="vertical-align: middle">
                                     <form action="ServletGestionEquipement">
