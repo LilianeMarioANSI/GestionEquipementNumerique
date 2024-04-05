@@ -39,11 +39,11 @@
             <div class="filter-section">
                 <span>
                     <label for="filterDon">Dons :</label>
-                    <input type="checkbox" id="filterDon">
+                    <input type="checkbox" id="filterDon" checked>
                 </span>
                 <span>
                     <label for="filterPret">Prêts :</label>
-                    <input type="checkbox" id="filterPret">
+                    <input type="checkbox" id="filterPret" checked>
                 </span>
     
                 <label for="etatEquipement">État :</label>
@@ -95,7 +95,7 @@
                                     icon = "plug-solid.svg";
                                     break;
                                 case CHARGEUR:
-                                    icon = "eye-slash-solid.svg";
+                                    icon = "plug-solid.svg";
                                     break;
                                 case CASQUE:
                                     icon = "headphones-solid.svg";
@@ -132,10 +132,11 @@
                         </div>
                         
                     </div>
-                    <p id="aucunResultatMessage">Aucune offre n'est disponible pour le moment.</p>
+                    
                 <%
-                        }
-                    } else {
+                        }%>
+                        <p id="aucunResultatMessage">Aucune offre n'est disponible pour le moment.</p>
+                    <% } else {
                 %>
                 <p>Aucune offre n'est disponible pour le moment.</p>
                 <%
