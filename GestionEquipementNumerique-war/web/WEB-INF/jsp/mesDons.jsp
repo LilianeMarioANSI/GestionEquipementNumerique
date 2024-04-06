@@ -18,7 +18,6 @@
         <link rel="stylesheet" type="text/css" href="Style/main.css">
         <link rel="stylesheet" type="text/css" href="Style/navigation.css">
         <link rel="stylesheet" type="text/css" href="Style/header.css">
-        <link rel="stylesheet" type="text/css" href="Style/inscription.css">
         <link rel="stylesheet" type="text/css" href="Style/catalogue.css">
         <link rel="stylesheet" type="text/css" href="Style/popup.css">
     </head>
@@ -38,8 +37,9 @@
                         <p><%= attribut %></p>
                     <%}
                     else {%>
-                        <div class="offer">
+                        
                             <% for(Demande d : lesDons){%>
+                            <div class="offer">
                                 <img class="large-icon" src="Assets/icons/computer-mouse-solid.svg" alt="logo"/>
                                 <h2><%= d.getOffre().getIntitule()%></h2>
                                 <p><%= d.getOffre().getAccessoire().getDesignation() %></p>
@@ -59,10 +59,10 @@
                                         <button type="submit" class="delete">Clôturer</button>
                                     </form>
                                 </div>
-                                
+                            </div>    
                            <%}%>
 
-                        </div>
+                        
 
                     <%}%>
             </div>

@@ -18,7 +18,6 @@
         <link rel="stylesheet" type="text/css" href="Style/main.css">
         <link rel="stylesheet" type="text/css" href="Style/navigation.css">
         <link rel="stylesheet" type="text/css" href="Style/header.css">
-        <link rel="stylesheet" type="text/css" href="Style/inscription.css">
         <link rel="stylesheet" type="text/css" href="Style/catalogue.css">
         <link rel="stylesheet" type="text/css" href="Style/popup.css">
     </head>
@@ -48,7 +47,7 @@
                                     <% SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");%>
                                     <p>Début de l'emprunt: <%= dateFormat.format(d.getOffre().getDateDebut())%></p>
                                     <p>Fin de l'emprunt: <%= dateFormat.format(d.getOffre().getDateFin())%></p>
-                                    <div class="action-wrapper right">
+                                <div class="action-wrapper right">
                                     <button class="popup-button submit" 
                                             onclick="openPopup('<p>Pour récupérer votre accessoire veuillez vous rendre à l\'agence de <b><%= d.getOffre().getUtilisateur().getAgence().label %></b>  au bureau <b><%= d.getOffre().getUtilisateur().getBureau()%></b> à partir du <b><%= dateFormat.format(d.getOffre().getDateDebut()) %></b> ou contactez directement <b><%= d.getOffre().getUtilisateur().getPrenom()%> <%= d.getOffre().getUtilisateur().getNom()%></b> par mail ou téléphone.</p> \n\
                                                                 Mail : <b><%= d.getOffre().getUtilisateur().getLogin()%></b><br/> \n\
@@ -61,11 +60,12 @@
                                         <button type="submit" class="delete">Clôturer</button>
                                     </form>
                                 </div>
+                            </div>
                            <%}%>
 
                     <%}%>
-            </div>
             
+            </div>
             <div id="popup" class="popup">
                 <div class="popup-content" id="popup-content"></div>
                 <div class='action-wrapper right'>
