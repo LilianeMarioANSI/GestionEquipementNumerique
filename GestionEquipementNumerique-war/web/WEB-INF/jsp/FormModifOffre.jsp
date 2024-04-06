@@ -68,6 +68,7 @@
                                 <%}%>
                             <%}%>
                         </select>
+                        <!-- Limite : si l'utilisateur change de type d'offre de DOn a pret le champs fin de prets n'apparait pas  -->
                             <% SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");%>
                         <label for="DateDeb">Date de début<span class="requis">*</span></label>
                         <input type="Date" id="DateDeb" name="DateDeb" value="<%= dateFormat.format(offre.getDateDebut())%>" size="20" maxlength="20" />
