@@ -7,6 +7,7 @@ package Facade;
 import Entite.Agence;
 import Entite.Membre;
 import Entite.Superviseur;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -31,7 +32,7 @@ public class SuperviseurFacade extends AbstractFacade<Superviseur> implements Su
 
     public SuperviseurFacade() {
         super(Superviseur.class);
-    }
+   }
     
     @Override
     public Superviseur IdentificationSuperviseur(String login, String mdp) {
@@ -52,17 +53,28 @@ public class SuperviseurFacade extends AbstractFacade<Superviseur> implements Su
     }
     
     
-        @Override
+    @Override
     public Superviseur CreerSuperviseur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence) {
-        Superviseur superviseur = new Superviseur();
-        superviseur.setLogin(login);
-        superviseur.setMdp(mdp);
-        superviseur.setNom(nom);
-        superviseur.setPrenom(prenom);
-        superviseur.setBureau(bureau);
-        superviseur.setTelephone(telephone);
-        superviseur.setAgence(agence);
-        em.persist(superviseur);
-        return superviseur;
+        TypedQuery<Superviseur> query = getEntityManager().createQuery(
+                "SELECT s FROM Superviseur s WHERE s.login = :login", Superviseur.class);
+        query.setParameter("login", login);
+        List<Superviseur> sups = query.getResultList();
+        if(sups.isEmpty()){
+            System.out.println("Superviseur créé");
+            Superviseur superviseur = new Superviseur();
+            superviseur.setLogin(login);
+            superviseur.setMdp(BCrypt.hashpw(mdp, BCrypt.gensalt(12)));
+            superviseur.setNom(nom);
+            superviseur.setPrenom(prenom);
+            superviseur.setBureau(bureau);
+            superviseur.setTelephone(telephone);
+            superviseur.setAgence(agence);
+            em.persist(superviseur);
+
+            return superviseur;
+        }else{
+            System.out.println("Superviseur existe déjà");
+            return null;
+        }
     }
 }

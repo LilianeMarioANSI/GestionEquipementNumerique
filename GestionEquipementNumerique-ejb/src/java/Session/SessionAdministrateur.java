@@ -43,19 +43,14 @@ public class SessionAdministrateur implements SessionAdministrateurLocal {
 
     @EJB
     private OffreFacadeLocal offreFacade;
-    
-    
-    
-    
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
    
     /*
         Authentification
     */
     @Override
     public Superviseur IdentificationSuperviseur(String log, String mdp){
+        this.superviseurFacade.CreerSuperviseur("superviseur@admin.com", "admin@123", "admin", "admin", "admin", "0000000000", Agence.LYON);
         return superviseurFacade.IdentificationSuperviseur(log, mdp);
     }
     

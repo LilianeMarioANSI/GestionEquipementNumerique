@@ -53,9 +53,9 @@
 
 
                         <input type="hidden" name="action" value="creerMembre">
+                        <!--<input type="hidden" name="action" value="creerSuperviseur">-->
                         <input type="checkbox" required>
                         J'accepte les conditions d'utilisation et j'adhére à votre politique de confidentialité
-
                         <div class="action-wrapper right">
                             <a href="ServletGestionEquipement">Se connecter</a>
                             <button type="submit" class="submit">S'enregistrer</button>
