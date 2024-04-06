@@ -8,7 +8,6 @@ import Entite.Accessoire;
 import Entite.Agence;
 import Entite.EtatAccessoire;
 import Entite.Membre;
-import Entite.Offre;
 import Entite.Personne;
 import Entite.Superviseur;
 import Entite.TypeOffre;
@@ -44,15 +43,12 @@ public class SessionAdministrateur implements SessionAdministrateurLocal {
     @EJB
     private OffreFacadeLocal offreFacade;
     
-    
-    
-    
-
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
    
     /*
         Authentification
+        Méthodes pour l'authentification et l'inscription des superviseurs sur la plateforme.
     */
     @Override
     public Superviseur IdentificationSuperviseur(String log, String mdp){
@@ -66,6 +62,8 @@ public class SessionAdministrateur implements SessionAdministrateurLocal {
     
     /*
         Gestion Utilisateur Membre
+        Méthodes pour la gestion des membres de la plateforme, telles que la récupération de la liste des membres 
+        appartenant à la même agence.
     */
     @Override
     public List<Membre> ListeMembres(){
@@ -84,6 +82,8 @@ public class SessionAdministrateur implements SessionAdministrateurLocal {
     
     /*
         Tableau de bord / Reporting
+        Méthodes pour obtenir des données statistiques et des rapports sur les offres et les membres de la plateforme, 
+        notamment le nombre de membres, le nombre d'offres publiques, etc.
     */
     @Override
     public List <String> getOffresParPeriode_Json(Date dateDebut, Date dateFin) {
@@ -104,7 +104,6 @@ public class SessionAdministrateur implements SessionAdministrateurLocal {
     public int getNombreOffrePublicByType(TypeOffre type) {
         return offreFacade.getNombreOffrePublicByType(type);
     }
-    
     
     @Override
     public int getNombreMembreAvecOffreByPeriode(Date dateDebut, Date dateFin){

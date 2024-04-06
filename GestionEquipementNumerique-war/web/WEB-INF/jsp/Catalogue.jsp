@@ -17,7 +17,7 @@
 
 <!DOCTYPE html>
 <html>
-<head>
+    <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="Style/normalize.css">
         <link rel="stylesheet" type="text/css" href="Style/normalize.css">
@@ -74,7 +74,7 @@
                     if(offres != null && !offres.isEmpty()) {
                         for(Offre offre : offres) {
                 %>
-<div class="offer offre-item" data-offre-type="<%= offre.getTypeOffre() %>" data-etat="<%= offre.getAccessoire().getEtat().label %>" data-categorie="<%= offre.getAccessoire().getTypeAccessoire().label %>">
+                <div class="offer offre-item" data-offre-type="<%= offre.getTypeOffre() %>" data-etat="<%= offre.getAccessoire().getEtat().label %>" data-categorie="<%= offre.getAccessoire().getTypeAccessoire().label %>">
                         <%
                             String icon;
                             TypeAccessoire typeAccessoireOffre = offre.getAccessoire().getTypeAccessoire();
@@ -131,7 +131,7 @@
                         </form>
                         </div>
                         
-                    </div>
+                </div>
                     
                 <%
                         }%>

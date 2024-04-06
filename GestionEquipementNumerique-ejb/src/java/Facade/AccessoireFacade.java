@@ -31,9 +31,12 @@ public class AccessoireFacade extends AbstractFacade<Accessoire> implements Acce
         super(Accessoire.class);
     }
 
-    
-    /*
-        Creation Accessoire pour créer offre
+    /**
+    * Cette méthode permet de créer un nouvel accessoire dans la base de données.
+    * Elle est utilisée dans le servlet pour créer une offre.
+    *
+    * @param a L'accessoire à créer.
+    * @return L'accessoire créé.
     */
     @Override
     public Accessoire CreerAccessoire(Accessoire a) {
@@ -41,8 +44,12 @@ public class AccessoireFacade extends AbstractFacade<Accessoire> implements Acce
         return a;
     }
     
-    /*
-        Tableau de bord
+    /**
+    * Cette méthode permet d'obtenir une liste d'accessoires en fonction de leur état.
+    * Elle est utilisée pour afficher les accessoires dans le tableau de bord.
+    *
+    * @param etat L'état des accessoires à récupérer.
+    * @return Une liste d'accessoires correspondant à l'état spécifié.
     */
     @Override
     public List<Accessoire> getAccessoireByEtat(EtatAccessoire etat) {
@@ -52,5 +59,4 @@ public class AccessoireFacade extends AbstractFacade<Accessoire> implements Acce
         List<Accessoire> result = req.getResultList();
         return result;
     }
-    
 }
