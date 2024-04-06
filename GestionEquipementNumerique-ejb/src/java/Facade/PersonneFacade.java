@@ -5,7 +5,6 @@
 package Facade;
 
 import Entite.Personne;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,6 +29,12 @@ public class PersonneFacade extends AbstractFacade<Personne> implements Personne
         super(Personne.class);
     }
     
+    /**
+     * Recherche une personne par son identifiant.
+     *
+     * @param id L'identifiant de la personne à rechercher.
+     * @return La personne correspondant à l'identifiant spécifié, s'il existe ; sinon, null.
+     */
     @Override
     public Personne rechercherPersonne(long id) {
         Query req = getEntityManager().createQuery("Select p from Personne as p where p.id=:idPersonne");

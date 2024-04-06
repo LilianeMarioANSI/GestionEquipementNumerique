@@ -5,7 +5,6 @@
 package Facade;
 
 import Entite.Badge;
-import Entite.Membre;
 import Entite.NiveauBadge;
 import Entite.Personne;
 import java.util.List;
@@ -33,6 +32,13 @@ public class BadgeFacade extends AbstractFacade<Badge> implements BadgeFacadeLoc
         super(Badge.class);
     }
 
+    /**
+     * Crée un nouveau badge pour un utilisateur donné avec le niveau spécifié.
+     *
+     * @param niveau      Le niveau du badge à créer.
+     * @param utilisateur L'utilisateur associé au badge.
+     * @return Le badge créé.
+     */
     @Override
     public Badge creerBadge(NiveauBadge niveau, Personne utilisateur) {
         Badge b = new Badge();
@@ -42,6 +48,13 @@ public class BadgeFacade extends AbstractFacade<Badge> implements BadgeFacadeLoc
         return b;
     }
     
+    /**
+     * Vérifie si un badge existe pour un utilisateur donné avec le niveau spécifié.
+     *
+     * @param utilisateur L'utilisateur pour lequel vérifier l'existence du badge.
+     * @param niveau      Le niveau du badge à vérifier.
+     * @return true si le badge existe pour l'utilisateur donné avec le niveau spécifié, sinon false.
+     */
     @Override
     public boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau){
         
@@ -53,6 +66,12 @@ public class BadgeFacade extends AbstractFacade<Badge> implements BadgeFacadeLoc
         return result.isEmpty();
     }
     
+    /**
+     * Récupère la liste des badges d'un utilisateur pour affichage dans son profil.
+     *
+     * @param utilisateur L'utilisateur pour lequel récupérer les badges.
+     * @return La liste des badges de l'utilisateur.
+     */
     @Override
     public List<Badge> getBadgeByMembre(Personne utilisateur){
         String txt = "SELECT b FROM Badge b WHERE b.utilisateur.id= :idUtilisateur";
@@ -61,6 +80,4 @@ public class BadgeFacade extends AbstractFacade<Badge> implements BadgeFacadeLoc
         List<Badge> result = req.getResultList();
         return result;
     }
-    
-    
 }

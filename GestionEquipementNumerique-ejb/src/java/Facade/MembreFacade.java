@@ -36,9 +36,18 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         super(Membre.class);
     }
     
-    /*
-        Inscription
-    */
+    /**
+     * Permet à un membre de s'inscrire sur la plateforme avec des informations personnelles.
+     *
+     * @param login      Le login du membre.
+     * @param mdp        Le mot de passe du membre.
+     * @param nom        Le nom du membre.
+     * @param prenom     Le prénom du membre.
+     * @param bureau     Le bureau du membre.
+     * @param telephone  Le numéro de téléphone du membre.
+     * @param agence     L'agence à laquelle le membre est affilié.
+     * @return Le membre créé.
+     */
     @Override
     public Membre CreerMembre(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence) {
         Membre utilisateur = new Membre();
@@ -53,9 +62,13 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         return utilisateur;
     }
 
-    /*
-        Authentification Membre
-    */
+    /**
+     * Permet à un membre de s'identifier sur la plateforme.
+     *
+     * @param login Le login du membre.
+     * @param mdp   Le mot de passe du membre.
+     * @return Le membre identifié, s'il existe et que le mot de passe est correct ; sinon, null.
+     */
     @Override
     public Membre IdentificationMembre(String login, String mdp) {
         TypedQuery<Membre> query = getEntityManager().createQuery(
@@ -64,28 +77,34 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
 
         try {
             Membre membre = query.getSingleResult();
+            // hacher le mot de passe et vérifier s'il correspond à celui stocké dans la base de données
             if (BCrypt.checkpw(mdp, membre.getMdp())) {
                 return membre;
             }
         } catch (NoResultException e) {
             System.err.println("Tentative de connexion avec un login invalide : " + login);
         }
-
         return null;
     }
     
-    /*
-        Supprimer Membre
-    */
+    /**
+     * Supprime un membre de la base de données.
+     *
+     * @param membre Le membre à supprimer.
+     */
     @Override
     public void SupprimerMembre(Membre membre) {
         if (membre != null) {
             em.remove(membre);
         }
     }
-    /*
-        Modifier Membre
-    */
+    
+    /**
+     * Obtient une agence à partir de son identifiant.
+     *
+     * @param agenceId L'identifiant de l'agence à rechercher.
+     * @return L'agence correspondant à l'identifiant spécifié, s'il existe ; sinon, null.
+     */
     @Override
     public Agence getAgenceById(String agenceId) {
         for (Agence agence : Agence.values()) {
@@ -96,6 +115,17 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         return null;
     }
     
+    /**
+    * Modifie les informations d'un membre dans la base de données.
+    *
+    * @param membre         Le membre à modifier.
+    * @param nouveauNom     Le nouveau nom du membre.
+    * @param nouveauPrenom  Le nouveau prénom du membre.
+    * @param nouvelEmail    Le nouvel e-mail du membre.
+    * @param nouveauTelephone Le nouveau numéro de téléphone du membre.
+    * @param nouveauBureau  Le nouveau bureau du membre.
+    * @param nouvelleAgence La nouvelle agence à laquelle le membre est affilié.
+    */
     @Override
     public void ModifierInformations(Membre membre, String nouveauNom, String nouveauPrenom, String nouvelEmail, String nouveauTelephone, String nouveauBureau, Agence nouvelleAgence) {
         Membre membreExistant = em.find(Membre.class, membre.getId());
@@ -118,11 +148,15 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         if (!Objects.equals(membreExistant.getAgence(), nouvelleAgence)) {
             membreExistant.setAgence(nouvelleAgence);
         }
-
         em.merge(membreExistant);
     }
     
-        
+    /**
+    * Recherche un membre dans la base de données par son identifiant.
+    *
+    * @param id L'identifiant du membre à rechercher.
+    * @return Le membre correspondant à l'identifiant spécifié.
+    */
     @Override
     public Membre rechercherMembre(long id) {
         Query req = getEntityManager().createQuery("Select m from Membre as m where m.id=:idMembre");
@@ -131,6 +165,11 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         return result;
     }
     
+    /**
+     * Obtient la liste de tous les membres enregistrés sur la plateforme.
+     *
+     * @return La liste de tous les membres.
+     */
     @Override
     public List<Membre> ListeMembres() {
         String txt = "SELECT m FROM Membre m";
@@ -139,6 +178,12 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         return result;
     }
     
+    /**
+    * Obtient la liste des membres appartenant à la même agence qu'un utilisateur donné.
+    *
+    * @param utilisateur L'utilisateur pour lequel récupérer les membres de la même agence.
+    * @return La liste des membres appartenant à la même agence.
+    */
     @Override
     public List<Membre> ListeMembresMemeAgence(Personne utilisateur) {
         String txt = "SELECT m FROM Membre m WHERE m.agence = :paramAgence";
@@ -147,9 +192,12 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         List<Membre> result = req.getResultList();
         return result;
     }
-    /*
-        Tableau de bord
-    */
+    
+    /**
+     * Obtient le nombre total de membres enregistrés sur la plateforme.
+     *
+     * @return Le nombre total de membres.
+     */
     @Override
     public int getNombreMembre() {
         String txt = "SELECT m FROM Membre m";
@@ -158,6 +206,12 @@ public class MembreFacade extends AbstractFacade<Membre> implements MembreFacade
         return result.size();
     }
     
+    /**
+    * Recherche un membre dans la base de données par son login.
+    *
+    * @param login Le login du membre à rechercher.
+    * @return Le membre correspondant au login spécifié, s'il existe ; sinon, null.
+    */
     @Override
     public Membre rechercherMembreParLogin(String login) {
         Query req = getEntityManager().createQuery(

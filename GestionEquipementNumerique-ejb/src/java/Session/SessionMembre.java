@@ -39,8 +39,10 @@ public class SessionMembre implements SessionMembreLocal {
 
     @EJB
     private PersonneFacadeLocal personneFacade;
+    
     @EJB
     private BadgeFacadeLocal badgeFacade;
+    
     @EJB
     private DemandeFacadeLocal demandeFacade;
 
@@ -56,14 +58,9 @@ public class SessionMembre implements SessionMembreLocal {
     @EJB
     private MembreFacadeLocal membreFacade;
     
-
-
-    
-  
-    
-    
     /*
         Personne
+        Méthodes pour rechercher une personne par son identifiant et vérifier l'existence d'un membre avec un login spécifique.
     */
     
     @Override
@@ -84,7 +81,10 @@ public class SessionMembre implements SessionMembreLocal {
     
     /*
         Membre
+        Méthodes pour l'inscription, l'authentification, la suppression, la modification et la recherche de membres, 
+        ainsi que pour la récupération de l'agence par son identifiant.
     */
+    
     @Override
     public Membre InscriptionUtilisateur(String login, String mdp, String nom, String prenom, String bureau, String telephone, Agence agence) {
         return membreFacade.CreerMembre(login, mdp, nom, prenom, bureau, telephone, agence);
@@ -129,6 +129,7 @@ public class SessionMembre implements SessionMembreLocal {
     public Agence getAgenceById(String agenceId){
         return membreFacade.getAgenceById(agenceId);
     } 
+    
     @Override
     public Membre RechercherMembre(long id) {
         return membreFacade.rechercherMembre(id);
@@ -136,7 +137,10 @@ public class SessionMembre implements SessionMembreLocal {
     
     /*
         Catalogue Offres
+        Méthodes pour consulter le catalogue d'offres, filtrer les offres en fonction de certains critères et 
+        mettre à jour l'état d'une offre.
     */
+
     @Override
     public List<Offre> ConsulterCatalogue(){
         return offreFacade.catalogueOffres();
@@ -148,7 +152,6 @@ public class SessionMembre implements SessionMembreLocal {
     }
     
     @Override
-    
     public List<Offre> FiltrerCatalogue(String etatEquipement, String categorie, String typeOffre) {
         List<Offre> offresFiltrees = new ArrayList<>();
         List<Offre> toutesLesOffres = offreFacade.catalogueOffres(); 
@@ -162,14 +165,15 @@ public class SessionMembre implements SessionMembreLocal {
                 }
             }
         }
-
         return offresFiltrees;
     }
     
     /*
         Souhait
+        Méthodes pour gérer les souhaits des membres, y compris la création, la récupération et 
+        l'affichage des souhaits d'un membre.
     */
-    
+     
     @Override
     public List<Souhait> GetSouhaitByMembre(long idMembre){
         return souhaitFacade.getSouhaitByMembre(idMembre);
@@ -180,38 +184,52 @@ public class SessionMembre implements SessionMembreLocal {
         return souhaitFacade.creerSouhait(datePublication, dateDebut, dateFin, typeSouhait, typeAccessoire, description, utilisateur);
     }
     
-    
+    @Override
+    public List<Souhait> listeMesSouhaits(Membre m) {
+        return souhaitFacade.listeSouhaits(m);
+
+    }
 
     /*
         Offre
+        Méthodes pour créer, modifier et lister les offres, ainsi que pour créer des accessoires.
     */
+    
     @Override
     public Offre creationOffre (Offre O) {
         return offreFacade.creerOffre(O);
     }
-
+    
     @Override
     public Accessoire CreerAccessoire(Accessoire a) {
         return accessoireFacade.CreerAccessoire(a);
     }
     
-    // Mes equipements
     @Override
-    public List<Offre> listeMesEquipements(long Id){
-        return offreFacade.MesEquipementDisponible(Id);
+    public boolean ModifierOffre(Long idOffre, String intitule, String description, TypeOffre typeOffreEnum, Date dd, Date df){
+        Offre o= offreFacade.find(idOffre);
+        if (o==null){
+            return false;
+        }
+        else {
+            o.setIntitule(intitule);
+            o.setDescription(description);
+            o.setTypeOffre(typeOffreEnum);
+            o.setDateDebut(dd);
+            o.setDateFin(df);
+            offreFacade.modifierOffre(o);
+            return true;
+        }
     }
     
     /*
-        Mes Demandes
+        Mes equipements
+        Méthodes pour afficher la liste des équipements disponibles et les offres associées à un membre spécifique.
     */ 
-    @Override
-    public List<Demande> listePrêts(Membre m) {
-        return demandeFacade.listePrêts(m);
-    }
 
     @Override
-    public List<Demande> listeDon(Membre m) {
-        return demandeFacade.listeDon(m);
+    public List<Offre> listeMesEquipements(long Id){
+        return offreFacade.MesEquipementDisponible(Id);
     }
     
     @Override
@@ -219,17 +237,48 @@ public class SessionMembre implements SessionMembreLocal {
         return offreFacade.listeOffre(m);
     }
     
-        @Override
-    public List<Souhait> listeMesSouhaits(Membre m) {
-        return souhaitFacade.listeSouhaits(m);
+    /*
+        Mes Demandes
+        Méthodes pour afficher les prêts et les dons d'un membre, ainsi que pour créer et supprimer des demandes.
+    */
 
+    @Override
+    public List<Demande> listePrêts(Membre m) {
+        return demandeFacade.listePrêts(m);
+    }
+    
+    @Override
+    public List<Demande> listeDon(Membre m) {
+        return demandeFacade.listeDon(m);
     }
     
     @Override
     public Demande CreerDemande(Personne personne, Offre offre){
         return demandeFacade.creerDemande(personne, offre);
     }
+       
+    @Override
+    public boolean SupprimerDemande(long idDemande){
+        boolean resultat=false;
+        Demande d=demandeFacade.rechercherDemande(idDemande);
+        if(d!=null){
+            demandeFacade.supprimerDemande(d);
+            resultat=true;
+        }
+        return resultat;
+    }
     
+    @Override
+    public Demande RechercherDemande(long id) {
+        return demandeFacade.rechercherDemande(id);
+    }
+    
+    /*
+        Badge
+        Méthodes pour vérifier l'existence et créer des badges pour un utilisateur, ainsi que pour obtenir 
+        le nombre de demandes et d'offres par utilisateur, et récupérer les badges associés à un membre.
+    */
+
     @Override
     public boolean verificationBadgeExistant(Personne utilisateur, NiveauBadge niveau){
         return badgeFacade.verificationBadgeExistant(utilisateur, niveau);
@@ -252,39 +301,5 @@ public class SessionMembre implements SessionMembreLocal {
     @Override
     public List<Badge> getBadgeByMembre(Membre u){
         return badgeFacade.getBadgeByMembre(u);
-    }
-
-    @Override
-    public boolean SupprimerDemande(long idDemande){
-        boolean resultat=false;
-        Demande d=demandeFacade.rechercherDemande(idDemande);
-        if(d!=null){
-            demandeFacade.supprimerDemande(d);
-            resultat=true;
-        }
-        return resultat;
-    }
-    
-    @Override
-    public Demande RechercherDemande(long id) {
-        return demandeFacade.rechercherDemande(id);
-    }
-
-    @Override
-    public boolean ModifierOffre(Long idOffre, String intitule, String description, TypeOffre typeOffreEnum, Date dd, Date df){
-        Offre o= offreFacade.find(idOffre);
-        if (o==null){
-            return false;
-        }
-        else {
-            o.setIntitule(intitule);
-            o.setDescription(description);
-            o.setTypeOffre(typeOffreEnum);
-            o.setDateDebut(dd);
-            o.setDateFin(df);
-            offreFacade.modifierOffre(o);
-            return true;
-        }
-
     }
 }

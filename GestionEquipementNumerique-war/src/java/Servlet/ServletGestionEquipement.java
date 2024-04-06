@@ -82,6 +82,12 @@ public class ServletGestionEquipement extends HttpServlet {
         String action = request.getParameter("action");
         String jsp = null;
         
+        /**
+        * Gère les différentes actions de la servlet en fonction de l'action spécifiée.
+        * Si aucune action n'est spécifiée ou si elle est égale à "accueil", affiche la page d'accueil ou redirige vers le tableau de bord si un membre est connecté.
+        * Si l'action est "inscription", redirige vers la page d'inscription.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         if(action==null || action.equals("accueil")){
             HttpSession session = request.getSession(false);
             if(session != null){
@@ -92,22 +98,30 @@ public class ServletGestionEquipement extends HttpServlet {
                     request.setAttribute("titrePage", "Mon espace !");
                 }else{
                     jsp = "/WEB-INF/jsp/Accueil.jsp";
-                    //Titre de la page
                     request.setAttribute("titrePage", "Bienvenue !");
                 }
             }else{
                 jsp = "/WEB-INF/jsp/Accueil.jsp";
-                //Titre de la page
                 request.setAttribute("titrePage", "Bienvenue !");
             }
         }else if(action.equals("inscription")){
             jsp = "/WEB-INF/jsp/Inscription.jsp";
 
-            request.setAttribute("titrePage", "Inscription"); //Titre de la page
+            request.setAttribute("titrePage", "Inscription");
         }
         
         /*
             Authentification
+        */
+        
+        /**
+        * Gère le processus d'authentification de l'utilisateur.
+        * Si l'action spécifiée est "authentification", tente de connecter l'utilisateur en vérifiant les informations d'identification.
+        * Si l'utilisateur est un membre ou un superviseur valide, le redirige vers le tableau de bord approprié.
+        * Gère également le nombre de tentatives de connexion restantes et affiche les messages d'erreur appropriés en cas d'échec de l'authentification.
+        * @param action L'action spécifiée dans la requête HTTP.
+        * @throws ServletException Si une erreur de servlet se produit.
+        * @throws IOException Si une erreur d'entrée/sortie se produit lors de la redirection.
         */
         else if (action.equals("authentification")) {
             HttpSession session = request.getSession(true);
@@ -144,18 +158,22 @@ public class ServletGestionEquipement extends HttpServlet {
                 // Si le nombre de tentatives est dépassé, redirigez l'utilisateur vers une page d'erreur
                 String message = "Nombre maximal de tentatives de connexion dépassé. Veuillez réessayer plus tard.";
                 request.setAttribute("message", message);
-                //jsp="/WEB-INF/jsp/ErreurConnexion.jsp";
                 request.getRequestDispatcher("/WEB-INF/jsp/ErreurConnexion.jsp").forward(request, response);
                 return;
             }
 
-            // Si l'utilisateur n'est pas authentifié et qu'il reste des tentatives, affichez un message d'erreur
+            // Si l'utilisateur n'est pas authentifié et qu'il reste des tentatives, affiche un message d'erreur
             String message = "Identifiant ou mot de passe incorrect.";
             request.setAttribute("message", message);
             jsp="/WEB-INF/jsp/Accueil.jsp";
         }
 
-        // Deconnexion
+        /**
+        * Gère le processus de déconnexion de l'utilisateur.
+        * Si l'action spécifiée est "logout", déconnecte l'utilisateur en invalidant sa session.
+        * Redirige ensuite l'utilisateur vers la page d'accueil.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if(action.equals("logout")){
                 HttpSession session = request.getSession(false);
                 if (session != null) {
@@ -167,13 +185,93 @@ public class ServletGestionEquipement extends HttpServlet {
         /*
             ADMINISTRATEUR / SUPERVISEUR
         */
-        /* 
-            Gestion utilisateur
-        */
+        
+        /**
+         * Gère l'action de création d'utilisateur.
+         * Affiche la page de création d'utilisateur avec le formulaire associé.
+         * @param action L'action spécifiée dans la requête HTTP.
+         */
         else if(action.equals("creationUtilisateur")){
             jsp = "/WEB-INF/jsp/Creation_admin.jsp";
             request.setAttribute("titrePage", "Création Utilisateur");
         }
+        
+        /**
+        * Crée un nouvel utilisateur sur la plateforme.
+        * Récupère les informations de l'utilisateur depuis la requête HTTP et effectue les vérifications nécessaires
+        * (champs obligatoires, format du mot de passe, etc.). Si les informations sont valides, le compte est créé
+        * et l'utilisateur est redirigé vers la page d'analyse. Sinon, un message d'erreur est affiché sur la page de création.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
+        else if(action.equals("creerUtilisateur")){
+           String login = request.getParameter("loginRegister");
+           String mdp = request.getParameter("mdpRegister");
+           String nom = request.getParameter("nom");
+           String prenom = request.getParameter("prenom");
+           String bureau = request.getParameter("bureau");
+           String tel = request.getParameter("telephone");
+           Agence agence = Agence.valueOfLabel(request.getParameter("agence"));
+           boolean isAdmin = request.getParameter("adminCheck") != null; 
+
+           String message;
+           String typeMessage;
+
+           // Vérification des champs obligatoires
+           if (prenom.trim().isEmpty() || nom.trim().isEmpty() || login.trim().isEmpty() || mdp.trim().isEmpty() || tel.trim().isEmpty() || agence == null || bureau.trim().isEmpty()){
+               message = "Vous n'avez pas rempli tous les champs obligatoires.";
+               typeMessage = "error";
+           } else {
+               // Vérification du format du mot de passe
+               if (mdp.length() < 8) {
+                   message = "Le mot de passe doit avoir au moins 8 caractères.";
+                   typeMessage = "error";
+               } else if (!mdp.matches(".*\\d.*")) {
+                   message = "Le mot de passe doit inclure au moins un chiffre.";
+                   typeMessage = "error";
+               } else if (!mdp.matches(".*[a-zA-Z].*")) {
+                   message = "Le mot de passe doit inclure au moins une lettre.";
+                   typeMessage = "error";
+               } else if (mdp.matches("[a-zA-Z0-9 ]*")) {
+                   message = "Le mot de passe doit inclure au moins un caractère spécial.";
+                   typeMessage = "error";
+               } else {
+                   // Cryptage du mot de passe
+                   String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
+                   if (isAdmin) {
+                       // Création d'un compte administrateur
+                       sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                       message = "Compte administrateur créé avec succès !";
+                   } else {
+                       // Création d'un compte membre
+                       Personne membre = sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
+                       doVerifierBadge(request, response, membre);
+                       message = "Compte membre créé avec succès !";
+                   }
+                   typeMessage = "success";
+
+                   // Affichage du message de succès et redirection vers la page d'analyse
+                   HttpSession session = request.getSession();
+                   Superviseur superviseur = (Superviseur) session.getAttribute("administrateur");
+                   request.setAttribute("membre", superviseur);
+                   request.setAttribute("message", message);
+                   request.setAttribute("typeMessage", typeMessage);
+                   request.setAttribute("titrePage", "Bienvenue !");
+                   response.sendRedirect("ServletGestionEquipement?action=analytics");
+                   return;
+               }
+           }
+
+           // Affichage du message d'erreur sur la page de création
+           request.setAttribute("message", message);
+           request.setAttribute("typeMessage", typeMessage);
+           jsp="/WEB-INF/jsp/Creation_admin.jsp";
+       }
+                
+        /**
+        * Gère l'action de modification d'utilisateur.
+        * Récupère les informations de l'utilisateur à modifier, puis affiche la page de modification avec les champs pré-remplis.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if(action.equals("modificationUtilisateur")){
             long login = Long.parseLong(request.getParameter("login"));
             
@@ -181,8 +279,16 @@ public class ServletGestionEquipement extends HttpServlet {
             request.setAttribute("membre", membre);
             jsp = "/WEB-INF/jsp/ModifierMembre.jsp";
             request.setAttribute("titrePage", "Modification Utilisateur");
-            
         }
+        
+        /**
+        * Modifie les informations d'un membre.
+        * Récupère les nouvelles informations de l'utilisateur depuis la requête HTTP,
+        * puis tente de mettre à jour ces informations dans la base de données.
+        * Redirige ensuite l'utilisateur vers la page de liste des membres avec un message de confirmation.
+        * En cas d'erreur, redirige l'utilisateur vers la page de modification avec un message d'erreur.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if(action.equals("modifierMembre")){
             String nom = request.getParameter("nom");
             String prenom = request.getParameter("prenom");
@@ -198,7 +304,9 @@ public class ServletGestionEquipement extends HttpServlet {
   
             if(m){
                 jsp = "/WEB-INF/jsp/ListeMembres.jsp";
-                List<Membre> listeMembres = sessionAdministrateur.ListeMembres();
+                HttpSession session = request.getSession(false);
+                Personne membre = (Personne) session.getAttribute("administrateur");
+                List<Membre> listeMembres = sessionAdministrateur.ListeMembresMemeAgence(membre);
                 request.setAttribute("listeMembres", listeMembres);
                 request.setAttribute("titrePage", "Membres CGI");
                 request.setAttribute("message", "Modifications enregistrées");
@@ -206,8 +314,16 @@ public class ServletGestionEquipement extends HttpServlet {
             else{
                     jsp="/WEB-INF/jsp/ModifierMembre.jsp";
                     request.setAttribute("message", "Erreur, Modifications non prises en compte");
-                }
+            }
         }
+        
+        /**
+        * Supprime un utilisateur de la plateforme.
+        * Récupère l'identifiant de l'utilisateur à supprimer depuis la requête HTTP.
+        * Si la suppression est effectuée avec succès, l'utilisateur est redirigé vers la liste des membres de sa même agence.
+        * Sinon, un message d'erreur est affiché sur la page du tableau de bord de l'administrateur.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if(action.equals("suppressionUtilisateur")){
             long login = Long.parseLong(request.getParameter("login"));
             
@@ -223,15 +339,32 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("message", "Suppression enregistrées");
             }
             else{
-                    jsp="/WEB-INF/jsp/TableauBordAdmin.jsp";
-                    request.setAttribute("message", "Erreur, Membre non supprimée");
-                }
+                jsp="/WEB-INF/jsp/TableauBordAdmin.jsp";
+                request.setAttribute("message", "Erreur, Membre non supprimée");
+            }
+        }
+        /**
+        * Affiche la liste des membres de la même agence que l'administrateur connecté.
+        * Récupère l'administrateur connecté depuis la session HTTP.
+        * Charge la liste des membres de la même agence que l'administrateur.
+        * Affiche la liste des membres sur la page "ListeMembres.jsp".
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
+        else if (action.equals("afficherMembres")) {
+            HttpSession session = request.getSession(false);
+            Personne membre = (Personne) session.getAttribute("administrateur");
+            jsp = "/WEB-INF/jsp/ListeMembres.jsp";
+            List<Membre> listeMembres = sessionAdministrateur.ListeMembresMemeAgence(membre);
+            request.setAttribute("listeMembres", listeMembres);
+            request.setAttribute("titrePage", "Membres CGI");
         }
         
-        
-        /*
-            TDB Reporting 
-            autorisation : administrateur
+        /**
+        * Affiche le tableau de bord de l'administrateur avec les statistiques et les graphiques.
+        * Charge les données pour le tableau de bord, y compris les offres par période, le nombre de membres,
+        * le nombre d'offres et de demandes publiques, les données sur les accessoires, etc.
+        * Réglage des attributs pour les graphiques et les cartes sur la page "TableauBordAdmin.jsp".
+        * @param action L'action spécifiée dans la requête HTTP.
         */
         else if(action.equals("analytics")){
             
@@ -300,25 +433,26 @@ public class ServletGestionEquipement extends HttpServlet {
             request.setAttribute("nbOffrePublic", Integer.toString(nombreOffrePublic));
             request.setAttribute("nbDonPublic", Integer.toString(nombreDonPublic));
             request.setAttribute("nbPretPublic", Integer.toString(nombrePretPublic));
-            
         }
-        
-        else if (action.equals("afficherMembres")) {
-            HttpSession session = request.getSession(false);
-            Personne membre = (Personne) session.getAttribute("administrateur");
-            jsp = "/WEB-INF/jsp/ListeMembres.jsp";
-            List<Membre> listeMembres = sessionAdministrateur.ListeMembresMemeAgence(membre);
-            request.setAttribute("listeMembres", listeMembres);
-            request.setAttribute("titrePage", "Membres CGI");
-        }
-
         
         /*
             MEMBRE / UTILISATEUR
         */
         
-        /*
-            Inscription
+        /**
+         * Affiche le formulaire d'inscription pour les nouveaux membres.
+         * Charge le formulaire d'inscription "Inscription.jsp" avec le titre de la page.
+         * @param action L'action spécifiée dans la requête HTTP.
+         */
+        else if(action.equals("inscription")){
+            jsp = "/WEB-INF/jsp/Inscription.jsp";
+            request.setAttribute("titrePage", "Inscription"); //Titre de la page
+        }
+        
+        /**
+        * Crée un nouveau membre à partir des informations fournies dans le formulaire d'inscription.
+        * Vérifie les champs obligatoires et les contraintes de mot de passe avant de créer le compte.
+        * @param action L'action spécifiée dans la requête HTTP.
         */
         else if(action.equals("creerMembre")){
             String login = request.getParameter("loginRegister");
@@ -351,7 +485,6 @@ public class ServletGestionEquipement extends HttpServlet {
                     typeMessage = "error";
                 } else {
                     String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
-                    //sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
                     Boolean recherche= sessionMembre.RechercherMembreParLogin(login);
                     if (recherche==true){
                         message = "Ce login est déjà utilisé.";
@@ -369,79 +502,16 @@ public class ServletGestionEquipement extends HttpServlet {
                     }
                 }
             }
-
             request.setAttribute("message", message);
             request.setAttribute("typeMessage", typeMessage);
             jsp="/WEB-INF/jsp/Inscription.jsp";
         }
-        
-        else if(action.equals("creerUtilisateur")){
-            String login = request.getParameter("loginRegister");
-            String mdp = request.getParameter("mdpRegister");
-            String nom = request.getParameter("nom");
-            String prenom = request.getParameter("prenom");
-            String bureau = request.getParameter("bureau");
-            String tel = request.getParameter("telephone");
-            Agence agence = Agence.valueOfLabel(request.getParameter("agence"));
-            boolean isAdmin = request.getParameter("adminCheck") != null; 
 
-            String message;
-            String typeMessage;
-
-            if (prenom.trim().isEmpty() || nom.trim().isEmpty() || login.trim().isEmpty() || mdp.trim().isEmpty() || tel.trim().isEmpty() || agence == null || bureau.trim().isEmpty()){
-                message = "Vous n'avez pas rempli tous les champs obligatoires.";
-                typeMessage = "error";
-            } else {
-                if (mdp.length() < 8) {
-                    message = "Le mot de passe doit avoir au moins 8 caractères.";
-                    typeMessage = "error";
-                } else if (!mdp.matches(".*\\d.*")) {
-                    message = "Le mot de passe doit inclure au moins un chiffre.";
-                    typeMessage = "error";
-                } else if (!mdp.matches(".*[a-zA-Z].*")) {
-                    message = "Le mot de passe doit inclure au moins une lettre.";
-                    typeMessage = "error";
-                } else if (mdp.matches("[a-zA-Z0-9 ]*")) {
-                    message = "Le mot de passe doit inclure au moins un caractère spécial.";
-                    typeMessage = "error";
-                } else {
-                    String encryptedMdp = BCrypt.hashpw(mdp, BCrypt.gensalt(12));
-                    if (isAdmin) {
-                        sessionAdministrateur.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
-                        message = "Compte administrateur créé avec succès !";
-                    } else {
-                        Personne membre = sessionMembre.InscriptionUtilisateur(login, encryptedMdp, nom, prenom, bureau, tel, agence);
-                        doVerifierBadge(request, response, membre);
-                        message = "Compte membre créé avec succès !";
-                    }
-                    typeMessage = "success";
-
-                    HttpSession session = request.getSession();
-                    Superviseur superviseur = (Superviseur) session.getAttribute("administrateur");
-                    request.setAttribute("membre", superviseur);
-                    request.setAttribute("message", message);
-                    request.setAttribute("typeMessage", typeMessage);
-                    request.setAttribute("titrePage", "Bienvenue !");
-                    response.sendRedirect("ServletGestionEquipement?action=analytics");
-                    return;
-                }
-            }
-
-            request.setAttribute("message", message);
-            request.setAttribute("typeMessage", typeMessage);
-            jsp="/WEB-INF/jsp/Creation_admin.jsp";
-        }
-        
-        else if(action.equals("inscription")){
-            jsp = "/WEB-INF/jsp/Inscription.jsp";
-            request.setAttribute("titrePage", "Inscription"); //Titre de la page
-        }
- 
-        
-        
-        /*
-            Catalogue
-        */
+        /**
+         * Affiche le catalogue des offres en ligne disponibles pour les membres.
+         * Récupère les offres à afficher depuis la session membre et les transmet à la page "Catalogue.jsp".
+         * @param action L'action spécifiée dans la requête HTTP.
+         */
         else if(action.equals("afficherCatalogue")){
             List<Offre> offres = sessionMembre.ConsulterCatalogue();
             request.setAttribute("offres", offres);
@@ -449,9 +519,12 @@ public class ServletGestionEquipement extends HttpServlet {
             jsp = "/WEB-INF/jsp/Catalogue.jsp";
         }
 
-        /* 
-            TDB Membre
-        */
+        /**
+         * Affiche le tableau de bord du membre.
+         * Récupère les données relatives aux dons, prêts, offres et souhaits du membre à partir de la session.
+         * Transmet ces données à la page "TableauBordMembre.jsp" pour affichage.
+         * @param action L'action spécifiée dans la requête HTTP.
+         */
         else if(action.equals("tableauBord")){
             HttpSession session = request.getSession();
             Membre membre = (Membre) session.getAttribute("membre");
@@ -465,12 +538,18 @@ public class ServletGestionEquipement extends HttpServlet {
             request.setAttribute("prets", prets);
             request.setAttribute("offres", offres);
             request.setAttribute("souhaits", souhaits);
-            // Transmettre les informations du membre à la vue JSP
             request.setAttribute("membre", membre);
             request.setAttribute("badges", badges);
-            // Rediriger vers la vue JSP du tableau de bord
             jsp="/WEB-INF/jsp/TableauBordMembre.jsp";
         }
+        
+        /**
+        * Modifie les informations d'un membre.
+        * Récupère les nouvelles informations du membre à partir des paramètres de la requête HTTP.
+        * Met à jour les informations du membre dans la base de données.
+        * Redirige ensuite vers le tableau de bord du membre avec un message indiquant le résultat de l'opération.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if(action.equals("ModifierMembre")){
             String nom = request.getParameter("nom");
             String prenom = request.getParameter("prenom");
@@ -484,7 +563,6 @@ public class ServletGestionEquipement extends HttpServlet {
             long membreId = membre.getId();
             
             Agence ag = Agence.valueOfLabel(agence);
-            //Agence ag = sessionMembre.getAgenceById(agence);
             boolean m = sessionMembre.ModifierMembre(membreId, nom, prenom, email, telephone, bureau, ag);
   
             if(m){
@@ -497,9 +575,13 @@ public class ServletGestionEquipement extends HttpServlet {
             }
         }
         
-        /*
-            Souhaits
-        */
+        /**
+         * Affiche les souhaits d'un membre.
+         * Récupère le membre à partir de la session.
+         * Récupère la liste des souhaits associés à ce membre.
+         * Redirige vers la page MesSouhaits.jsp avec la liste des souhaits pour affichage.
+         * @param action L'action spécifiée dans la requête HTTP.
+         */
         else if(action.equals("mesSouhaits")){
             HttpSession session = request.getSession(false);
             Membre membre = (Membre) session.getAttribute("membre");
@@ -516,15 +598,23 @@ public class ServletGestionEquipement extends HttpServlet {
             }else {
                 jsp = "/ServletGestionEquipement?action=accueil";
             }
-            
-            
-            
         }
         
+        /**
+        * Crée un nouveau souhait pour un membre.
+        * Redirige vers la page de gestion des souhaits pour affichage.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if(action.equals("creerSouhait")){
             jsp = "/ServletGestionEquipement?action=mesSouhaits";
             doCreerSouhait(request, response);
         }
+        
+        /**
+        * Supprime un souhait spécifié par son identifiant.
+        * Redirige vers la page de gestion des souhaits pour affichage.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if(action.equals("supprimerSouhait")){
             long idSouhait = Long.parseLong(request.getParameter("idSouhait"));
             Souhait souhaitToRemove = souhaitFacade.find(idSouhait);
@@ -532,13 +622,20 @@ public class ServletGestionEquipement extends HttpServlet {
             jsp = "/ServletGestionEquipement?action=mesSouhaits";
         }
         
-        /*
-            Offre
-        */
+        /**
+         * Affiche le formulaire de création d'une nouvelle offre.
+         * @param action L'action spécifiée dans la requête HTTP.
+         */
         else if (action.equals("creerOffre")){
             request.setAttribute("titrePage", "Création d'une offre");
             jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
         }
+        
+        /**
+        * Ajoute une nouvelle offre à partir des données du formulaire.
+        * Redirige vers le tableau de bord du membre après la création de l'offre.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if (action.equals("AjouterOffre")){
             // Réception des données du formulaire pour Accessoire 
             HttpSession session = request.getSession();
@@ -575,8 +672,7 @@ public class ServletGestionEquipement extends HttpServlet {
                 catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 }
-                
-                
+
                 if(intitule.trim().isEmpty() || description.trim().isEmpty() || typeOffre.trim().isEmpty() || dd==null){
                     jsp="/WEB-INF/jsp/FormCreationOffre.jsp";
                     request.setAttribute("message", "Vous n'avez pas rempli tous les champs obligatoires");
@@ -627,9 +723,13 @@ public class ServletGestionEquipement extends HttpServlet {
                         }
                     }
                 }    
-        }
+            }
         }
         
+        /**
+        * Affiche le formulaire de modification d'une offre spécifiée par son identifiant.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if (action.equals("AfficherModifierOffre")){
             long idOffre = Long.parseLong(request.getParameter("idOffre"));
             Offre offre = offreFacade.find(idOffre);
@@ -637,6 +737,12 @@ public class ServletGestionEquipement extends HttpServlet {
             jsp ="/WEB-INF/jsp/FormModifOffre.jsp";
 
         }
+        
+        /**
+        * Met à jour les informations d'une offre à partir des données du formulaire de modification.
+        * Redirige vers le tableau de bord du membre après la modification de l'offre.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         // la limite de cette fonctionnalité c'est que quand on souhaite modfifier une date de l'offre 
         // la verif sur les dates par rapport a la date actuelle ne s'applique pas 
         // Or elle foudrait la faire appliquer uniquement si l'utilisateur change la date ( il faut comparer la date d'avant et la nouvelle date)
@@ -713,9 +819,13 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("message", "Vous devez remplir tous les champs sauf la date de fin si vous faites un don");
                 request.setAttribute("typeMessage", "error");
             }
-
         }
         
+        /**
+        * Supprime une offre spécifiée par son identifiant.
+        * Redirige vers le tableau de bord du membre après la suppression de l'offre.
+        * @param action L'action spécifiée dans la requête HTTP.
+        */
         else if (action.equals("SupprimerOffre")){
             long idOffre = Long.parseLong(request.getParameter("idOffre"));
             Offre offreToRemove = offreFacade.find(idOffre);
@@ -723,7 +833,11 @@ public class ServletGestionEquipement extends HttpServlet {
             jsp = "/ServletGestionEquipement?action=tableauBord";
         }
 
-        // Mes equipements
+        /**
+         * Affiche les équipements appartenant à un membre spécifié.
+         * Redirige vers la page mesEquipements.jsp pour afficher les équipements.
+         * @param action L'action spécifiée dans la requête HTTP.
+         */
         else if(action.equals("mesEquipements")){
             HttpSession session = request.getSession();
             Membre membre = (Membre) session.getAttribute("membre");
@@ -741,12 +855,17 @@ public class ServletGestionEquipement extends HttpServlet {
             request.setAttribute("titrePage", "Mes equipements");
         }
             
-        
-        
         /*
             Demande
         */
-        // Afficher mes prêts 
+        /**
+         * Affiche les prêts de l'utilisateur connecté.
+         * 
+         * @param request Requête HTTP contenant les informations de la session utilisateur
+         * @param response Réponse HTTP à renvoyer au client
+         * @throws ServletException Si une erreur servlet se produit
+         * @throws IOException Si une erreur d'entrée-sortie se produit lors de la manipulation de la requête ou de la réponse
+         */
         else if (action.equals("mesPrets")) {
             HttpSession session = request.getSession();
             Membre membre = (Membre) session.getAttribute("membre");
@@ -754,7 +873,16 @@ public class ServletGestionEquipement extends HttpServlet {
             request.setAttribute("prets", prets);
             jsp = "/WEB-INF/jsp/mesPrets.jsp";
         }
-        // Afficher mes dons
+        
+        /**
+         * Affiche les dons de l'utilisateur connecté dans la page "mesDons.jsp".
+         * Si l'utilisateur n'a aucun don, un message approprié est défini dans les attributs de la requête.
+         * 
+         * @param request Requête HTTP contenant les informations de la session utilisateur
+         * @param response Réponse HTTP à renvoyer au client
+         * @throws ServletException Si une erreur servlet se produit
+         * @throws IOException Si une erreur d'entrée-sortie se produit lors de la manipulation de la requête ou de la réponse
+         */
         else if(action.equals("AfficherMesDons")){
             HttpSession session = request.getSession();
             Membre membre = (Membre) session.getAttribute("membre");
@@ -766,7 +894,15 @@ public class ServletGestionEquipement extends HttpServlet {
             }
         }
         
-        // Afficher mes Prets
+        /**
+         * Affiche les prêts de l'utilisateur connecté dans la page "mesPrets.jsp".
+         * Si l'utilisateur n'a aucun prêt, un message approprié est défini dans les attributs de la requête.
+         * 
+         * @param request Requête HTTP contenant les informations de la session utilisateur
+         * @param response Réponse HTTP à renvoyer au client
+         * @throws ServletException Si une erreur servlet se produit
+         * @throws IOException Si une erreur d'entrée-sortie se produit lors de la manipulation de la requête ou de la réponse
+         */
         else if(action.equals("AfficherMesPrets")){
             HttpSession session = request.getSession();
             Membre membre = (Membre) session.getAttribute("membre");
@@ -777,6 +913,19 @@ public class ServletGestionEquipement extends HttpServlet {
                 request.setAttribute("message", "Vous n'avez aucun prets");
             }
         }
+        
+        /**
+        * Affiche les détails d'une offre spécifiée.
+        * 
+        * Cette méthode récupère l'identifiant de l'offre à afficher à partir des paramètres de la requête HTTP
+        * et utilise cet identifiant pour obtenir l'offre correspondante dans la base de données. Les détails de l'offre
+        * sont ensuite transmis à la page JSP pour affichage.
+        * 
+        * @param request L'objet HttpServletRequest contenant les paramètres de la requête.
+        * @param response L'objet HttpServletResponse pour la réponse.
+        * @throws ServletException Si une erreur de servlet se produit.
+        * @throws IOException Si une erreur d'entrée/sortie se produit.
+        */
         else if(action.equals("afficherDetailOffre")){
             Long idOffre = Long.valueOf(request.getParameter("idOffre"));
             Offre offre = offreFacade.find(idOffre);
@@ -785,6 +934,15 @@ public class ServletGestionEquipement extends HttpServlet {
             request.setAttribute("titrePage", "Détail de l\'offre");
             jsp = "/WEB-INF/jsp/DetailOffre.jsp";
         }
+        
+        /**
+        * Réclame une offre pour un membre spécifié.
+        * 
+        * @param request L'objet HttpServletRequest contenant les paramètres de la requête.
+        * @param response L'objet HttpServletResponse pour la réponse.
+        * @throws ServletException Si une erreur de servlet se produit.
+        * @throws IOException Si une erreur d'entrée/sortie se produit.
+        */
         else if(action.equals("reclamerOffre")){
             String idOffre_string = request.getParameter("idOffre");
             String idMembre_string = request.getParameter("idUtilisateur");
@@ -808,31 +966,18 @@ public class ServletGestionEquipement extends HttpServlet {
             jsp = "/ServletGestionEquipement?action=tableauBord";
         }
         
-//        else if(action.equals("SupprimerDemande")) {
-//            long demandeId = Long.parseLong(request.getParameter("demandeId"));
-//
-//            Demande demande = sessionMembre.RechercherDemande(demandeId);
-//
-//            if(demande != null && demande.getOffre().getDateDebut().after(new Date(System.currentTimeMillis()))) {
-//                boolean demandeSupprimee = sessionMembre.SupprimerDemande(demandeId);
-//                if(demandeSupprimee) {
-//                    Offre offre = demande.getOffre();
-//                    if(offre != null) {
-//                        offre.setEtat(EtatOffre.DISPONIBLE);
-//                    }
-//                    jsp = "/ServletGestionEquipement?action=tableauBord";
-//                } else {
-//                    request.setAttribute("message", "Échec de la suppression de la demande.");
-//                    request.setAttribute("typeMessage", "error");
-//                    jsp = "/ServletGestionEquipement?action=tableauBord";
-//                }
-//            } else {
-//                request.setAttribute("message", "Vous ne pouvez pas supprimer cette demande.");
-//                request.setAttribute("typeMessage", "error");
-//                jsp = "/ServletGestionEquipement?action=tableauBord";
-//            }
-//        }
-        
+        /**
+        * Clôture une demande spécifiée par son identifiant.
+        * 
+        * Si la demande existe et que la date de début de l'offre associée est postérieure à la date actuelle,
+        * elle clôture la demande en mettant l'offre associée à l'état DISPONIBLE, supprime la demande de la base de données
+        * et redirige l'utilisateur vers le tableau de bord avec un message de succès. Sinon, affiche un message d'erreur.
+        * 
+        * @param request L'objet HttpServletRequest contenant les paramètres de la requête.
+        * @param response L'objet HttpServletResponse pour la réponse.
+        * @throws ServletException Si une erreur de servlet se produit.
+        * @throws IOException Si une erreur d'entrée/sortie se produit.
+        */
         else if(action.equals("cloturerDemande")) {
             long demandeId = Long.parseLong(request.getParameter("demandeId"));
 
@@ -916,7 +1061,14 @@ public class ServletGestionEquipement extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-        
+    /**
+    * Gère la création d'un souhait par un utilisateur.
+    * 
+    * @param request L'objet HttpServletRequest qui contient les informations de la requête HTTP.
+    * @param response L'objet HttpServletResponse qui contient les informations de la réponse HTTP.
+    * @throws ServletException Si une erreur Servlet se produit.
+    * @throws IOException Si une erreur d'entrée-sortie se produit lors de la gestion de la demande.
+    */    
     protected void doCreerSouhait(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -1003,6 +1155,16 @@ public class ServletGestionEquipement extends HttpServlet {
         }
     }
     
+    /**
+    * Crée un accessoire avec les informations fournies.
+    * 
+    * @param intituleAccessoire Le titre de l'accessoire.
+    * @param descriptionAccessoire La description de l'accessoire.
+    * @param typeAccessoire Le type de l'accessoire.
+    * @param etatAccessoire L'état de l'accessoire.
+    * @param membre Le membre propriétaire de l'accessoire.
+    * @return L'accessoire créé.
+    */
     protected Accessoire creerAccessoire (String intituleAccessoire, String descriptionAccessoire, TypeAccessoire typeAccessoire, EtatAccessoire etatAccessoire, Membre membre){
         Accessoire a= new Accessoire();
         a.setPersonnes(new ArrayList<Personne>());
@@ -1015,6 +1177,18 @@ public class ServletGestionEquipement extends HttpServlet {
         return a;
     }
 
+    /**
+    * Crée une offre avec les informations fournies.
+    * 
+    * @param intitule Le titre de l'offre.
+    * @param description La description de l'offre.
+    * @param typeOffreEnum Le type de l'offre.
+    * @param dateDebut La date de début de l'offre.
+    * @param dateFin La date de fin de l'offre.
+    * @param a L'accessoire lié à l'offre.
+    * @param membre Le membre créateur de l'offre.
+    * @return L'offre créée.
+    */
     protected Offre creerOffre (String intitule, String description, TypeOffre typeOffreEnum, Date dateDebut, Date dateFin, Accessoire a, Membre membre){
         Offre o= new Offre();
         o.setIntitule(intitule);
@@ -1029,6 +1203,15 @@ public class ServletGestionEquipement extends HttpServlet {
         return o;
     }
     
+    /**
+    * Vérifie le nombre d'offres et de demandes créées par un membre pour décerner les badges.
+    * 
+    * @param request L'objet HttpServletRequest.
+    * @param response L'objet HttpServletResponse.
+    * @param membre Le membre pour lequel vérifier les badges.
+    * @throws ServletException Si une erreur de servlet se produit.
+    * @throws IOException Si une erreur d'entrée/sortie se produit.
+    */
     protected void doVerifierBadge(HttpServletRequest request, HttpServletResponse response, Personne membre)
             throws ServletException, IOException {
         
@@ -1048,8 +1231,6 @@ public class ServletGestionEquipement extends HttpServlet {
             }else if(nbActions >= 5 && sessionMembre.verificationBadgeExistant(membre, NiveauBadge.UN)){
                 //ajouter badge débutant
                 sessionMembre.creerBadge(NiveauBadge.UN, membre);
-                
-                
             }
     }
 
