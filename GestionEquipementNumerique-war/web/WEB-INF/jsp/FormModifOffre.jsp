@@ -50,6 +50,7 @@
                 </div>
 
                 <h1>Modifier Votre Offre</h1>
+                <!-- Limite : si l'utilisateur change de type d'offre de DOn a pret le champs fin de prets n'apparait pas -->
                 <div id="step2" style=""display:none;">
                     <fieldset>
                         <label for="idO">Identifiant de l'offre<span class="requis">*</span></label>
