@@ -98,7 +98,7 @@
                 <label for="dateFin">Date de fin</label>
                 <input type="date" name="dateFin" id="dateFin" value=<%=dateFin%>>
                 
-                <input type="hidden" name="action" value="tableauBord">
+                <input type="hidden" name="action" value="analytics">
                 <button type="submit" class="submit">Appliquer</button>
             </form>
             
